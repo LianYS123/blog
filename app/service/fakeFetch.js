@@ -1,0 +1,1 @@
+export default () => fetch('http://localhost:12345/test').then(res => res.json()).then(res => res.message);
