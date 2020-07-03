@@ -25,14 +25,14 @@ export default (
         <Route
           path='/blog'
           exact={true}
-          component={asyncLoad2(import('pages/blog'))}
+          component={asyncLoad(import('pages/blog'))}
         />
         <Route
           path='/blog/edit'
           exact={true}
-          component={asyncLoad2(import('pages/blog/edit'))}
+          component={asyncLoad(import('pages/blog/edit'))}
         />
-        <Route component={asyncLoad2(import('pages/error'))} />
+        <Route component={asyncLoad(import('pages/error'))} />
       </Switch>
     </Layout>
   </Route>

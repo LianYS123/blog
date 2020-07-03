@@ -32,14 +32,14 @@ class Blog extends React.Component {
         render: ({ id }) => {
           return (
             <>
-              <Link to='/blog/edit'>编辑</Link>
+              <Link to={{ pathname: '/blog/edit', query: { id } }}>编辑</Link>
               <Button
                 type='link'
                 danger={true}
                 onClick={() =>
                   deleteBlog({ id })
                     .then(() => notification.success({ message: '操作成功' }))
-                    .then(this.fetchList)
+                    .then(this.props.fetchList)
                 }
               >
                 删除
@@ -80,7 +80,7 @@ class Blog extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  state = state.getIn(['blog','tableData']);
+  state = state.getIn(['blog', 'tableData']);
   return {
     page: state.getIn(['pagination', 'page']),
     pageSize: state.getIn(['pagination', 'pageSize']),
