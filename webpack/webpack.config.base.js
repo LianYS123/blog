@@ -37,6 +37,11 @@ module.exports = smart({
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
         loader: 'happypack/loader?id=js'
+      },
+      {
+        test: /\.(png|jpg|gif)$/i,
+        exclude: /(node_modules|bower_components)/,
+        loader: 'happypack/loader?id=img'
       }
     ]
   },
@@ -118,10 +123,8 @@ module.exports = smart({
   // },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './app/index.html'
-    }),
-    new HtmlWebpackPlugin({
-      template: './app/index.html'
+      template: './app/index.html',
+      favicon: './app/assets/favicon.ico'
     }),
     new HappyPack({
       id: 'js',
@@ -139,6 +142,17 @@ module.exports = smart({
               ]
             ],
             plugins: ['@babel/plugin-proposal-class-properties']
+          }
+        }
+      ]
+    }),
+    new HappyPack({
+      id: 'img',
+      loaders: [
+        {
+          loader: 'url-loader',
+          options: {
+            limit: 8192
           }
         }
       ]
