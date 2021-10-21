@@ -1,7 +1,6 @@
 {
 	"compilerOptions": {
-		"baseUrl": "./src",
-		"target": "esnext"
+		"baseUrl": "./src"
 	},
 	"jsx": "react",
 	"exclude": [

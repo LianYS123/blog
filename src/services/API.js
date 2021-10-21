@@ -14,3 +14,5 @@ export const CONFIG_APP = "/sto/rest/admin/api/v1/cloud/cfg";
 //  上传文件
 export const BATCH_SIGN = "POST /sto/rest/api/v2/resource/sign/batch";
 export const FILE_LOG = "POST /sto/rest/api/v2/resource/add/batch";
+
+export const GET_ARTICLE_DETAIL = "";

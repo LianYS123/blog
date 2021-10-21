@@ -34,12 +34,9 @@ const AppLayout = ({ children }) => {
   return (
     <div className="h-full flex flex-col">
       <AppHeader />
-      <div className="flex flex-1 overflow-auto">
-        <div className="w-64 flex-shrink-0 h-full overflow-auto">
-          <Sidebar />
-        </div>
-        <main className="h-full flex-auto overflow-auto">{children}</main>
-      </div>
+      <main className="flex-auto overflow-auto container mx-auto">
+        {children}
+      </main>
     </div>
   );
 };

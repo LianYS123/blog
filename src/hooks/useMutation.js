@@ -3,7 +3,6 @@ import { useMessageUtils } from "hooks";
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { getAPIMethod } from "utils/apiUtils";
-import cookie from "utils/cookie";
 import xFetch from "utils/fetch";
 
 // 处理服务器返回错误消息
@@ -21,8 +20,6 @@ const useRequestErrorHandler = () => {
       }
     };
     if (code === "LGN4001000") {
-      localStorage.removeItem("acc");
-      cookie.remove("acc");
       showErrorMessage();
       history.push("/login");
     } else {

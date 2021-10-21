@@ -29,5 +29,7 @@ export default {
   ONLY_IMAGES: "Only images and videos can be uploaded",
   FILE_SIZE_EXCEED: "File size exceeds the maximum upload size of 20M",
   SERVICE_API_ERR: "API request error",
-  OPERATE_SUCCESS: "Operate Successfully"
+  OPERATE_SUCCESS: "Operate Successfully",
+  ADD_ARTICLE: "Add New Article",
+  EDIT_ARTICLE: "Edit Article"
 };

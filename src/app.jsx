@@ -6,7 +6,6 @@ import store from "models";
 
 import { localMap } from "constants";
 import { Provider, useSelector } from "react-redux";
-import { BrowserRouter as Router } from "react-router-dom";
 
 // 国际化
 import en_US from "locales/en_US";
@@ -31,17 +30,15 @@ const locales = {
 const App = () => {
   const { local } = useSelector(({ app }) => app);
   return (
-    <Router>
-      <ConfigProvider locale={antdLocales}>
-        <IntlProvider
-          messages={locales[local]}
-          locale={localMap[local]}
-          defaultLocale="en"
-        >
-          <AppRoutes />
-        </IntlProvider>
-      </ConfigProvider>
-    </Router>
+    <ConfigProvider locale={antdLocales}>
+      <IntlProvider
+        messages={locales[local]}
+        locale={localMap[local]}
+        defaultLocale="en"
+      >
+        <AppRoutes />
+      </IntlProvider>
+    </ConfigProvider>
   );
 };
 

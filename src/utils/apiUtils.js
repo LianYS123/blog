@@ -1,4 +1,4 @@
-import { stringify as serializeQuery, stringifyUrl } from "query-string";
+import { stringifyUrl } from "query-string";
 
 const methodReg = /^(get|post|put|delete)/i;
 

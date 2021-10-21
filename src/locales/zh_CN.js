@@ -29,5 +29,7 @@ export default {
   ONLY_IMAGES: "只能上传图片和视频",
   FILE_SIZE_EXCEED: "上传大小超过限制20M",
   SERVICE_API_ERR: "接口请求出错",
-  OPERATE_SUCCESS: "操作成功"
+  OPERATE_SUCCESS: "操作成功",
+  ADD_ARTICLE: "新增文章",
+  EDIT_ARTICLE: "编辑文章"
 };

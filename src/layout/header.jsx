@@ -14,7 +14,10 @@ const AppHeader = () => {
   return (
     <header className="flex justify-between items-center px-8 py-4 shadow z-10">
       <div className="space-x-6">
-        <span className="text-lg">
+        <span
+          onClick={() => history.push(routers.HOME)}
+          className="text-lg cursor-pointer hover:underline"
+        >
           {intl.formatMessage({ id: "WEBSITE_NAME" })}
         </span>
         {/* <input
@@ -32,7 +35,7 @@ const AppHeader = () => {
             {intl.formatMessage({ id: "LOGOUT" })}
           </button>
         </span>
-        <LanguageSelection size="small" className="w-24" />
+        {/* <LanguageSelection size="small" className="w-24" /> */}
       </div>
     </header>
   );
