@@ -1,11 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
-
-import { useMutation } from "hooks";
-import { CONFIG_APP } from "services/API";
-import { appSlice } from "models/app";
 
 import AppLayout from "layout";
 import routers from "./index";
@@ -15,24 +10,11 @@ import Home from "pages/home";
 import NotFound from "pages/404";
 import Editor from "pages/editor/index";
 import Detial from "pages/detail/index";
-
-const useAppConfig = () => {
-  const dispatch = useDispatch();
-  const [loadConfg] = useMutation(CONFIG_APP);
-  const fetchConfig = async () => {
-    const { cloudCfgList, code } = await loadConfg();
-    if (code === "0000") {
-      dispatch(appSlice.actions.setConfig(cloudCfgList));
-    }
-  };
-  useEffect(() => {
-    fetchConfig();
-  }, []);
-};
+import { useInitApp } from "hooks/app";
 
 // 页面路由
 const AppRoutes = () => {
-  // useAppConfig();
+  useInitApp(); // 初始化应用数据
   return (
     <Router>
       <Switch>

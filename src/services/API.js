@@ -1,5 +1,6 @@
 export const AUTH_LOGIN = "POST /api/auth/login"; // 登录
 export const CONFIG_APP = "GET /api/config"; // 配置
+export const USER_INFO = "GET /api/user"; // 用户信息
 
 // 文章
 export const ARTICLE_LIST = "GET /api/article/list"; // 文章列表

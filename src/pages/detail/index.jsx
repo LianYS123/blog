@@ -1,13 +1,13 @@
 import React from "react";
-import { Affix, Spin, Anchor, Empty } from "antd";
-import { EditOutlined } from "@ant-design/icons";
 import { useIntl } from "react-intl";
 import { useDocAuth, useHtmlAndOutline } from "./hooks";
+import { Anchor, Empty, Spin } from "@douyinfe/semi-ui";
 
 import { useHistory, useLocation, useParams } from "react-router";
 import { parse, stringify } from "query-string";
 import "./styles.less";
 import routers from "routers";
+import { IconEdit } from "@douyinfe/semi-icons";
 
 const { Link } = Anchor;
 
@@ -58,32 +58,22 @@ function Detail() {
                 dangerouslySetInnerHTML={{ __html: html }}
               ></article>
             ) : (
-              <Empty description={false} className="my-12" />
+              <Empty className="my-12" />
             )}
 
             {auth && (
-              <Affix
-                target={() => document.getElementById("anchor-box")}
-                className="absolute right-0 top-0"
-                onClick={goEdit}
-              >
-                <div className="flex items-center hover:underline cursor-pointer">
-                  <EditOutlined className="mx-1" />
-                  {resourceId == "undefined"
-                    ? intl.formatMessage({ id: "ADD_ARTICLE" })
-                    : intl.formatMessage({ id: "EDIT_ARTICLE" })}
-                </div>
-              </Affix>
+              <div className="flex items-center hover:underline cursor-pointer">
+                <IconEdit className="mx-1" />
+                {resourceId == "undefined"
+                  ? intl.formatMessage({ id: "ADD_ARTICLE" })
+                  : intl.formatMessage({ id: "EDIT_ARTICLE" })}
+              </div>
             )}
           </div>
           {outline && outline.length ? (
-            <Affix className="w-48" onClick={e => e.preventDefault()}>
-              <Anchor
-                getContainer={() => document.getElementById("anchor-box")}
-              >
-                {renderLink(outline)}
-              </Anchor>
-            </Affix>
+            <Anchor getContainer={() => document.getElementById("anchor-box")}>
+              {renderLink(outline)}
+            </Anchor>
           ) : null}
         </div>
       </Spin>

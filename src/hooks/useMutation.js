@@ -1,4 +1,4 @@
-import { notification } from "antd";
+import { Notification } from "@douyinfe/semi-ui";
 import { useMessageUtils } from "hooks";
 import { useState } from "react";
 import { useHistory } from "react-router";
@@ -14,7 +14,7 @@ const useRequestErrorHandler = () => {
     const { code = "", message } = res;
     const showErrorMessage = () => {
       if (message) {
-        notification.error({ message });
+        Notification.error({ title: message });
       } else {
         showError({ id: "SERVICE_API_ERR" });
       }
@@ -64,7 +64,7 @@ export const useMutation = (service, initialData, config = {}) => {
           DELETE: "OPERATE_SUCCESS"
         };
         if (successMessage) {
-          notification.success({ message: successMessage });
+          Notification.success({ title: successMessage });
         } else if (successMessageId) {
           showSuccess({ id: successMessageId });
         } else if (showActionMessage && actionMessageMap[method]) {

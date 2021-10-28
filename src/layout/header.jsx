@@ -1,16 +1,14 @@
 import React from "react";
-import LanguageSelection from "components/languageSelection";
 import routers from "routers";
 import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import { secretPhone } from "utils";
+import { useSelector } from "react-redux";
 
 // header
 const AppHeader = () => {
   const history = useHistory();
   const intl = useIntl();
-  const { mobile } = useSelector(({ app }) => app.userInfo);
+  const { id: userId, username } = useSelector(state => state.app.userInfo);
   return (
     <header className="flex justify-between items-center px-8 py-4 shadow z-10">
       <div className="space-x-6">
@@ -27,13 +25,23 @@ const AppHeader = () => {
       </div>
       <div className="space-x-4 text-sm">
         <span className="space-x-2">
-          <span>{secretPhone(mobile)}</span>
           <button
-            onClick={() => history.push(routers.LOGIN)}
+            onClick={() => history.push(routers.EDITOR)}
             className="hover:underline"
           >
-            {intl.formatMessage({ id: "LOGOUT" })}
+            写文章
           </button>
+
+          {userId ? (
+            <span className="text-sm">{username}</span>
+          ) : (
+            <button
+              onClick={() => history.push(routers.LOGIN)}
+              className="hover:underline"
+            >
+              {intl.formatMessage({ id: "LOGOUT" })}
+            </button>
+          )}
         </span>
         {/* <LanguageSelection size="small" className="w-24" /> */}
       </div>

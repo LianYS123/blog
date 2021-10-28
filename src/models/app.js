@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const appSlice = createSlice({
   name: "app",
   initialState: {
+    token: localStorage.getItem("acc"),
     sidebar: [],
     menuList: [],
     userInfo: {},
@@ -11,6 +12,11 @@ export const appSlice = createSlice({
     config: {}
   },
   reducers: {
+    // 将token保存在全局
+    setToken: (state, action) => {
+      state.token = action.payload;
+      localStorage.setItem("acc", action.payload);
+    },
     setMenu: (state, action) => {
       state.menuList = action.payload;
     },

@@ -9,7 +9,7 @@ import {
 import isEqual from "fast-deep-equal";
 
 import { useIntl } from "react-intl";
-import { notification } from "antd";
+import { Notification } from "@douyinfe/semi-ui";
 
 /**
  * @description: 自定义useEffect的更新逻辑
@@ -94,8 +94,8 @@ export const useMessageUtils = () => {
   const intl = useIntl();
 
   const showMessage = (method, { id, ...rest }) => {
-    notification[method]({
-      message: intl.formatMessage({
+    Notification[method]({
+      title: intl.formatMessage({
         id
       }),
       ...rest

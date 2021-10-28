@@ -1,67 +1,65 @@
 import React from "react";
-import { Form, Input, Button, Typography } from "antd";
 import { useMutation } from "hooks";
 import routers from "routers";
 import { useHistory } from "react-router";
 import { AUTH_LOGIN } from "services/API";
 import { FormattedMessage } from "react-intl";
+import { Button, Form } from "@douyinfe/semi-ui";
+import { useDispatch } from "react-redux";
+import { appSlice } from "models/app";
 
 const Login = () => {
   const [submit, { loading }] = useMutation(AUTH_LOGIN);
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const handleLogin = async values => {
     // history.push(routers.HOME);
     const result = await submit(values);
     const { data: token, userInfos, code } = result;
-    console.log(result);
 
     if (code === "0000") {
       localStorage.setItem("acc", token);
+      dispatch(appSlice.actions.setToken(token));
       history.push(routers.HOME);
     }
   };
 
   return (
     <Form
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100%",
-        overflow: "auto"
-      }}
-      onFinish={handleLogin}
+      labelAlign="right"
+      labelCol={6}
+      labelPosition="left"
+      className="w-96 mt-64 mx-auto"
+      onSubmit={handleLogin}
     >
-      <div
-        style={{
-          width: "50%",
-          maxWidth: 500,
-          minWidth: 300,
-          transform: "translateY(-20%)"
-        }}
-      >
-        <Typography.Title style={{ textAlign: "center" }} level={2}>
-          <FormattedMessage id="WEBSITE_NAME" />
-        </Typography.Title>
-        <Form.Item name="username" rules={[{ required: true }]}>
-          <Input size="large" placeholder="Account" />
-        </Form.Item>
-
-        <Form.Item name="password" rules={[{ required: true }]}>
-          <Input.Password size="large" placeholder="Password" />
-        </Form.Item>
-
-        <Button
-          loading={loading}
-          block
-          size="large"
-          htmlType="submit"
-          type="primary"
-        >
-          登录
-        </Button>
+      <div className="text-center text-lg">
+        <FormattedMessage id="WEBSITE_NAME" />
       </div>
+      <Form.Input
+        field="username"
+        label="用户名"
+        rules={[{ required: true }]}
+        size="large"
+        placeholder="请输入用户名"
+      />
+      <Form.Input
+        field="password"
+        label="密码"
+        rules={[{ required: true }]}
+        size="large"
+        placeholder="请输入密码"
+      />
+
+      <Button
+        loading={loading}
+        block
+        size="large"
+        htmlType="submit"
+        type="primary"
+      >
+        登录
+      </Button>
     </Form>
   );
 };

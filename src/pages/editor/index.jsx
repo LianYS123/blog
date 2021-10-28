@@ -1,5 +1,4 @@
-import React from "react";
-import { Button, Form, Input, Spin, Select } from "antd";
+import React, { useRef } from "react";
 import BraftEditor from "braft-editor";
 
 import "braft-editor/dist/index.css";
@@ -9,6 +8,7 @@ import { useHistory, useLocation } from "react-router";
 import { useMutation } from "hooks";
 import { ADD_ARTICLE, EDIT_ARTICLE } from "services/API";
 import qs from "query-string";
+import { Button, Form, Spin, withField } from "@douyinfe/semi-ui";
 
 const useQuery = () => {
   const location = useLocation();
@@ -16,7 +16,8 @@ const useQuery = () => {
 };
 
 function Editor() {
-  const [form] = Form.useForm();
+  const api = useRef();
+  const form = api.current;
   const { loading } = useArticle({ form });
   const history = useHistory();
   const { id } = useQuery();
@@ -35,39 +36,28 @@ function Editor() {
     // console.log(requestParams);
   };
 
+  const Editor = withField(BraftEditor);
+
   return (
     <div className="mx-auto py-8">
       <Spin spinning={loading}>
-        <Form onFinish={handleSubmit} form={form}>
-          {/* 文章标题 */}
-          <Form.Item
+        <Form
+          getFormApi={formApi => (api.current = formApi)}
+          onSubmit={handleSubmit}
+        >
+          <Form.Input
             className="w-72"
-            rules={[{ required: true }]}
             label="标题"
-            name="articleName"
-          >
-            <Input placeholder="请输入标题" />
-          </Form.Item>
-          {/* 文章标签 */}
-          {/* <Form.Item
-            className="w-72"
+            placeholder="请输入标题"
             rules={[{ required: true }]}
-            label="标签"
-            name="tags"
-          >
-            <Select
-              placeholder="请选择标签"
-              options={[{ label: "test", value: "test" }]}
-            />
-          </Form.Item> */}
+          />
+
           {/* 文章内容 */}
-          <Form.Item name="editorState" colon={false} label=" ">
-            <BraftEditor
-              controls={controls}
-              fontFamilies={fontFamilies}
-              // media={ {accepts: { audio:true,video:true} } }
-            />
-          </Form.Item>
+          <Editor
+            controls={controls}
+            fontFamilies={fontFamilies}
+            // media={ {accepts: { audio:true,video:true} } }
+          />
 
           <div className="text-center space-x-4">
             <Button type="primary" htmlType="submit">
