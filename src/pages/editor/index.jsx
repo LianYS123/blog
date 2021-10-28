@@ -5,20 +5,33 @@ import BraftEditor from "braft-editor";
 import "braft-editor/dist/index.css";
 import { controls, fontFamilies } from "./config";
 import { useArticle } from "./hooks";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
+import { useMutation } from "hooks";
+import { ADD_ARTICLE, EDIT_ARTICLE } from "services/API";
+import qs from "query-string";
+
+const useQuery = () => {
+  const location = useLocation();
+  return qs.parse(location.search);
+};
 
 function Editor() {
   const [form] = Form.useForm();
   const { loading } = useArticle({ form });
   const history = useHistory();
+  const { id } = useQuery();
+  const [updateArticle] = useMutation(EDIT_ARTICLE);
+  const [addArticle] = useMutation(ADD_ARTICLE);
 
   // 保存文章
-  const handleSubmit = values => {
+  const handleSubmit = async values => {
     const { editorState, ...rest } = values;
     const html = editorState.toHTML();
     const raw = editorState.toRAW();
 
     const requestParams = { html, raw, ...rest };
+    const request = id ? updateArticle : addArticle;
+    await request(requestParams);
     // console.log(requestParams);
   };
 
@@ -31,22 +44,22 @@ function Editor() {
             className="w-72"
             rules={[{ required: true }]}
             label="标题"
-            name="title"
+            name="articleName"
           >
             <Input placeholder="请输入标题" />
           </Form.Item>
           {/* 文章标签 */}
-          <Form.Item
+          {/* <Form.Item
             className="w-72"
             rules={[{ required: true }]}
             label="标签"
-            name="title"
+            name="tags"
           >
             <Select
               placeholder="请选择标签"
               options={[{ label: "test", value: "test" }]}
             />
-          </Form.Item>
+          </Form.Item> */}
           {/* 文章内容 */}
           <Form.Item name="editorState" colon={false} label=" ">
             <BraftEditor

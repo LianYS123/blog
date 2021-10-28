@@ -3,20 +3,23 @@ import { Form, Input, Button, Typography } from "antd";
 import { useMutation } from "hooks";
 import routers from "routers";
 import { useHistory } from "react-router";
-import { LOGOUT_URL } from "services/API";
+import { AUTH_LOGIN } from "services/API";
+import { FormattedMessage } from "react-intl";
 
 const Login = () => {
-  const [submit, { loading }] = useMutation(LOGOUT_URL);
+  const [submit, { loading }] = useMutation(AUTH_LOGIN);
   const history = useHistory();
 
   const handleLogin = async values => {
-    history.push(routers.HOME);
-    // const { token, userInfos, code, userId } = await submit(values);
+    // history.push(routers.HOME);
+    const result = await submit(values);
+    const { data: token, userInfos, code } = result;
+    console.log(result);
 
-    // if (code === "0000") {
-    //   localStorage.setItem("acc", token);
-    //   history.push(routers.HOME);
-    // }
+    if (code === "0000") {
+      localStorage.setItem("acc", token);
+      history.push(routers.HOME);
+    }
   };
 
   return (
@@ -39,13 +42,13 @@ const Login = () => {
         }}
       >
         <Typography.Title style={{ textAlign: "center" }} level={2}>
-          Blog
+          <FormattedMessage id="WEBSITE_NAME" />
         </Typography.Title>
-        <Form.Item name={"account"} rules={[{ required: true }]}>
+        <Form.Item name="username" rules={[{ required: true }]}>
           <Input size="large" placeholder="Account" />
         </Form.Item>
 
-        <Form.Item name={"password"} rules={[{ required: true }]}>
+        <Form.Item name="password" rules={[{ required: true }]}>
           <Input.Password size="large" placeholder="Password" />
         </Form.Item>
 

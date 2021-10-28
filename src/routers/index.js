@@ -3,7 +3,7 @@ const routers = {
   HOME: "/pages/home",
   NOT_FOUND: "/pages/404",
   EDITOR: "/pages/editor",
-  DETAIL: "/pages/detail"
+  DETAIL: "/pages/detail/{id}"
 };
 
 export default routers;

@@ -1,7 +1,13 @@
 import { Card } from "./Card";
 import React from "react";
+import { useRequest } from "hooks";
+import { ARTICLE_LIST } from "services/API";
 
 const Home = () => {
+  const { data } = useRequest({
+    service: ARTICLE_LIST
+  });
+  console.log(data);
   const fakeData = [...Array(2)].map((_, index) => ({
     content: "some message",
     id: index,

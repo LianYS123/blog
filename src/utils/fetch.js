@@ -1,20 +1,16 @@
-import { languageCodeMap } from "constants";
 import { parseAPI } from "./apiUtils";
 
 const xFetch = function (url, data, options = {}) {
   const { parsedUrl, method, parsedData } = parseAPI(url, data);
   const headers = {};
 
-  // const token = "Bearer " + localStorage.getItem("acc");
   const token = localStorage.getItem("acc");
-  const lang = languageCodeMap[localStorage.getItem("lang")] || "EN";
+  // const token = "Bearer " + localStorage.getItem("acc");
+  // const token = localStorage.getItem("acc");
   const opts = {
     method,
     headers: {
-      // Authorization: token,
-      token,
-      "x-lang": lang,
-      lang: lang,
+      Authorization: token,
       "Content-Type": "application/json",
       ...headers
     },

@@ -1,18 +1,9 @@
-// 登录与授权
-export const GET_CODEIMG_URL = "/cloudpick/rest/admin/api/v1/logon/captcha";
-export const GET_SENDSMS_URL = "/cloudpick/rest/admin/api/v1/logon/sendsms";
-export const SURE_SIGN_URL = "POST /cloudpick/rest/admin/api/v1/logon/login";
-export const GET_USERPERS_URL = "/cloudpick/rest/admin/api/v1/logon/userpmt";
-export const GET_USERINFO_URL = "/cloudpick/rest/admin/api/v1/logon/getuser";
-export const LOGOUT_URL = "POST /cloudpick/rest/admin/api/v1/logon/logout";
-export const IP_INFO = "/cloudpick/rest/api/v1/ip";
-export const USER_AUTH = `/cloudpick/rest/admin/api/v1/user/permission/{userId}`;
-export const SEC_LOGIN = "/cloudpick/rest/admin/api/v1/logon/mlogin";
+export const AUTH_LOGIN = "POST /api/auth/login"; // 登录
+export const CONFIG_APP = "GET /api/config"; // 配置
 
-export const CONFIG_APP = "/sto/rest/admin/api/v1/cloud/cfg";
-
-//  上传文件
-export const BATCH_SIGN = "POST /sto/rest/api/v2/resource/sign/batch";
-export const FILE_LOG = "POST /sto/rest/api/v2/resource/add/batch";
-
-export const GET_ARTICLE_DETAIL = "";
+// 文章
+export const ARTICLE_LIST = "GET /api/article/list"; // 文章列表
+export const GET_ARTICLE_DETAIL = "GET /api/aritcle/{id}"; // 文章详情
+export const ADD_ARTICLE = "POST /api/article"; // 添加文章
+export const EDIT_ARTICLE = "PUT /api/aritcle"; // 编辑文章
+export const DELETE_ARTICLE = "DELETE /api/article"; // 删除文章

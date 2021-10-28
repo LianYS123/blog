@@ -32,7 +32,7 @@ const useAppConfig = () => {
 
 // 页面路由
 const AppRoutes = () => {
-  useAppConfig();
+  // useAppConfig();
   return (
     <Router>
       <Switch>

@@ -19,7 +19,7 @@ const useRequestErrorHandler = () => {
         showError({ id: "SERVICE_API_ERR" });
       }
     };
-    if (code === "LGN4001000") {
+    if (code === "1001") {
       showErrorMessage();
       history.push("/login");
     } else {
