@@ -1,39 +1,41 @@
 import React, { useRef } from "react";
 import BraftEditor from "braft-editor";
 
-import "braft-editor/dist/index.css";
 import { controls, fontFamilies } from "./config";
 import { useArticle } from "./hooks";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import { useMutation } from "hooks";
-import { ADD_ARTICLE, EDIT_ARTICLE } from "services/API";
-import qs from "query-string";
+import { ADD_ARTICLE, EDIT_ARTICLE, IMAGE_UPLOAD } from "services/API";
 import { Button, Form, Spin, withField } from "@douyinfe/semi-ui";
-
-const useQuery = () => {
-  const location = useLocation();
-  return qs.parse(location.search);
-};
+import { IconUpload } from "@douyinfe/semi-icons";
+import { upload } from "utils/fetch";
 
 function Editor() {
-  const api = useRef();
-  const form = api.current;
-  const { loading } = useArticle({ form });
+  const formApiRef = useRef();
   const history = useHistory();
-  const { id } = useQuery();
+  const { id } = useParams();
+  const { loading } = useArticle({ formApi: formApiRef, id });
   const [updateArticle] = useMutation(EDIT_ARTICLE);
   const [addArticle] = useMutation(ADD_ARTICLE);
 
   // 保存文章
   const handleSubmit = async values => {
-    const { editorState, ...rest } = values;
+    const { editorState, cover: files = [], ...rest } = values;
     const html = editorState.toHTML();
     const raw = editorState.toRAW();
+    const file = files[0];
+
+    if (file?.response?.code === "0000") {
+      const { data } = file.response;
+      rest.cover = data;
+    }
 
     const requestParams = { html, raw, ...rest };
     const request = id ? updateArticle : addArticle;
-    await request(requestParams);
-    // console.log(requestParams);
+    const { code } = await request({ ...requestParams, id });
+    if (code === "0000") {
+      history.goBack();
+    }
   };
 
   const Editor = withField(BraftEditor);
@@ -42,30 +44,70 @@ function Editor() {
     <div className="mx-auto py-8">
       <Spin spinning={loading}>
         <Form
-          getFormApi={formApi => (api.current = formApi)}
+          labelPosition="left"
+          getFormApi={formApi => (formApiRef.current = formApi)}
           onSubmit={handleSubmit}
         >
           <Form.Input
+            field="articleName"
             className="w-72"
             label="标题"
             placeholder="请输入标题"
             rules={[{ required: true }]}
           />
 
+          <Form.Upload
+            field="cover"
+            label="封面"
+            fileName="file"
+            // listType="picture"
+            headers={{ Authorization: localStorage.getItem("acc") }}
+            limit={1}
+            action={IMAGE_UPLOAD}
+          >
+            <Button icon={<IconUpload />} theme="light">
+              点击上传
+            </Button>
+          </Form.Upload>
+
           {/* 文章内容 */}
           <Editor
+            id="htmlTemplate"
+            noLabel={true}
+            field="editorState"
             controls={controls}
             fontFamilies={fontFamilies}
-            // media={ {accepts: { audio:true,video:true} } }
+            media={{
+              accepts: { audio: true, video: true },
+              async uploadFn({ success, error, file }) {
+                const { code, data: url } = await upload(file);
+                if (code === "0000" && url) {
+                  success({
+                    url,
+                    meta: {
+                      id: url,
+                      title: url,
+                      alt: url,
+                      loop: false, // 指定音视频是否循环播放
+                      autoPlay: false, // 指定音视频是否自动播放
+                      controls: false // 指定音视频是否显示控制栏
+                      // poster: 'http://xxx/xx.png', // 指定视频播放器的封面
+                    }
+                  });
+                } else {
+                  error({
+                    msg: "unable to upload."
+                  });
+                }
+              }
+            }}
           />
 
           <div className="text-center space-x-4">
             <Button type="primary" htmlType="submit">
               保存
             </Button>
-            <Button type="default" onClick={() => history.go(-1)}>
-              返回
-            </Button>
+            <Button onClick={() => history.go(-1)}>返回</Button>
           </div>
         </Form>
       </Spin>

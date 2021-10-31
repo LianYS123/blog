@@ -28,7 +28,7 @@ const Login = () => {
   return (
     <Form
       labelAlign="right"
-      labelCol={6}
+      labelCol={{ span: 6 }}
       labelPosition="left"
       className="w-96 mt-64 mx-auto"
       onSubmit={handleLogin}
@@ -44,6 +44,7 @@ const Login = () => {
         placeholder="请输入用户名"
       />
       <Form.Input
+        type="password"
         field="password"
         label="密码"
         rules={[{ required: true }]}

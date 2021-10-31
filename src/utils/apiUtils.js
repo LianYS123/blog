@@ -1,4 +1,4 @@
-import { stringifyUrl } from "query-string";
+import { parseUrl, stringifyUrl } from "query-string";
 
 const methodReg = /^(get|post|put|delete)/i;
 
@@ -18,14 +18,14 @@ export const parseAPI = (url, data) => {
   const paramsReg = /\{(.*?)\}/g;
 
   if (paramsReg.test(url)) {
-    parsedUrl = url.replace(paramsReg, ($0, $1) => {
+    parsedUrl = parsedUrl.replace(paramsReg, ($0, $1) => {
       delete parsedData[$1];
       return data[$1];
     });
   }
 
   if (method === "GET") {
-    parsedUrl = stringifyUrl({ url: parsedUrl, query: data });
+    parsedUrl = stringifyUrl({ url: parsedUrl, query: parsedData });
   }
 
   return {

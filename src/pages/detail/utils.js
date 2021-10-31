@@ -29,9 +29,10 @@ export const renderOutline = doc => {
       arr.push(obj);
     }
   };
+  let uid = 0;
   elements.each((i, ele) => {
     if ("H1 H2 H3 H4".includes(ele.nodeName)) {
-      const id = ele.innerText.replace(/\s/g, "");
+      const id = `article-h${++uid}`;
       ele.id = id;
       const hMap = {
         H1: 1,

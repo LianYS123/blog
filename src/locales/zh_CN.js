@@ -1,5 +1,5 @@
 export default {
-  WEBSITE_NAME: "模板项目",
+  WEBSITE_NAME: "MY SPACE",
   PHONE: "手机号",
   CAPTCHA: "验证码",
   GET_CAPTCHA: "获取验证码",

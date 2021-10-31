@@ -1,34 +1,52 @@
 import { Card } from "./Card";
 import React from "react";
-import { useRequest } from "hooks";
+import { useTable } from "hooks";
 import { ARTICLE_LIST } from "services/API";
+import { Pagination, Skeleton, Spin } from "@douyinfe/semi-ui";
 
 const Home = () => {
-  const { data } = useRequest({
+  const { tableProps, loading } = useTable({
     service: ARTICLE_LIST
   });
-  console.log(data);
-  const fakeData = [...Array(2)].map((_, index) => ({
-    content: "some message",
-    id: index,
-    title: `TTT${index}`,
-    info: "Lian",
-    desc: "2020-10-04",
-    src: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
-  }));
+  const { dataSource, pagination } = tableProps;
+  const placeholder = (
+    <section className="shadow-sm px-4 py-3 flex rounded">
+      <div className="flex w-full flex-col justify-between">
+        <div className="space-y-1">
+          <Skeleton.Title className="font-bold w-48"></Skeleton.Title>
+          <div className="flex h-16 md:h-24">
+            <Skeleton.Paragraph className="flex-auto h-full mr-1 md:mr-4"></Skeleton.Paragraph>
+            <Skeleton.Image className="h-full w-24 flex-shrink-0 md:w-40" />
+          </div>
+        </div>
+        <div className="space-x-2 flex">
+          <Skeleton.Button />
+          <Skeleton.Button />
+        </div>
+      </div>
+    </section>
+  );
   return (
     <div className="space-y-3">
-      {fakeData.map(it => (
-        <Card
-          key={it.id}
-          title={it.title}
-          info={it.info}
-          desc={it.desc}
-          src={it.src}
-        >
-          {it.content}
-        </Card>
-      ))}
+      <div className="mb-4">
+        {dataSource.length ? (
+          dataSource.map(it => (
+            <Skeleton
+              active
+              key={it.id}
+              loading={loading}
+              placeholder={placeholder}
+            >
+              <Card {...it} />
+            </Skeleton>
+          ))
+        ) : (
+          <Skeleton active loading={loading} placeholder={placeholder}>
+            loading...
+          </Skeleton>
+        )}
+      </div>
+      <Pagination {...pagination} />
     </div>
   );
 };

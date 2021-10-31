@@ -1,27 +1,45 @@
 import BraftEditor from "braft-editor";
+import "braft-editor/dist/index.css";
 
 import { useRequest } from "hooks";
 import { useEffect } from "react";
+import { GET_ARTICLE_DETAIL } from "services/API";
 import { fontFamilies } from "./config";
 
-export const useArticle = ({ resourceId, form }) => {
+export const useArticle = ({ id, formApi }) => {
   const result = useRequest({
-    service: "",
-    necessaryParams: { resourceId },
-    // ready: !!resourceId,
-    ready: false,
-    initialData: { content: "" }
+    service: GET_ARTICLE_DETAIL,
+    necessaryParams: { id },
+    ready: !!id
   });
 
   const { data } = result;
-  const { html, raw } = data;
+  const { html, raw, articleName, cover } = data;
   const template = raw || html;
 
+  const file = {
+    uid: "1",
+    name: cover,
+    status: "success",
+    // size: "130KB",
+    response: {
+      code: "0000",
+      data: cover
+    },
+    preview: true,
+    url: cover
+  };
+
   useEffect(() => {
-    if (template) {
-      form.setFieldsValue({
-        editorState: BraftEditor.createEditorState(template, { fontFamilies })
-      });
+    if (template && formApi.current) {
+      const initValues = {
+        editorState: BraftEditor.createEditorState(template, { fontFamilies }),
+        articleName
+      };
+      if (cover) {
+        initValues.cover = [file];
+      }
+      formApi.current.setValues(initValues);
     }
   }, [template]);
 

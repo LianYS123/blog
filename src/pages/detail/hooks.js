@@ -7,17 +7,14 @@ export const useDocAuth = () => {
   return true;
 };
 
-export const useHtmlAndOutline = resourceId => {
-  const {
-    data: { html },
-    ...rest
-  } = useRequest({
+export const useHtmlAndOutline = id => {
+  const { data, ...rest } = useRequest({
     service: GET_ARTICLE_DETAIL,
-    necessaryParams: { resourceId },
-    // ready: !!resourceId && resourceId !== "undefined",
-    ready: false,
+    necessaryParams: { id },
+    ready: !!id && id !== "undefined",
     initialData: { html: "" }
   });
+  const { html } = data;
   const result = getHtmlAndOutline(html);
-  return { ...result, ...rest };
+  return { ...data, ...result, ...rest };
 };

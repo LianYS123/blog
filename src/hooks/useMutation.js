@@ -34,7 +34,7 @@ const useRequestErrorHandler = () => {
  * @param {function} service 异步方法
  * @return {array} 异步方法和状态信息
  */
-export const useMutation = (service, initialData, config = {}) => {
+export const useMutation = (service, initialData = {}, config = {}) => {
   const {
     autoHandleError = true,
     showActionMessage = true,
@@ -73,9 +73,12 @@ export const useMutation = (service, initialData, config = {}) => {
       } else if (autoHandleError) {
         handler(res);
       }
+      // 报错数据
+      if (res.code === "0000") {
+        setData(res.data || {});
+      }
 
       setLoading(false);
-      setData(res);
       return res;
     } catch (e) {
       setLoading(false);

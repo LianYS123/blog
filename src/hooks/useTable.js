@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { useDeepCompareEffect } from "./useUtils";
 import { useRequest } from "./useRequest";
 
-const defaultFormatter = ({ data = [], total = 1 } = {}) => {
-  return { total: total || data.length, dataSource: data };
+const defaultFormatter = ({ list = [], total = 1 } = {}) => {
+  return { total, dataSource: list };
 };
 
 /**
@@ -77,7 +77,7 @@ export const useTable = options => {
     necessaryParams = {},
     formatter = defaultFormatter,
     rowSelection: customConfig,
-    pageFieldName = "pageNo",
+    pageFieldName = "page",
     pageSizeFieldName = "pageSize",
     ...rest
   } = options;
