@@ -1,11 +1,12 @@
 import { parseUrl, stringifyUrl } from "query-string";
 
 const methodReg = /^(get|post|put|delete)/i;
+const SIMPLE_REQUEST_METHODS = ["GET", "DELETE"];
 
 export const getAPIMethod = url => {
   if (methodReg.test(url)) {
     const [_, urlMethod] = methodReg.exec(url);
-    return urlMethod;
+    return urlMethod.toUpperCase();
   }
   return "GET";
 };
@@ -24,7 +25,7 @@ export const parseAPI = (url, data) => {
     });
   }
 
-  if (method === "GET") {
+  if (SIMPLE_REQUEST_METHODS.includes(method)) {
     parsedUrl = stringifyUrl({ url: parsedUrl, query: parsedData });
   }
 

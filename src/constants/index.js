@@ -32,3 +32,14 @@ export const localMap = {
   zh_CN: "zh",
   en_US: "en"
 };
+
+export const COMMON_FORM_ITEM_LAYOUT = {
+  labelCol: {
+    span: 6
+  },
+  wrapper: {
+    span: 6
+  },
+  labelAlign: "right",
+  labelPosition: "left"
+};

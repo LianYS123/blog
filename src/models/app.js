@@ -9,7 +9,8 @@ export const appSlice = createSlice({
     userInfo: {},
     loadingApp: false,
     local: localStorage.getItem("lang") || "en_US",
-    config: {}
+    config: {},
+    dictMap: {}
   },
   reducers: {
     // 将token保存在全局
@@ -25,6 +26,12 @@ export const appSlice = createSlice({
     },
     setConfig: (state, action) => {
       state.config = action.payload;
+    },
+    setDict: (state, action) => {
+      state.dictMap = (action.payload || []).reduce(
+        (res, cur) => ({ ...res, [cur.key]: cur.value }),
+        {}
+      );
     },
     setLocal: (state, action) => {
       state.local = action.payload;

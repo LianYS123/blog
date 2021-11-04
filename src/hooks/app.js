@@ -1,5 +1,5 @@
 import { useMutation } from "hooks";
-import { CONFIG_APP, USER_INFO } from "services/API";
+import { CONFIG_APP, GET_ALL_DICT, USER_INFO } from "services/API";
 import { appSlice } from "models/app";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -30,6 +30,11 @@ export const useRemoteData = ({
 // 数据初始化
 export const useInitApp = () => {
   const { token } = useSelector(state => state.app);
+
+  useRemoteData({
+    action: appSlice.actions.setDict,
+    service: GET_ALL_DICT
+  });
 
   // 请求初始化配置信息
   useRemoteData({

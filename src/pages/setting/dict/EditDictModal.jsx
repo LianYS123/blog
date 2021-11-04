@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { Form, Modal } from "@douyinfe/semi-ui";
 import { useMutation } from "hooks";
 import { ADD_DICT, EDIT_DICT } from "services/API";
+import { COMMON_FORM_ITEM_LAYOUT } from "constants";
 
 // 编辑字典
 export const EditDictModal = ({ visible, id, close, reload, record = {} }) => {
@@ -31,16 +32,13 @@ export const EditDictModal = ({ visible, id, close, reload, record = {} }) => {
       visible={visible}
     >
       <Form
+        {...COMMON_FORM_ITEM_LAYOUT}
         initValues={initialValues}
         getFormApi={api => (formApiRef.current = api)}
-        labelAlign="right"
-        labelCol={{ span: 6 }}
-        wrapperCol={{ span: 18 }}
         onSubmit={handleSubmit}
-        labelPosition="left"
       >
-        <Form.Input label="字段名称" field="key" placeholder="Key" />
-        <Form.Input label="字段值" field="value" placeholder="Value" />
+        <Form.Input required label="字段名称" field="key" placeholder="Key" />
+        <Form.Input required label="字段值" field="value" placeholder="Value" />
         <Form.Input
           label="描述"
           field="description"

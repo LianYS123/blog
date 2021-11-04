@@ -1,5 +1,6 @@
 import { IMAGE_UPLOAD } from "services/API";
 import { parseAPI } from "./apiUtils";
+const SIMPLE_REQUEST_METHODS = ["GET", "DELETE"];
 
 const xFetch = function (url, data, options = {}) {
   const { parsedUrl, method, parsedData } = parseAPI(url, data);
@@ -15,7 +16,7 @@ const xFetch = function (url, data, options = {}) {
     },
     ...options
   };
-  if (method !== "GET") {
+  if (!SIMPLE_REQUEST_METHODS.includes(method)) {
     opts.body = JSON.stringify(parsedData);
   }
   return fetch(parsedUrl, opts).then(res => res.json());

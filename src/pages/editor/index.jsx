@@ -1,14 +1,16 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import BraftEditor from "braft-editor";
 
-import { controls, fontFamilies } from "./config";
+import { fontFamilies } from "./config";
 import { useArticle } from "./hooks";
-import { useHistory, useLocation, useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { useMutation } from "hooks";
 import { ADD_ARTICLE, EDIT_ARTICLE, IMAGE_UPLOAD } from "services/API";
 import { Button, Form, Spin, withField } from "@douyinfe/semi-ui";
 import { IconUpload } from "@douyinfe/semi-icons";
 import { upload } from "utils/fetch";
+import { parse } from "marked";
+import routers from "routers";
 
 function Editor() {
   const formApiRef = useRef();
@@ -17,6 +19,7 @@ function Editor() {
   const { loading } = useArticle({ formApi: formApiRef, id });
   const [updateArticle] = useMutation(EDIT_ARTICLE);
   const [addArticle] = useMutation(ADD_ARTICLE);
+  const [loadingConvert, setLoadingConvert] = useState(false);
 
   // 保存文章
   const handleSubmit = async values => {
@@ -32,9 +35,29 @@ function Editor() {
 
     const requestParams = { html, raw, ...rest };
     const request = id ? updateArticle : addArticle;
-    const { code } = await request({ ...requestParams, id });
+    const { code, data } = await request({ ...requestParams, id });
     if (code === "0000") {
-      history.goBack();
+      // history.goBack();
+      history.push(routers.DETAIL.replace(":id", data));
+    }
+  };
+
+  // 转换markdown
+  const handleConvert = () => {
+    setLoadingConvert(true);
+    try {
+      const editorState = formApiRef.current.getValue("editorState");
+      if (!editorState) {
+        setLoadingConvert(false);
+        return;
+      }
+      const text = editorState.toText();
+      // console.log(text);
+      const html = parse(text);
+      const editor = BraftEditor.createEditorState(html);
+      formApiRef.current.setValue("editorState", editor);
+    } finally {
+      setLoadingConvert(false);
     }
   };
 
@@ -42,7 +65,7 @@ function Editor() {
 
   return (
     <div className="mx-auto py-8">
-      <Spin spinning={loading}>
+      <Spin spinning={loading || loadingConvert}>
         <Form
           labelPosition="left"
           getFormApi={formApi => (formApiRef.current = formApi)}
@@ -75,7 +98,16 @@ function Editor() {
             id="htmlTemplate"
             noLabel={true}
             field="editorState"
-            controls={controls}
+            // controls={controls}
+            extendControls={[
+              "separator",
+              {
+                key: "my-button",
+                type: "button",
+                text: "自动解析markdown文章",
+                onClick: handleConvert
+              }
+            ]}
             fontFamilies={fontFamilies}
             media={{
               accepts: { audio: true, video: true },

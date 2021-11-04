@@ -1,11 +1,13 @@
 import React from "react";
 import { useIntl } from "react-intl";
 import { useDocAuth, useHtmlAndOutline } from "./hooks";
-import { Anchor, Empty, Spin } from "@douyinfe/semi-ui";
+import { Anchor, Empty, Modal, Spin } from "@douyinfe/semi-ui";
 
 import { useHistory, useParams } from "react-router";
 import routers from "routers";
-import { IconEdit } from "@douyinfe/semi-icons";
+import { IconDelete, IconEdit } from "@douyinfe/semi-icons";
+import { useMutation } from "hooks";
+import { DELETE_ARTICLE } from "services/API";
 
 const { Link } = Anchor;
 
@@ -15,7 +17,8 @@ function Detail() {
   const history = useHistory();
 
   const auth = useDocAuth();
-  const { html, outline, loading } = useHtmlAndOutline(resourceId);
+  const { html, outline, loading, id } = useHtmlAndOutline(resourceId);
+  const [deleteArticle] = useMutation(DELETE_ARTICLE);
 
   const renderLink = list => {
     return list.map(item => {
@@ -47,15 +50,42 @@ function Detail() {
           )}
 
           {auth && (
-            <div
-              onClick={() => {
-                const pathname = routers.EDITOR_EDIT.replace(":id", resourceId);
-                history.push(pathname);
-              }}
-              className="flex items-center hover:underline cursor-pointer"
-            >
-              <IconEdit className="mx-1" />
-              {intl.formatMessage({ id: "EDIT_ARTICLE" })}
+            <div className="flex">
+              <span
+                onClick={() => {
+                  const pathname = routers.EDITOR_EDIT.replace(
+                    ":id",
+                    resourceId
+                  );
+                  history.push(pathname);
+                }}
+                className="flex items-center hover:underline cursor-pointer mr-2"
+              >
+                <IconEdit className="mx-1" />
+                {intl.formatMessage({ id: "EDIT_ARTICLE" })}
+              </span>
+
+              <span
+                onClick={() => {
+                  Modal.warning({
+                    title: "你确定要删除该文章吗？",
+                    content: "删除后不可恢复，请谨慎操作",
+                    onOk: async () => {
+                      const { code } = await deleteArticle({ id });
+                      if (code === "0000") {
+                        history.push(routers.HOME);
+                      }
+                    },
+                    okButtonProps: {
+                      type: "danger"
+                    }
+                  });
+                }}
+                className="flex items-center hover:underline cursor-pointer text-red-500"
+              >
+                <IconDelete className="mx-1" />
+                删除文章
+              </span>
             </div>
           )}
         </div>
