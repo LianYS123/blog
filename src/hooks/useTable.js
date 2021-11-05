@@ -14,18 +14,18 @@ const defaultFormatter = ({ list = [], total = 1 } = {}) => {
  * @return {*} pagination
  */
 export const usePagination = ({ defaultPageSize, total }) => {
-  const [{ current, pageSize }, onChangePaination] = useState({
-    current: 1,
+  const [{ currentPage, pageSize }, onChangePaination] = useState({
+    currentPage: 1,
     pageSize: defaultPageSize
   });
-  const onChange = (current, pageSize) => {
+  const onChange = (currentPage, pageSize) => {
     onChangePaination({
-      current,
+      currentPage,
       pageSize
     });
   };
   const pagination = {
-    current,
+    currentPage,
     pageSize,
     total,
     onChange,
@@ -96,7 +96,7 @@ export const useTable = options => {
     service,
     necessaryParams: {
       ...necessaryParams,
-      [pageFieldName]: pagination.current,
+      [pageFieldName]: pagination.currentPage,
       [pageSizeFieldName]: pagination.pageSize
     },
     ...rest

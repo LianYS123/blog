@@ -1,5 +1,5 @@
 export default {
-  WEBSITE_NAME: "MY SPACE",
+  WEBSITE_NAME: "SPACE",
   PHONE: "手机号",
   CAPTCHA: "验证码",
   GET_CAPTCHA: "获取验证码",

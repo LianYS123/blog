@@ -19,12 +19,13 @@ const DictManager = () => {
   const columns = [
     {
       title: "字段名称(Key)",
-      dataIndex: "key"
+      dataIndex: "key",
+      width: 150
     },
     {
       title: "字段值(Value)",
       dataIndex: "value",
-      maxWidth: 300
+      width: 320
     },
     {
       title: "描述",

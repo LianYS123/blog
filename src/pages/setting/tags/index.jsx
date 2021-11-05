@@ -26,10 +26,10 @@ const TagManager = () => {
       dataIndex: "color",
       render: color => <Tag color={color}>{color}</Tag>
     },
-    {
-      title: "标签描述",
-      dataIndex: "description"
-    },
+    // {
+    //   title: "标签描述",
+    //   dataIndex: "description"
+    // },
     {
       title: "创建时间",
       dataIndex: "createTime",
