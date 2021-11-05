@@ -1,15 +1,7 @@
-import React, { useRef } from "react";
-import { Form, Modal, Tag, withField } from "@douyinfe/semi-ui";
-import { useMutation } from "hooks";
+import React from "react";
+import { Form, Tag } from "@douyinfe/semi-ui";
 import { ADD_TAG, EDIT_TAG } from "services/API";
-import { COMMON_FORM_ITEM_LAYOUT } from "constants";
-import { SketchPicker } from "react-color";
-
-const ColorPicker = withField(SketchPicker, {
-  valueKey: "color",
-  onKeyChangeFnName: "onChangeComplete",
-  valuePath: "hex"
-});
+import { FormModal } from "components/modal";
 
 const colors = [
   "amber",
@@ -31,70 +23,46 @@ const colors = [
   "white"
 ];
 
-// 编辑字典
-export const EditTagModal = ({ visible, id, close, reload, record = {} }) => {
-  const [add, { loading: loadingAdd }] = useMutation(ADD_TAG);
-  const [update, { loading: loadingUpdate }] = useMutation(EDIT_TAG);
-  const loading = loadingAdd || loadingUpdate;
-  const formApiRef = useRef();
-  const { tagName, description, color } = record;
+// 编辑标签
+export const EditTagModal = props => {
+  const { record = {} } = props;
+  const { tagName, description, color, id } = record;
+  const service = id ? EDIT_TAG : ADD_TAG;
+  const title = id ? "编辑标签" : "新增标签";
   const initialValues = { tagName, description, color };
-  const handleSubmit = async values => {
-    let result;
-    if (id) {
-      result = await update({ ...values, id });
-    } else {
-      result = await add(values);
-    }
-    const { code } = result;
-    if (code === "0000") {
-      close();
-      reload();
-    }
-  };
   return (
-    <Modal
-      title={id ? "编辑标签" : "新增标签"}
-      onOk={() => {
-        formApiRef.current.submitForm();
-      }}
-      okButtonProps={{ loading }}
-      onCancel={close}
-      visible={visible}
+    <FormModal
+      initialValues={initialValues}
+      service={service}
+      title={title}
+      {...props}
     >
-      <Form
-        {...COMMON_FORM_ITEM_LAYOUT}
-        initValues={initialValues}
-        getFormApi={api => (formApiRef.current = api)}
-        onSubmit={handleSubmit}
+      <Form.Input
+        rules={[{ required: true }]}
+        label="标签名称"
+        field="tagName"
+        placeholder="请输入标签名称"
+      />
+      <Form.Select
+        rules={[{ required: true }]}
+        label="标签颜色"
+        field="color"
+        placeholder="请选择标签颜色"
+        className="w-full"
       >
-        <Form.Input
-          required
-          label="标签名称"
-          field="tagName"
-          placeholder="请输入标签名称"
-        />
-        <Form.Select
-          required
-          label="标签颜色"
-          field="color"
-          placeholder="请选择标签颜色"
-          className="w-full"
-        >
-          {colors.map(color => (
-            <Form.Select.Option value={color} key={color}>
-              <Tag style={{ marginTop: 5 }} color={color}>
-                {color}
-              </Tag>
-            </Form.Select.Option>
-          ))}
-        </Form.Select>
-        <Form.Input
-          label="标签描述"
-          field="description"
-          placeholder="请输入标签描述"
-        />
-      </Form>
-    </Modal>
+        {colors.map(color => (
+          <Form.Select.Option value={color} key={color}>
+            <Tag style={{ marginTop: 5 }} color={color}>
+              {color}
+            </Tag>
+          </Form.Select.Option>
+        ))}
+      </Form.Select>
+      <Form.Input
+        label="标签描述"
+        field="description"
+        placeholder="请输入标签描述"
+      />
+    </FormModal>
   );
 };

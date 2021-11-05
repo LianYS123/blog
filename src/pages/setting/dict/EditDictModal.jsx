@@ -1,50 +1,34 @@
-import React, { useRef } from "react";
-import { Form, Modal } from "@douyinfe/semi-ui";
-import { useMutation } from "hooks";
+import React from "react";
+import { Form } from "@douyinfe/semi-ui";
 import { ADD_DICT, EDIT_DICT } from "services/API";
-import { COMMON_FORM_ITEM_LAYOUT } from "constants";
+import { FormModal } from "components/modal";
 
 // 编辑字典
-export const EditDictModal = ({ visible, id, close, reload, record = {} }) => {
-  const [addDict, { loading: loadingAdd }] = useMutation(ADD_DICT);
-  const [updateDict, { loading: loadingUpdate }] = useMutation(EDIT_DICT);
-  const loading = loadingAdd || loadingUpdate;
-  const formApiRef = useRef();
+export const EditDictModal = props => {
+  const { id, record = {} } = props;
+  const service = id ? EDIT_DICT : ADD_DICT;
   const { key, value, description } = record;
   const initialValues = { key, value, description };
-  const handleSubmit = async values => {
-    if (id) {
-      await updateDict({ ...values, id });
-    } else {
-      await addDict(values);
-    }
-    close();
-    reload();
-  };
   return (
-    <Modal
+    <FormModal
       title={id ? "编辑字段" : "新增字段"}
-      onOk={() => {
-        formApiRef.current.submitForm();
-      }}
-      okButtonProps={{ loading }}
-      onCancel={close}
-      visible={visible}
+      initialValues={initialValues}
+      service={service}
+      {...props}
     >
-      <Form
-        {...COMMON_FORM_ITEM_LAYOUT}
-        initValues={initialValues}
-        getFormApi={api => (formApiRef.current = api)}
-        onSubmit={handleSubmit}
-      >
-        <Form.Input required label="字段名称" field="key" placeholder="Key" />
-        <Form.Input required label="字段值" field="value" placeholder="Value" />
-        <Form.Input
-          label="描述"
-          field="description"
-          placeholder="Description"
-        />
-      </Form>
-    </Modal>
+      <Form.Input
+        rules={[{ required: true }]}
+        label="字段名称"
+        field="key"
+        placeholder="Key"
+      />
+      <Form.Input
+        rules={[{ required: true }]}
+        label="字段值"
+        field="value"
+        placeholder="Value"
+      />
+      <Form.Input label="描述" field="description" placeholder="Description" />
+    </FormModal>
   );
 };
