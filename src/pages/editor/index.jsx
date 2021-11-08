@@ -4,22 +4,31 @@ import BraftEditor from "braft-editor";
 import { fontFamilies } from "./config";
 import { useArticle } from "./hooks";
 import { useHistory, useParams } from "react-router";
-import { useMutation } from "hooks";
-import { ADD_ARTICLE, EDIT_ARTICLE, IMAGE_UPLOAD } from "services/API";
+import { useMutation, useRequest } from "hooks";
+import {
+  ADD_ARTICLE,
+  EDIT_ARTICLE,
+  GET_ALL_TAGS,
+  IMAGE_UPLOAD
+} from "services/API";
 import { Button, Form, Spin, withField } from "@douyinfe/semi-ui";
 import { IconUpload } from "@douyinfe/semi-icons";
 import { upload } from "utils/fetch";
 import { parse } from "marked";
 import routers from "routers";
+import $ from "jquery";
 
 function Editor() {
   const formApiRef = useRef();
   const history = useHistory();
   const { id } = useParams();
   const { loading } = useArticle({ formApi: formApiRef, id });
-  const [updateArticle] = useMutation(EDIT_ARTICLE);
-  const [addArticle] = useMutation(ADD_ARTICLE);
+  const [load] = useMutation(id ? EDIT_ARTICLE : ADD_ARTICLE);
   const [loadingConvert, setLoadingConvert] = useState(false);
+  const { data: tags } = useRequest({
+    service: GET_ALL_TAGS,
+    initialData: []
+  });
 
   // 保存文章
   const handleSubmit = async values => {
@@ -27,6 +36,10 @@ function Editor() {
     const html = editorState.toHTML();
     const raw = editorState.toRAW();
     const file = files[0];
+    const src = $(html).find("img").attr("src");
+    if (src) {
+      rest.cover = src;
+    }
 
     if (file?.response?.code === "0000") {
       const { data } = file.response;
@@ -34,8 +47,7 @@ function Editor() {
     }
 
     const requestParams = { html, raw, ...rest };
-    const request = id ? updateArticle : addArticle;
-    const { code, data } = await request({ ...requestParams, id });
+    const { code, data } = await load({ ...requestParams, id });
     if (code === "0000") {
       // history.goBack();
       history.push(routers.DETAIL.replace(":id", data));
@@ -64,22 +76,48 @@ function Editor() {
   const Editor = withField(BraftEditor);
 
   return (
-    <div className="mx-auto py-8">
+    <div className="mx-auto">
       <Spin spinning={loading || loadingConvert}>
         <Form
           labelPosition="left"
           getFormApi={formApi => (formApiRef.current = formApi)}
           onSubmit={handleSubmit}
         >
-          <Form.Input
-            field="articleName"
-            className="w-72"
-            label="标题"
-            placeholder="请输入标题"
-            rules={[{ required: true }]}
-          />
+          <div className="flex space-x-8">
+            <div className="flex-auto">
+              <Form.Input
+                size="large"
+                className="w-full"
+                field="articleName"
+                noLabel
+                placeholder="请输入标题"
+                rules={[{ required: true }]}
+              />
+            </div>
+            <Form.Select
+              className="w-64"
+              size="large"
+              // label="文章标签"
+              noLabel
+              field="tags"
+              multiple
+              placeholder="请选择标签"
+            >
+              {tags.map(tag => (
+                <Form.Select.Option value={tag.id} key={tag.id}>
+                  {tag.tagName}
+                </Form.Select.Option>
+              ))}
+            </Form.Select>
+            <div className="text-right space-x-2 mt-4">
+              <Button theme="solid" htmlType="submit">
+                保存
+              </Button>
+              <Button onClick={history.goBack}>返回</Button>
+            </div>
+          </div>
 
-          <Form.Upload
+          {/* <Form.Upload
             field="cover"
             label="封面"
             fileName="file"
@@ -91,7 +129,7 @@ function Editor() {
             <Button icon={<IconUpload />} theme="light">
               点击上传
             </Button>
-          </Form.Upload>
+          </Form.Upload> */}
 
           {/* 文章内容 */}
           <Editor
@@ -104,7 +142,8 @@ function Editor() {
               {
                 key: "my-button",
                 type: "button",
-                text: "自动解析markdown文章",
+                title: "自动解析markdown文章",
+                text: "markdown",
                 onClick: handleConvert
               }
             ]}
@@ -134,13 +173,6 @@ function Editor() {
               }
             }}
           />
-
-          <div className="text-center space-x-4">
-            <Button type="primary" htmlType="submit">
-              保存
-            </Button>
-            <Button onClick={() => history.go(-1)}>返回</Button>
-          </div>
         </Form>
       </Spin>
     </div>

@@ -14,7 +14,7 @@ export const useArticle = ({ id, formApi }) => {
   });
 
   const { data } = result;
-  const { html, raw, articleName, cover } = data;
+  const { html, raw, articleName, cover, tags } = data;
   const template = raw || html;
 
   const file = {
@@ -34,7 +34,8 @@ export const useArticle = ({ id, formApi }) => {
     if (template && formApi.current) {
       const initValues = {
         editorState: BraftEditor.createEditorState(template, { fontFamilies }),
-        articleName
+        articleName,
+        tags: tags ? tags.map(it => it.id) : []
       };
       if (cover) {
         initValues.cover = [file];

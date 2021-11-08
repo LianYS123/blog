@@ -24,7 +24,13 @@ export const FormModal = ({
     if (record?.id) {
       values.id = record.id;
     }
-    const result = await load(getParams(values));
+    const params = getParams(values);
+    if (!params) {
+      // eslint-disable-next-line no-console
+      console.warn("请求数据不存在。");
+      return;
+    }
+    const result = await load(params);
     const { code } = result;
     if (code === "0000") {
       close && close();

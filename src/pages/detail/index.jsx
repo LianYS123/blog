@@ -1,7 +1,7 @@
 import React from "react";
 import { useIntl } from "react-intl";
 import { useDocAuth, useHtmlAndOutline } from "./hooks";
-import { Anchor, Empty, Modal, Spin } from "@douyinfe/semi-ui";
+import { Anchor, Empty, Modal, Select, Spin, Tag } from "@douyinfe/semi-ui";
 
 import { useHistory, useParams } from "react-router";
 import routers from "routers";
@@ -17,7 +17,8 @@ function Detail() {
   const history = useHistory();
 
   const auth = useDocAuth();
-  const { html, outline, loading, id } = useHtmlAndOutline(resourceId);
+  const { html, outline, loading, id, tags, articleName } =
+    useHtmlAndOutline(resourceId);
   const [deleteArticle] = useMutation(DELETE_ARTICLE);
 
   const renderLink = list => {
@@ -38,68 +39,78 @@ function Detail() {
   return (
     <div className="py-8">
       <Spin className="w-full" spinning={loading}>
-        <div>
-          {html ? (
-            <article
-              className="w-full"
-              id="htmlTemplate"
-              dangerouslySetInnerHTML={{ __html: html }}
-            ></article>
-          ) : (
-            <Empty className="my-12" />
-          )}
+        <div className="relative">
+          <h1 className="my-2">{articleName}</h1>
+          <div>
+            {tags &&
+              tags.map(it => (
+                <Tag className="m-1" key={it.id} color={it.color}>
+                  {it.tagName}
+                </Tag>
+              ))}
+          </div>
+          <div className="mr-52">
+            {html ? (
+              <article
+                id="htmlTemplate"
+                dangerouslySetInnerHTML={{ __html: html }}
+              ></article>
+            ) : (
+              <Empty className="my-12" />
+            )}
+          </div>
+          <div className="absolute right-0 top-4">
+            <div className="fixed right-0 w-64">
+              {auth && (
+                <div className="flex mb-4 -ml-2">
+                  <span
+                    onClick={() => {
+                      const pathname = routers.EDITOR_EDIT.replace(
+                        ":id",
+                        resourceId
+                      );
+                      history.push(pathname);
+                    }}
+                    className="flex items-center hover:underline cursor-pointer mr-2"
+                  >
+                    <IconEdit className="mx-1" />
+                    {intl.formatMessage({ id: "EDIT_ARTICLE" })}
+                  </span>
 
-          {auth && (
-            <div className="flex">
-              <span
-                onClick={() => {
-                  const pathname = routers.EDITOR_EDIT.replace(
-                    ":id",
-                    resourceId
-                  );
-                  history.push(pathname);
-                }}
-                className="flex items-center hover:underline cursor-pointer mr-2"
-              >
-                <IconEdit className="mx-1" />
-                {intl.formatMessage({ id: "EDIT_ARTICLE" })}
-              </span>
-
-              <span
-                onClick={() => {
-                  Modal.warning({
-                    title: "你确定要删除该文章吗？",
-                    content: "删除后不可恢复，请谨慎操作",
-                    onOk: async () => {
-                      const { code } = await deleteArticle({ id });
-                      if (code === "0000") {
-                        history.push(routers.HOME);
-                      }
-                    },
-                    okButtonProps: {
-                      type: "danger"
-                    }
-                  });
-                }}
-                className="flex items-center hover:underline cursor-pointer text-red-500"
-              >
-                <IconDelete className="mx-1" />
-                删除文章
-              </span>
+                  <span
+                    onClick={() => {
+                      Modal.warning({
+                        title: "你确定要删除该文章吗？",
+                        content: "删除后不可恢复，请谨慎操作",
+                        onOk: async () => {
+                          const { code } = await deleteArticle({ id });
+                          if (code === "0000") {
+                            history.push(routers.HOME);
+                          }
+                        },
+                        okButtonProps: {
+                          type: "danger"
+                        }
+                      });
+                    }}
+                    className="flex items-center hover:underline cursor-pointer text-red-500"
+                  >
+                    <IconDelete className="mx-1" />
+                    删除文章
+                  </span>
+                </div>
+              )}
+              {outline && outline.length ? (
+                <Anchor
+                  getContainer={() => document.getElementById("container")}
+                >
+                  {renderLink(outline)}
+                </Anchor>
+              ) : null}
             </div>
-          )}
+          </div>
         </div>
       </Spin>
-      {outline && outline.length ? (
-        <div className="top-12 w-56 absolute">
-          <Anchor
-            className="fixed right-2"
-            getContainer={() => document.getElementById("container")}
-          >
-            {renderLink(outline)}
-          </Anchor>
-        </div>
-      ) : null}
     </div>
   );
 }

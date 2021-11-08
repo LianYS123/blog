@@ -5,14 +5,20 @@ import { useHistory } from "react-router";
 import { useSelector } from "react-redux";
 import { Button } from "@douyinfe/semi-ui";
 import { IconMenu } from "@douyinfe/semi-icons";
+import classNames from "classnames";
 
 // header
-const AppHeader = ({ onMenuIconClick }) => {
+const AppHeader = ({ onMenuIconClick, top }) => {
   const history = useHistory();
   const intl = useIntl();
   const { id: userId, username } = useSelector(state => state.app.userInfo);
   return (
-    <header className="flex justify-between items-center pl-4 pr-6 py-3 shadow z-10">
+    <header
+      className={classNames(
+        "flex justify-between items-center pl-4 pr-6 py-3 z-10 transition-shadow duration-300",
+        { shadow: top > 10 }
+      )}
+    >
       <div className="space-x-6">
         <svg
           onClick={onMenuIconClick}
@@ -26,7 +32,7 @@ const AppHeader = ({ onMenuIconClick }) => {
         </svg>
         <span
           onClick={() => history.push(routers.HOME)}
-          className="text-lg font-bold cursor-pointer hover:underline"
+          className="text-lg font-medium cursor-pointer hover:underline"
         >
           {intl.formatMessage({ id: "WEBSITE_NAME" })}
         </span>
