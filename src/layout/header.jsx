@@ -1,10 +1,8 @@
 import React from "react";
 import routers from "routers";
 import { useIntl } from "react-intl";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import { useSelector } from "react-redux";
-import { Button } from "@douyinfe/semi-ui";
-import { IconMenu } from "@douyinfe/semi-icons";
 import classNames from "classnames";
 
 // header
@@ -12,11 +10,16 @@ const AppHeader = ({ onMenuIconClick, top }) => {
   const history = useHistory();
   const intl = useIntl();
   const { id: userId, username } = useSelector(state => state.app.userInfo);
+  const { pathname } = useLocation();
   return (
     <header
       className={classNames(
-        "flex justify-between items-center pl-4 pr-6 py-3 z-10 transition-shadow duration-300",
-        { shadow: top > 10 }
+        "flex justify-between items-center pl-4 pr-6 py-3 z-20 transition-shadow duration-300",
+        {
+          shadow: top > 10,
+          "bg-transparent absolute left-0 right-0 top-0 text-white":
+            pathname === routers.HOME
+        }
       )}
     >
       <div className="space-x-6">
@@ -26,9 +29,12 @@ const AppHeader = ({ onMenuIconClick, top }) => {
           height="1.5em"
           viewBox="0 0 48 48"
           className="cursor-pointer"
-          style={{ transform: "translateY(-2px)", display: "inline" }}
+          style={{ transform: "translateY(-3px)", display: "inline" }}
         >
-          <path d="M6 36h36v-4H6v4zm0-10h36v-4H6v4zm0-14v4h36v-4H6z"></path>
+          <path
+            fill="currentColor"
+            d="M6 36h36v-4H6v4zm0-10h36v-4H6v4zm0-14v4h36v-4H6z"
+          ></path>
         </svg>
         <span
           onClick={() => history.push(routers.HOME)}
@@ -43,7 +49,19 @@ const AppHeader = ({ onMenuIconClick, top }) => {
       </div>
       <div className="space-x-4 font-semibold text-sm">
         <span className="space-x-4">
-          <Button onClick={() => history.push(routers.EDITOR)}>写文章</Button>
+          <button
+            onClick={() => history.push(routers.ARTICLE_LIST)}
+            className="hover:underline"
+          >
+            文章
+          </button>
+
+          <button
+            onClick={() => history.push(routers.EDITOR)}
+            className="hover:underline"
+          >
+            写文章
+          </button>
 
           {userId ? (
             <span className="text-sm">{username}</span>

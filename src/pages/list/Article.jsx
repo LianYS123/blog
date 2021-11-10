@@ -1,11 +1,10 @@
 import { Tag } from "@douyinfe/semi-ui";
-import dayjs from "dayjs";
 import React from "react";
 import { useHistory } from "react-router";
 import routers from "routers";
 import { renderDateTime } from "utils";
 
-export const Card = ({
+export const Article = ({
   cover,
   summary,
   articleName,
@@ -16,7 +15,7 @@ export const Card = ({
 }) => {
   const history = useHistory();
   return (
-    <section className="shadow-sm px-4 py-3 flex rounded">
+    <section className="flex pb-2 border-b border-gray-200">
       <div className="flex w-full flex-col justify-between">
         <div className="space-y-1">
           <div>

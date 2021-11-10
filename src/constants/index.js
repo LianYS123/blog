@@ -43,3 +43,9 @@ export const COMMON_FORM_ITEM_LAYOUT = {
   labelAlign: "right",
   labelPosition: "left"
 };
+
+export const HOME_PANEL_CATEGORY = {
+  SINGLE_ITEM: "单项展示",
+  PANEL_LIST: "水平列表",
+  PANEL_WALL: "照片墙"
+};

@@ -1,85 +1,75 @@
-import { Card } from "./Card";
+import { useRequest } from "hooks";
 import React from "react";
-import { useTable } from "hooks";
-import { ARTICLE_LIST } from "services/API";
-import { Pagination, Skeleton, Spin } from "@douyinfe/semi-ui";
-import { useSelector } from "react-redux";
-import { useHistory } from "react-router";
-import routers from "routers";
+import { GET_PANEL_LIST } from "services/API";
+import { PanelList } from "./components/PanelList";
+import { PanelWall } from "./components/PanelWall";
+import { SingleItem } from "./components/SingleItem";
+import styles from "./styles.module.less";
+
+const PanelMap = {
+  SINGLE_ITEM: SingleItem,
+  PANEL_LIST: PanelList,
+  PANEL_WALL: PanelWall
+};
+
+const items = [
+  {
+    id: 1,
+    type: "SINGLE_ITEM",
+    title: "欢迎来到我的空间",
+    subTitle: "记录心情、想法，以及一些有趣的事物",
+    source:
+      "https://liuli-1259462774.cos.ap-shanghai.myqcloud.com/c39d7a8e-90fb-4ec3-9db4-6eb4d728ff92cat-6747298_1280.jpeg"
+  },
+  {
+    id: 2,
+    type: "PANEL_LIST",
+    panels: [
+      {
+        id: 1,
+        title: "aaa",
+        subTitle: "aaa",
+        source:
+          "https://lh3.googleusercontent.com/ZlzT2DFoTB6BZji6K0iub6_GO7H3oMHwKmZY_efgG0OWaaaw-5NWXI534Xhb83g2=w842-c-h908-rw-v1"
+      },
+      {
+        id: 2,
+        title: "aaa",
+        subTitle: "aaa",
+        source:
+          "https://lh3.googleusercontent.com/ZlzT2DFoTB6BZji6K0iub6_GO7H3oMHwKmZY_efgG0OWaaaw-5NWXI534Xhb83g2=w842-c-h908-rw-v1"
+      },
+      {
+        id: 3,
+        title: "aaa",
+        subTitle: "aaa",
+        source:
+          "https://lh3.googleusercontent.com/ZlzT2DFoTB6BZji6K0iub6_GO7H3oMHwKmZY_efgG0OWaaaw-5NWXI534Xhb83g2=w842-c-h908-rw-v1"
+      },
+      {
+        id: 4,
+        title: "aaa",
+        subTitle: "aaa",
+        source:
+          "https://lh3.googleusercontent.com/ZlzT2DFoTB6BZji6K0iub6_GO7H3oMHwKmZY_efgG0OWaaaw-5NWXI534Xhb83g2=w842-c-h908-rw-v1"
+      }
+    ]
+  }
+];
 
 const Home = () => {
-  const { dictMap } = useSelector(state => state.app);
-  const { HOME_IMAGE } = dictMap;
-  const { tableProps, loading } = useTable({
-    service: ARTICLE_LIST
-  });
-  const history = useHistory();
-  const { dataSource, pagination } = tableProps;
-  const placeholder = (
-    <section className="shadow-sm px-4 py-3 flex rounded">
-      <div className="flex w-full flex-col justify-between">
-        <div className="space-y-1">
-          <Skeleton.Title className="font-bold w-48"></Skeleton.Title>
-          <div className="flex h-16 md:h-24">
-            <Skeleton.Paragraph className="flex-auto h-full mr-1 md:mr-4"></Skeleton.Paragraph>
-            <Skeleton.Image className="h-full w-24 flex-shrink-0 md:w-40" />
-          </div>
-        </div>
-        <div className="space-x-2 flex">
-          <Skeleton.Button />
-          <Skeleton.Button />
-        </div>
-      </div>
-    </section>
-  );
-  return (
-    <div className="space-y-3 mt-8 mb-16">
-      {HOME_IMAGE ? (
-        <div
-          className="overflow-hidden bg-gray-500 rounded-lg relative cursor-pointer"
-          onClick={() => history.push(routers.USER_SPACE)}
-          style={{
-            height: "30vw",
-            backgroundImage: `url(${HOME_IMAGE})`,
-            backgroundPosition: "center",
-            backgroundSize: "cover"
-          }}
-        >
-          <div
-            className="absolute left-0 right-0 bottom-0 mx-4 my-3 md:mx-6 md:my-4 text-white"
-            style={{ textShadow: "1px 1px 2px black" }}
-          >
-            <p className="text-lg font-bold">欢迎来到我的空间</p>
-            <p className="text-sm text-gray-100">
-              记录想法、知识和一些有趣的事物
-            </p>
-          </div>
-          {/* <img
-            className="object-cover w-full h-full object-center rounded-lg"
-            src={HOME_IMAGE}
-          /> */}
-        </div>
-      ) : null}
+  // const { data = [] } = useRequest({
+  //   service: GET_PANEL_LIST
+  // });
+  const data = items;
 
-      <div className="mb-4">
-        {dataSource.length ? (
-          dataSource.map(it => (
-            <Skeleton
-              active
-              key={it.id}
-              loading={loading}
-              placeholder={placeholder}
-            >
-              <Card {...it} />
-            </Skeleton>
-          ))
-        ) : (
-          <Skeleton active loading={loading} placeholder={placeholder}>
-            loading...
-          </Skeleton>
-        )}
-      </div>
-      <Pagination {...pagination} />
+  return (
+    <div className={"space-y-3 " + styles.home}>
+      {data.map(it => {
+        const { type, id } = it;
+        const Comp = PanelMap[type] || "div";
+        return <Comp key={id} {...it} />;
+      })}
     </div>
   );
 };

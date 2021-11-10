@@ -1,7 +1,15 @@
 import React from "react";
 import { useIntl } from "react-intl";
 import { useDocAuth, useHtmlAndOutline } from "./hooks";
-import { Anchor, Empty, Modal, Select, Spin, Tag } from "@douyinfe/semi-ui";
+import {
+  Anchor,
+  Empty,
+  Modal,
+  Select,
+  Spin,
+  Tag,
+  Typography
+} from "@douyinfe/semi-ui";
 
 import { useHistory, useParams } from "react-router";
 import routers from "routers";
@@ -37,10 +45,10 @@ function Detail() {
   };
 
   return (
-    <div className="py-8">
+    <div className="container">
       <Spin className="w-full" spinning={loading}>
         <div className="relative">
-          <h1 className="my-2">{articleName}</h1>
+          <Typography.Title className="mb-4">{articleName}</Typography.Title>
           <div>
             {tags &&
               tags.map(it => (

@@ -6,7 +6,7 @@ import TagManager from "./tags";
 
 const Setting = () => {
   return (
-    <div className="py-4">
+    <div className="container">
       <Tabs keepDOM={false} type="line">
         <Tabs.TabPane className="py-2" tab="资源管理" itemKey="resource">
           <ResourceManager />

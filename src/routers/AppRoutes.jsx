@@ -13,6 +13,7 @@ import Detial from "pages/detail/index";
 import { useInitApp } from "hooks/app";
 import Setting from "pages/setting";
 import Space from "pages/space";
+import ArticleList from "pages/list";
 
 // 页面路由
 const AppRoutes = () => {
@@ -25,10 +26,12 @@ const AppRoutes = () => {
           <AppLayout>
             <Switch>
               <Route path={routers.HOME} component={Home} />
+              <Route path={routers.ARTICLE_LIST} component={ArticleList} />
               <Route exact path={routers.EDITOR} component={Editor} />
               <Route path={routers.EDITOR_EDIT} component={Editor} />
               <Route path={routers.DETAIL} component={Detial} />
               <Route path={routers.USER_SPACE} component={Space} />
+
               <Route path={routers.SETTING} component={Setting} />
               <Route path={routers.NOT_FOUND} component={NotFound} />
               <Redirect to={routers.NOT_FOUND} />

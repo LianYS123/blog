@@ -76,7 +76,7 @@ function Editor() {
   const Editor = withField(BraftEditor);
 
   return (
-    <div className="mx-auto">
+    <div className="container">
       <Spin spinning={loading || loadingConvert}>
         <Form
           labelPosition="left"
