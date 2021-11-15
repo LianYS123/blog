@@ -47,8 +47,10 @@ function Detail() {
   return (
     <div className="container">
       <Spin className="w-full" spinning={loading}>
-        <div className="relative">
-          <Typography.Title className="mb-4">{articleName}</Typography.Title>
+        <div className="relative mb-8">
+          <div className="mb-2">
+            <Typography.Title>{articleName}</Typography.Title>
+          </div>
           <div>
             {tags &&
               tags.map(it => (
@@ -57,7 +59,7 @@ function Detail() {
                 </Tag>
               ))}
           </div>
-          <div className="mr-52">
+          <div className="mr-52 mt-4">
             {html ? (
               <article
                 id="htmlTemplate"

@@ -1,13 +1,17 @@
+import classNames from "classnames";
+import { MenuButton } from "components/button/MenuButton";
 import { useRequest } from "hooks";
 import React from "react";
 import { GET_PANEL_LIST } from "services/API";
 import { PanelList } from "./components/PanelList";
 import { PanelWall } from "./components/PanelWall";
+import { SingleArticle } from "./components/SingleArticle";
 import { SingleItem } from "./components/SingleItem";
 import styles from "./styles.module.less";
 
 const PanelMap = {
   SINGLE_ITEM: SingleItem,
+  SINGLE_ARTICLE: SingleArticle,
   PANEL_LIST: PanelList,
   PANEL_WALL: PanelWall
 };
@@ -20,6 +24,15 @@ const items = [
     subTitle: "记录心情、想法，以及一些有趣的事物",
     source:
       "https://liuli-1259462774.cos.ap-shanghai.myqcloud.com/c39d7a8e-90fb-4ec3-9db4-6eb4d728ff92cat-6747298_1280.jpeg"
+  },
+  {
+    id: 8,
+    type: "SINGLE_ARTICLE",
+    articleId: 8
+    // title: "欢迎来到我的空间",
+    // subTitle: "记录心情、想法，以及一些有趣的事物",
+    // source:
+    //   "https://liuli-1259462774.cos.ap-shanghai.myqcloud.com/c39d7a8e-90fb-4ec3-9db4-6eb4d728ff92cat-6747298_1280.jpeg"
   },
   {
     id: 2,
@@ -62,14 +75,16 @@ const Home = () => {
   //   service: GET_PANEL_LIST
   // });
   const data = items;
+  // const data = [];
 
   return (
-    <div className={"space-y-3 " + styles.home}>
+    <div className={classNames("space-y-3", styles.home, "bg-gray-50")}>
       {data.map(it => {
         const { type, id } = it;
         const Comp = PanelMap[type] || "div";
         return <Comp key={id} {...it} />;
       })}
+      {/* <MenuButton /> */}
     </div>
   );
 };

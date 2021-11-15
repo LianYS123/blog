@@ -5,14 +5,8 @@ import { fontFamilies } from "./config";
 import { useArticle } from "./hooks";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useRequest } from "hooks";
-import {
-  ADD_ARTICLE,
-  EDIT_ARTICLE,
-  GET_ALL_TAGS,
-  IMAGE_UPLOAD
-} from "services/API";
+import { ADD_ARTICLE, EDIT_ARTICLE, GET_ALL_TAGS } from "services/API";
 import { Button, Form, Spin, withField } from "@douyinfe/semi-ui";
-import { IconUpload } from "@douyinfe/semi-icons";
 import { upload } from "utils/fetch";
 import { parse } from "marked";
 import routers from "routers";
@@ -76,105 +70,90 @@ function Editor() {
   const Editor = withField(BraftEditor);
 
   return (
-    <div className="container">
-      <Spin spinning={loading || loadingConvert}>
-        <Form
-          labelPosition="left"
-          getFormApi={formApi => (formApiRef.current = formApi)}
-          onSubmit={handleSubmit}
-        >
-          <div className="flex space-x-8">
-            <div className="flex-auto">
-              <Form.Input
-                size="large"
-                className="w-full"
-                field="articleName"
-                noLabel
-                placeholder="请输入标题"
-                rules={[{ required: true }]}
-              />
-            </div>
-            <Form.Select
-              className="w-64"
+    <div className="container h-full">
+      {/* <Spin className="h-full" spinning={loading || loadingConvert}> */}
+      <Form
+        className="h-full"
+        labelPosition="left"
+        getFormApi={formApi => (formApiRef.current = formApi)}
+        onSubmit={handleSubmit}
+      >
+        <div className="flex space-x-8">
+          <div className="flex-auto">
+            <Form.Input
               size="large"
-              // label="文章标签"
+              className="w-full"
+              field="articleName"
               noLabel
-              field="tags"
-              multiple
-              placeholder="请选择标签"
-            >
-              {tags.map(tag => (
-                <Form.Select.Option value={tag.id} key={tag.id}>
-                  {tag.tagName}
-                </Form.Select.Option>
-              ))}
-            </Form.Select>
-            <div className="text-right space-x-2 mt-4">
-              <Button theme="solid" htmlType="submit">
-                保存
-              </Button>
-              <Button onClick={history.goBack}>返回</Button>
-            </div>
+              placeholder="请输入标题"
+              rules={[{ required: true }]}
+            />
           </div>
-
-          {/* <Form.Upload
-            field="cover"
-            label="封面"
-            fileName="file"
-            // listType="picture"
-            headers={{ Authorization: localStorage.getItem("acc") }}
-            limit={1}
-            action={IMAGE_UPLOAD}
+          <Form.Select
+            className="w-64"
+            size="large"
+            // label="文章标签"
+            noLabel
+            field="tags"
+            multiple
+            placeholder="请选择标签"
           >
-            <Button icon={<IconUpload />} theme="light">
-              点击上传
+            {tags.map(tag => (
+              <Form.Select.Option value={tag.id} key={tag.id}>
+                {tag.tagName}
+              </Form.Select.Option>
+            ))}
+          </Form.Select>
+          <div className="text-right space-x-2 mt-4">
+            <Button theme="solid" htmlType="submit">
+              保存
             </Button>
-          </Form.Upload> */}
+            <Button onClick={history.goBack}>返回</Button>
+          </div>
+        </div>
 
-          {/* 文章内容 */}
-          <Editor
-            id="htmlTemplate"
-            noLabel={true}
-            field="editorState"
-            // controls={controls}
-            extendControls={[
-              "separator",
-              {
-                key: "my-button",
-                type: "button",
-                title: "自动解析markdown文章",
-                text: "markdown",
-                onClick: handleConvert
+        {/* 文章内容 */}
+        <Editor
+          noLabel={true}
+          field="editorState"
+          extendControls={[
+            "separator",
+            {
+              key: "my-button",
+              type: "button",
+              title: "自动解析markdown文章",
+              text: "markdown",
+              onClick: handleConvert
+            }
+          ]}
+          fontFamilies={fontFamilies}
+          media={{
+            accepts: { audio: true, video: true },
+            async uploadFn({ success, error, file }) {
+              const { code, data: url } = await upload(file);
+              if (code === "0000" && url) {
+                success({
+                  url,
+                  meta: {
+                    id: url,
+                    title: url,
+                    alt: url,
+                    loop: false, // 指定音视频是否循环播放
+                    autoPlay: false, // 指定音视频是否自动播放
+                    controls: false // 指定音视频是否显示控制栏
+                    // poster: 'http://xxx/xx.png', // 指定视频播放器的封面
+                  }
+                });
+              } else {
+                error({
+                  msg: "unable to upload."
+                });
               }
-            ]}
-            fontFamilies={fontFamilies}
-            media={{
-              accepts: { audio: true, video: true },
-              async uploadFn({ success, error, file }) {
-                const { code, data: url } = await upload(file);
-                if (code === "0000" && url) {
-                  success({
-                    url,
-                    meta: {
-                      id: url,
-                      title: url,
-                      alt: url,
-                      loop: false, // 指定音视频是否循环播放
-                      autoPlay: false, // 指定音视频是否自动播放
-                      controls: false // 指定音视频是否显示控制栏
-                      // poster: 'http://xxx/xx.png', // 指定视频播放器的封面
-                    }
-                  });
-                } else {
-                  error({
-                    msg: "unable to upload."
-                  });
-                }
-              }
-            }}
-          />
-        </Form>
-      </Spin>
+            }
+          }}
+        />
+      </Form>
+      {/* </Spin> */}
     </div>
   );
 }
