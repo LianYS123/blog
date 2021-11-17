@@ -37,7 +37,7 @@ export const Article = ({
           <div className="flex h-16 md:h-24">
             <p
               onClick={() => history.push(routers.DETAIL.replace(":id", id))}
-              className="text-xs text-gray-800 cursor-pointer flex-auto h-full md:text-base overflow-hidden hover:underline font-normal mr-1 md:mr-4"
+              className="text-base sm:text-xs text-gray-800 dark:text-gray-50 cursor-pointer flex-auto h-full md:text-base overflow-hidden hover:underline font-normal mr-1 md:mr-4"
             >
               {summary}
             </p>

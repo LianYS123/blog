@@ -33,41 +33,41 @@ const items = [
     // subTitle: "记录心情、想法，以及一些有趣的事物",
     // source:
     //   "https://liuli-1259462774.cos.ap-shanghai.myqcloud.com/c39d7a8e-90fb-4ec3-9db4-6eb4d728ff92cat-6747298_1280.jpeg"
-  },
-  {
-    id: 2,
-    type: "PANEL_LIST",
-    panels: [
-      {
-        id: 1,
-        title: "aaa",
-        subTitle: "aaa",
-        source:
-          "https://lh3.googleusercontent.com/ZlzT2DFoTB6BZji6K0iub6_GO7H3oMHwKmZY_efgG0OWaaaw-5NWXI534Xhb83g2=w842-c-h908-rw-v1"
-      },
-      {
-        id: 2,
-        title: "aaa",
-        subTitle: "aaa",
-        source:
-          "https://lh3.googleusercontent.com/ZlzT2DFoTB6BZji6K0iub6_GO7H3oMHwKmZY_efgG0OWaaaw-5NWXI534Xhb83g2=w842-c-h908-rw-v1"
-      },
-      {
-        id: 3,
-        title: "aaa",
-        subTitle: "aaa",
-        source:
-          "https://lh3.googleusercontent.com/ZlzT2DFoTB6BZji6K0iub6_GO7H3oMHwKmZY_efgG0OWaaaw-5NWXI534Xhb83g2=w842-c-h908-rw-v1"
-      },
-      {
-        id: 4,
-        title: "aaa",
-        subTitle: "aaa",
-        source:
-          "https://lh3.googleusercontent.com/ZlzT2DFoTB6BZji6K0iub6_GO7H3oMHwKmZY_efgG0OWaaaw-5NWXI534Xhb83g2=w842-c-h908-rw-v1"
-      }
-    ]
   }
+  // {
+  //   id: 2,
+  //   type: "PANEL_LIST",
+  //   panels: [
+  //     {
+  //       id: 1,
+  //       title: "aaa",
+  //       subTitle: "aaa",
+  //       source:
+  //         "https://lh3.googleusercontent.com/ZlzT2DFoTB6BZji6K0iub6_GO7H3oMHwKmZY_efgG0OWaaaw-5NWXI534Xhb83g2=w842-c-h908-rw-v1"
+  //     },
+  //     {
+  //       id: 2,
+  //       title: "aaa",
+  //       subTitle: "aaa",
+  //       source:
+  //         "https://lh3.googleusercontent.com/ZlzT2DFoTB6BZji6K0iub6_GO7H3oMHwKmZY_efgG0OWaaaw-5NWXI534Xhb83g2=w842-c-h908-rw-v1"
+  //     },
+  //     {
+  //       id: 3,
+  //       title: "aaa",
+  //       subTitle: "aaa",
+  //       source:
+  //         "https://lh3.googleusercontent.com/ZlzT2DFoTB6BZji6K0iub6_GO7H3oMHwKmZY_efgG0OWaaaw-5NWXI534Xhb83g2=w842-c-h908-rw-v1"
+  //     },
+  //     {
+  //       id: 4,
+  //       title: "aaa",
+  //       subTitle: "aaa",
+  //       source:
+  //         "https://lh3.googleusercontent.com/ZlzT2DFoTB6BZji6K0iub6_GO7H3oMHwKmZY_efgG0OWaaaw-5NWXI534Xhb83g2=w842-c-h908-rw-v1"
+  //     }
+  //   ]
+  // }
 ];
 
 const Home = () => {

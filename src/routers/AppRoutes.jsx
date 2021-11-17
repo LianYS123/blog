@@ -11,7 +11,6 @@ import NotFound from "pages/404";
 import Editor from "pages/editor/index";
 import Detial from "pages/detail/index";
 import { useInitApp } from "hooks/app";
-import Setting from "pages/setting";
 import Space from "pages/space";
 import ArticleList from "pages/list";
 
@@ -32,7 +31,6 @@ const AppRoutes = () => {
               <Route path={routers.DETAIL} component={Detial} />
               <Route path={routers.USER_SPACE} component={Space} />
 
-              <Route path={routers.SETTING} component={Setting} />
               <Route path={routers.NOT_FOUND} component={NotFound} />
               <Redirect to={routers.NOT_FOUND} />
             </Switch>

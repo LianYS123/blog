@@ -36,6 +36,8 @@ export const controls = [
   "media"
 ];
 
+export const simpleControls = ["bold", "italic", "underline"];
+
 export const fontFamilies = [
   {
     name: "Araial",

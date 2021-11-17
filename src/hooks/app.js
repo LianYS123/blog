@@ -33,7 +33,8 @@ export const useInitApp = () => {
 
   useRemoteData({
     action: appSlice.actions.setDict,
-    service: GET_ALL_DICT
+    service: GET_ALL_DICT,
+    ready: !!token
   });
 
   // 请求初始化配置信息
@@ -49,4 +50,33 @@ export const useInitApp = () => {
     ready: !!token,
     deps: [token]
   });
+};
+
+// 主题操作
+export const useTheme = () => {
+  const { theme } = useSelector(state => state.app);
+  const dispatch = useDispatch();
+  const switchTo = mode => {
+    dispatch(appSlice.actions.setTheme(mode));
+  };
+  const body = document.body;
+  const switchToLight = () => {
+    body.removeAttribute("theme-mode");
+    body.classList.remove("dark");
+    switchTo("light");
+  };
+  const switchToDark = () => {
+    body.setAttribute("theme-mode", "dark");
+    body.classList.add("dark");
+    switchTo("dark");
+  };
+  const toggleTheme = () => {
+    if (theme === "dark") {
+      switchToLight();
+    } else {
+      switchToDark();
+    }
+  };
+  const isDark = theme === "dark";
+  return { theme, isDark, switchTo, switchToDark, switchToLight, toggleTheme };
 };

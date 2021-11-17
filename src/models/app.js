@@ -10,7 +10,8 @@ export const appSlice = createSlice({
     loadingApp: false,
     local: localStorage.getItem("lang") || "en_US",
     config: {},
-    dictMap: {}
+    dictMap: {},
+    theme: localStorage.getItem("theme") || "light" // 默认暗色主题
   },
   reducers: {
     // 将token保存在全局
@@ -35,6 +36,10 @@ export const appSlice = createSlice({
     },
     setLocal: (state, action) => {
       state.local = action.payload;
+    },
+    setTheme: (state, action) => {
+      localStorage.setItem("theme", action.payload);
+      state.theme = action.payload;
     }
   }
 });

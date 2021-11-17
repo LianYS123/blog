@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import BraftEditor from "braft-editor";
 
-import { fontFamilies } from "./config";
+import { controls, fontFamilies, simpleControls } from "./config";
 import { useArticle } from "./hooks";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useRequest } from "hooks";
@@ -11,6 +11,8 @@ import { upload } from "utils/fetch";
 import { parse } from "marked";
 import routers from "routers";
 import $ from "jquery";
+import { useMedia } from "react-use";
+import { BREAKPOINT } from "constants/index";
 
 function Editor() {
   const formApiRef = useRef();
@@ -23,6 +25,8 @@ function Editor() {
     service: GET_ALL_TAGS,
     initialData: []
   });
+
+  const isSM = useMedia(BREAKPOINT.sm);
 
   // 保存文章
   const handleSubmit = async values => {
@@ -66,6 +70,19 @@ function Editor() {
       setLoadingConvert(false);
     }
   };
+
+  const extendControls = isSM
+    ? [
+        "separator",
+        {
+          key: "my-button",
+          type: "button",
+          title: "自动解析markdown文章",
+          text: "markdown",
+          onClick: handleConvert
+        }
+      ]
+    : [];
 
   const Editor = withField(BraftEditor);
 
@@ -116,16 +133,8 @@ function Editor() {
         <Editor
           noLabel={true}
           field="editorState"
-          extendControls={[
-            "separator",
-            {
-              key: "my-button",
-              type: "button",
-              title: "自动解析markdown文章",
-              text: "markdown",
-              onClick: handleConvert
-            }
-          ]}
+          controls={isSM ? controls : simpleControls}
+          extendControls={extendControls}
           fontFamilies={fontFamilies}
           media={{
             accepts: { audio: true, video: true },

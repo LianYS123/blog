@@ -19,13 +19,13 @@ const getAligns = () => {
 export default ({ command, mode }) => {
   const proxy = {
     "/api": {
-      target: "http://localhost:8090",
+      target: "http://blog.lianys.fun/",
       changeOrigin: true
     }
   };
 
   return {
-    base: "./", // index.html文件所在位置
+    base: "/", // index.html文件所在位置
     root: "./", // js导入的资源路径，src
     resolve: {
       alias: getAligns()

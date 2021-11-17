@@ -4,19 +4,20 @@ import { useIntl } from "react-intl";
 import { useHistory, useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import classNames from "classnames";
-import Favicon from "./favicon";
+import { useTheme } from "hooks/app";
 
 // header
-const AppHeader = ({ onMenuIconClick, top }) => {
+const AppHeader = ({ top }) => {
   const history = useHistory();
   const intl = useIntl();
   const { id: userId, username } = useSelector(state => state.app.userInfo);
   const { pathname } = useLocation();
   const isHomePage = pathname === routers.HOME;
+  const { toggleTheme } = useTheme();
   return (
     <header
       className={classNames(
-        "flex justify-between items-center pl-4 pr-6 py-3 z-20 transition",
+        "flex justify-between items-center pl-1 sm:pl-4 pr-6 py-3 z-20 transition",
         {
           shadow: top > 10,
           "absolute left-0 right-0 top-0": isHomePage,
@@ -27,22 +28,9 @@ const AppHeader = ({ onMenuIconClick, top }) => {
     >
       <div className="space-x-6">
         <svg
-          onClick={onMenuIconClick}
-          width="1.5em"
-          height="1.5em"
-          viewBox="0 0 48 48"
-          className="cursor-pointer"
-          style={{ transform: "translateY(-3px)", display: "inline" }}
-        >
-          <path
-            fill="currentColor"
-            d="M6 36h36v-4H6v4zm0-10h36v-4H6v4zm0-14v4h36v-4H6z"
-          ></path>
-        </svg>
-        <svg
           width="2.5em"
           height="2.5em"
-          className="cursor-pointer absolute top-0 left-10"
+          className="cursor-pointer absolute top-0 left-4 sm:left-10"
           onClick={() => history.push(routers.HOME)}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="-87.65 0 175.3 100"
@@ -72,6 +60,9 @@ const AppHeader = ({ onMenuIconClick, top }) => {
       </div>
       <div className="space-x-4 font-semibold text-sm">
         <span className="space-x-4">
+          <button onClick={() => toggleTheme()} className="hover:underline">
+            切换主题
+          </button>
           <button
             onClick={() => history.push(routers.ARTICLE_LIST)}
             className="hover:underline"

@@ -59,7 +59,7 @@ function Detail() {
                 </Tag>
               ))}
           </div>
-          <div className="mr-52 mt-4">
+          <div className="mr-0 sm:mr-52 mt-4">
             {html ? (
               <article
                 id="htmlTemplate"
@@ -69,7 +69,7 @@ function Detail() {
               <Empty className="my-12" />
             )}
           </div>
-          <div className="absolute right-0 top-4">
+          <div className="absolute hidden sm:block right-0 top-4">
             <div className="fixed right-0 w-64">
               {auth && (
                 <div className="flex mb-4 -ml-2">

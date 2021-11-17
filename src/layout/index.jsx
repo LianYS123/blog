@@ -1,19 +1,16 @@
-import { useModalAction } from "hooks";
 import React, { useRef } from "react";
 import { useMeasure, useScroll } from "react-use";
 import AppHeader from "./header";
-import Sidebar from "./sidebar";
 
 // 页面布局
 const AppLayout = ({ children }) => {
-  const { open, ...modalProps } = useModalAction();
   const ref = useRef();
   const { y } = useScroll(ref);
   const [headerRef, { height }] = useMeasure();
   return (
-    <div className="h-full relative">
+    <div className="h-full relative dark:bg-black dark:text-white">
       <div ref={headerRef}>
-        <AppHeader top={y} onMenuIconClick={() => open()} />
+        <AppHeader top={y} />
       </div>
       <main
         ref={ref}
@@ -23,7 +20,6 @@ const AppLayout = ({ children }) => {
       >
         {children}
       </main>
-      <Sidebar {...modalProps} />
     </div>
   );
 };

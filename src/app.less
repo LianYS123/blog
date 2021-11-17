@@ -10,6 +10,10 @@ body {
   font-family: "Google Sans", Roboto, "Noto Naskh Arabic UI", Arial, sans-serif;
 }
 
+.dark {
+  color-scheme: dark;
+}
+
 @keyframes onePulse {
   0% {
     box-shadow: 0px 0px 0px 0px rgba(92, 103, 255, 0.3);
@@ -82,7 +86,9 @@ body {
     }
   }
 
-  p, ol, ul {
+  p,
+  ol,
+  ul {
     margin: 0.5em 0;
     color: #314659;
     // font-size: 14px;
@@ -130,38 +136,41 @@ body {
     font-size: 18px;
     line-height: 1.4;
   }
-  // div {
-  //   h2,
-  //   h3,
-  //   h4,
-  //   h5 {
-  //     &:first-child {
-  //       margin-top: 10px;
-  //     }
-  //   }
-  // }
-  // .shuiyin {
-  //   content: "shuiyin";
-  //   &::after {
-  //     content: "123";
-  //   }
-  // }
-  // .shui-yin {
-  //   position: absolute;
-  //   left: 1%;
-  //   top: 10%;
-  //   font-family: lucida console, Consolas, Monaco, andale mono, ubuntu mono,
-  //     monospace;
-  //   color: #ddd;
-  //   font-size: 24px;
-  //   opacity: 0.2;
-  //   transform: rotate(-30deg);
-  //   user-select: none;
-  // }
-  // img {
-  //   box-shadow: 0 8px 20px rgba(143, 168, 191, 0.35);
-  //   max-width: calc(100% - 32px);
-  // }
+}
+
+.dark {
+  #htmlTemplate {
+    pre {
+      code {
+        color: whitesmoke;
+        background: #1f2937;
+      }
+    }
+    blockquote {
+      color: rgba(0, 0, 0, 0.45);
+      border-left: 4px solid #f0f0f0;
+    }
+
+    p,
+    ol,
+    ul {
+      color: white;
+      & > code {
+        color: #c7254e;
+      }
+    }
+
+    h1 {
+      color: white;
+    }
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: white;
+    }
+  }
 }
 
 #htmlTemplate {

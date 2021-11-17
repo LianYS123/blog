@@ -10,6 +10,7 @@ import isEqual from "fast-deep-equal";
 
 import { useIntl } from "react-intl";
 import { Notification } from "@douyinfe/semi-ui";
+import { useMedia } from "react-use";
 
 /**
  * @description: 自定义useEffect的更新逻辑
