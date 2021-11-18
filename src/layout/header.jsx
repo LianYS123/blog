@@ -17,12 +17,11 @@ const AppHeader = ({ top }) => {
   return (
     <header
       className={classNames(
-        "flex justify-between items-center pl-1 sm:pl-4 pr-6 py-3 z-20 transition",
+        "flex w-full justify-between items-center pl-1 sm:pl-4 pr-6 py-3 z-20 transition-shadow fixed bg-white dark:bg-gray-900",
         {
-          shadow: top > 10,
-          "absolute left-0 right-0 top-0": isHomePage,
-          "bg-transparent text-white": isHomePage && top <= 300,
-          "bg-gray-50 text-black": isHomePage && top > 300
+          shadow: top > 10
+          // "bg-transparent text-white": isHomePage && top <= 100,
+          // "bg-gray-50 text-black": isHomePage && top > 100
         }
       )}
     >

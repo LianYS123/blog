@@ -36,7 +36,16 @@ export const controls = [
   "media"
 ];
 
-export const simpleControls = ["bold", "italic", "underline"];
+export const simpleControls = [
+  "undo",
+  "redo",
+  "separator",
+  "bold",
+  "italic",
+  "emoji",
+  "headings",
+  "underline"
+];
 
 export const fontFamilies = [
   {

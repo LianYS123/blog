@@ -17,14 +17,14 @@ const PanelMap = {
 };
 
 const items = [
-  {
-    id: 1,
-    type: "SINGLE_ITEM",
-    title: "欢迎来到我的空间",
-    subTitle: "记录心情、想法，以及一些有趣的事物",
-    source:
-      "https://liuli-1259462774.cos.ap-shanghai.myqcloud.com/c39d7a8e-90fb-4ec3-9db4-6eb4d728ff92cat-6747298_1280.jpeg"
-  },
+  // {
+  //   id: 1,
+  //   type: "SINGLE_ITEM",
+  //   title: "欢迎来到我的空间",
+  //   subTitle: "记录心情、想法，以及一些有趣的事物",
+  //   source:
+  //     "https://liuli-1259462774.cos.ap-shanghai.myqcloud.com/c39d7a8e-90fb-4ec3-9db4-6eb4d728ff92cat-6747298_1280.jpeg"
+  // },
   {
     id: 8,
     type: "SINGLE_ARTICLE",
@@ -78,7 +78,13 @@ const Home = () => {
   // const data = [];
 
   return (
-    <div className={classNames("space-y-3", styles.home, "bg-gray-50")}>
+    <div
+      className={classNames(
+        "space-y-3",
+        styles.home,
+        "bg-gray-50 dark:bg-black"
+      )}
+    >
       {data.map(it => {
         const { type, id } = it;
         const Comp = PanelMap[type] || "div";

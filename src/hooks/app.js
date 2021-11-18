@@ -78,5 +78,9 @@ export const useTheme = () => {
     }
   };
   const isDark = theme === "dark";
-  return { theme, isDark, switchTo, switchToDark, switchToLight, toggleTheme };
+
+  useEffect(() => {
+    document.documentElement.style.colorScheme = theme;
+  }, [theme]);
+  return { theme, isDark, switchToDark, switchToLight, toggleTheme };
 };

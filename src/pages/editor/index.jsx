@@ -121,12 +121,6 @@ function Editor() {
               </Form.Select.Option>
             ))}
           </Form.Select>
-          <div className="text-right space-x-2 mt-4">
-            <Button theme="solid" htmlType="submit">
-              保存
-            </Button>
-            <Button onClick={history.goBack}>返回</Button>
-          </div>
         </div>
 
         {/* 文章内容 */}
@@ -161,7 +155,14 @@ function Editor() {
             }
           }}
         />
+        <div className="text-center space-x-2 pb-4">
+          <Button theme="solid" htmlType="submit">
+            保存
+          </Button>
+          <Button onClick={history.goBack}>返回</Button>
+        </div>
       </Form>
+
       {/* </Spin> */}
     </div>
   );
