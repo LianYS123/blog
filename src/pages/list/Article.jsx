@@ -1,4 +1,4 @@
-import { Tag } from "@douyinfe/semi-ui";
+import { Tag, Typography } from "@douyinfe/semi-ui";
 import React from "react";
 import { useHistory } from "react-router";
 import routers from "routers";
@@ -34,13 +34,22 @@ export const Article = ({
                 ))}
             </span>
           </div>
-          <div className="flex h-16 md:h-24">
-            <p
+          <div className="flex">
+            {/* <p
               onClick={() => history.push(routers.DETAIL.replace(":id", id))}
               className="text-base sm:text-xs text-gray-800 dark:text-gray-50 cursor-pointer flex-auto h-full md:text-base overflow-hidden hover:underline font-normal mr-1 md:mr-4"
             >
               {summary}
-            </p>
+            </p> */}
+            <div className="w-full mb-1">
+              <Typography.Paragraph
+                onClick={() => history.push(routers.DETAIL.replace(":id", id))}
+                className="text-sm sm:text-xs text-gray-800 dark:text-gray-50 cursor-pointer overflow-hidden flex-auto md:text-base font-normal mr-1 md:mr-4"
+                ellipsis={{ rows: 3 }}
+              >
+                {summary}
+              </Typography.Paragraph>
+            </div>
             {cover ? (
               <div className="h-full w-24 flex-shrink-0 md:w-40">
                 <img

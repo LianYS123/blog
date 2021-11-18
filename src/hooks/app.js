@@ -61,13 +61,9 @@ export const useTheme = () => {
   };
   const body = document.body;
   const switchToLight = () => {
-    body.removeAttribute("theme-mode");
-    body.classList.remove("dark");
     switchTo("light");
   };
   const switchToDark = () => {
-    body.setAttribute("theme-mode", "dark");
-    body.classList.add("dark");
     switchTo("dark");
   };
   const toggleTheme = () => {
@@ -80,6 +76,14 @@ export const useTheme = () => {
   const isDark = theme === "dark";
 
   useEffect(() => {
+    if (theme === "light") {
+      body.removeAttribute("theme-mode");
+      body.classList.remove("dark");
+    }
+    if (theme === "dark") {
+      body.setAttribute("theme-mode", "dark");
+      body.classList.add("dark");
+    }
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
   return { theme, isDark, switchToDark, switchToLight, toggleTheme };

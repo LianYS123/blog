@@ -37,14 +37,11 @@ export const controls = [
 ];
 
 export const simpleControls = [
-  "undo",
-  "redo",
-  "separator",
   "bold",
   "italic",
   "emoji",
-  "headings",
-  "underline"
+  "underline",
+  "text-indent"
 ];
 
 export const fontFamilies = [

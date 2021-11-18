@@ -8,7 +8,7 @@ const AppLayout = ({ children }) => {
   const { y } = useScroll(ref);
   return (
     <div className="relative h-full dark:bg-black dark:text-white overflow-hidden">
-      <div className="absolute w-full left-0 right-0 top-0">
+      <div className="absolute h-14 w-full left-0 right-0 top-0">
         <AppHeader top={y} />
       </div>
       <main
