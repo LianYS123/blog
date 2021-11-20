@@ -35,7 +35,8 @@ export default ({ command, mode }) => {
     },
     server: {
       // 代理
-      proxy
+      proxy,
+      host: "0.0.0.0"
     },
     build: {
       target: "es2015",

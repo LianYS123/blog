@@ -37,7 +37,7 @@ const useRequestErrorHandler = () => {
 export const useMutation = (service, initialData = {}, config = {}) => {
   const {
     autoHandleError = true,
-    showActionMessage = true,
+    showActionMessage = false,
     successMessageId,
     successMessage
   } = config;
