@@ -5,7 +5,6 @@ import { controls, fontFamilies, simpleControls } from "./config";
 import { useArticle } from "./hooks";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useRequest } from "hooks";
-import { ADD_ARTICLE, EDIT_ARTICLE, GET_ALL_TAGS } from "services/API";
 import { Button, Form, Spin, withField } from "@douyinfe/semi-ui";
 import { upload } from "utils/fetch";
 import { parse } from "marked";
@@ -13,6 +12,8 @@ import routers from "routers";
 import $ from "jquery";
 import { useMedia } from "react-use";
 import { BREAKPOINT } from "constants/index";
+import { ADD_ARTICLE, EDIT_ARTICLE } from "services/article";
+import { GET_ALL_TAGS } from "services/tag";
 
 function Editor() {
   const formApiRef = useRef();

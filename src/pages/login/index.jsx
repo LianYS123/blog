@@ -2,11 +2,11 @@ import React from "react";
 import { useMutation } from "hooks";
 import routers from "routers";
 import { useHistory } from "react-router";
-import { AUTH_LOGIN } from "services/API";
 import { FormattedMessage } from "react-intl";
 import { Button, Form } from "@douyinfe/semi-ui";
 import { useDispatch } from "react-redux";
 import { appSlice } from "models/app";
+import { AUTH_LOGIN } from "services/app";
 
 const Login = () => {
   const [submit, { loading }] = useMutation(AUTH_LOGIN);

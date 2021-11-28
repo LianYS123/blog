@@ -15,7 +15,7 @@ import { useHistory, useParams } from "react-router";
 import routers from "routers";
 import { IconDelete, IconEdit } from "@douyinfe/semi-icons";
 import { useMutation } from "hooks";
-import { DELETE_ARTICLE } from "services/API";
+import { DELETE_ARTICLE } from "services/article";
 
 const { Link } = Anchor;
 

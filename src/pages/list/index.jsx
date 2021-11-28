@@ -1,8 +1,8 @@
 import React from "react";
 import { useTable } from "hooks";
-import { ARTICLE_LIST } from "services/API";
 import { Pagination, Skeleton } from "@douyinfe/semi-ui";
 import { Article } from "./Article";
+import { ARTICLE_LIST } from "services/article";
 
 const ArticleList = () => {
   const { tableProps, loading } = useTable({

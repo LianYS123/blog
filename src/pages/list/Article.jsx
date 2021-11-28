@@ -51,7 +51,7 @@ export const Article = ({
               </Typography.Paragraph>
             </div>
             {cover ? (
-              <div className="h-full w-24 flex-shrink-0 md:w-40">
+              <div className="w-24 max-h-16 sm:max-h-28 flex-shrink-0 md:w-36">
                 <img
                   src={cover}
                   alt="scene"

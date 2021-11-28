@@ -1,4 +1,4 @@
-import { IMAGE_UPLOAD } from "services/API";
+import { IMAGE_UPLOAD } from "services/app";
 import { parseAPI } from "./apiUtils";
 const SIMPLE_REQUEST_METHODS = ["GET", "DELETE"];
 

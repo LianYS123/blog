@@ -2,7 +2,6 @@ import classNames from "classnames";
 import { MenuButton } from "components/button/MenuButton";
 import { useRequest } from "hooks";
 import React from "react";
-import { GET_PANEL_LIST } from "services/API";
 import { PanelList } from "./components/PanelList";
 import { PanelWall } from "./components/PanelWall";
 import { SingleArticle } from "./components/SingleArticle";
@@ -17,14 +16,14 @@ const PanelMap = {
 };
 
 const items = [
-  // {
-  //   id: 1,
-  //   type: "SINGLE_ITEM",
-  //   title: "欢迎来到我的空间",
-  //   subTitle: "记录心情、想法，以及一些有趣的事物",
-  //   source:
-  //     "https://liuli-1259462774.cos.ap-shanghai.myqcloud.com/c39d7a8e-90fb-4ec3-9db4-6eb4d728ff92cat-6747298_1280.jpeg"
-  // },
+  {
+    id: 1,
+    type: "SINGLE_ITEM",
+    title: "这是我的空间",
+    subTitle: "记录心情、想法，以及有趣的事",
+    source:
+      "https://liuli-1259462774.cos.ap-shanghai.myqcloud.com/c39d7a8e-90fb-4ec3-9db4-6eb4d728ff92cat-6747298_1280.jpeg"
+  },
   {
     id: 8,
     type: "SINGLE_ARTICLE",

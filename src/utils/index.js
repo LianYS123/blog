@@ -25,7 +25,7 @@ export const getFileInfo = (file, defaultValues = {}) => {
   return { src, blobUrl, size, showSize, type, name };
 };
 
-export const getDefaultFileObj = ({ src, size, showSize, name }) => {
+export const getDefaultFileObj = ({ src, size = 0, showSize, name }) => {
   const file = {
     uid: src || name,
     name,

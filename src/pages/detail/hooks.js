@@ -1,5 +1,5 @@
 import { useRequest } from "hooks";
-import { GET_ARTICLE_DETAIL } from "services/API";
+import { GET_ARTICLE_DETAIL } from "services/article";
 import { getHtmlAndOutline } from "./utils";
 
 export const useDocAuth = () => {

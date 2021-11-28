@@ -3,7 +3,7 @@ import "braft-editor/dist/index.css";
 
 import { useRequest } from "hooks";
 import { useEffect } from "react";
-import { GET_ARTICLE_DETAIL } from "services/API";
+import { GET_ARTICLE_DETAIL } from "services/article";
 import { fontFamilies } from "./config";
 
 export const useArticle = ({ id, formApi }) => {

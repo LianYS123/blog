@@ -1,8 +1,10 @@
 import { useMutation } from "hooks";
-import { CONFIG_APP, GET_ALL_DICT, USER_INFO } from "services/API";
 import { appSlice } from "models/app";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { GET_ALL_DICT } from "services/dict";
+import { CONFIG_APP } from "services/app";
+import { USER_INFO } from "services/user";
 
 // 请求数据并存储到redux
 export const useRemoteData = ({
