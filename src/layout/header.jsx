@@ -68,7 +68,7 @@ const AppHeader = () => {
         </button>
 
         <button
-          onClick={() => history.push(routers.NOTES)}
+          onClick={() => history.push(routers.ESSAY)}
           className="hover:underline"
         >
           随笔
