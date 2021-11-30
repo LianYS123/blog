@@ -49,7 +49,6 @@ const Space = () => {
     const { response } = files[0];
     const avatar = response.data;
     const requestParams = { avatar, ...rest };
-    console.log(requestParams);
     const { code } = await changeUserInfo(requestParams);
   };
   return (

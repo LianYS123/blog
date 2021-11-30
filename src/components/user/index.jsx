@@ -2,7 +2,7 @@ import { Avatar } from "@douyinfe/semi-ui";
 import React from "react";
 
 export const UserAvatar = ({ userInfo, ...rest }) => {
-  const { id: userId, username, avatar } = userInfo;
+  const { id: userId, username = "u", avatar } = userInfo;
   return avatar ? (
     <Avatar src={avatar} {...rest} />
   ) : (

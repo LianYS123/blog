@@ -6,6 +6,30 @@ import { GET_ALL_DICT } from "services/dict";
 import { CONFIG_APP } from "services/app";
 import { USER_INFO } from "services/user";
 
+// 主题操作
+export const useTheme = () => {
+  const { theme } = useSelector(state => state.app);
+  const dispatch = useDispatch();
+  const switchTo = mode => {
+    dispatch(appSlice.actions.setTheme(mode));
+  };
+  const switchToLight = () => {
+    switchTo("light");
+  };
+  const switchToDark = () => {
+    switchTo("dark");
+  };
+  const toggleTheme = () => {
+    if (theme === "dark") {
+      switchToLight();
+    } else {
+      switchToDark();
+    }
+  };
+  const isDark = theme === "dark";
+  return { theme, isDark, switchToDark, switchToLight, toggleTheme, switchTo };
+};
+
 // 请求数据并存储到redux
 export const useRemoteData = ({
   service,
@@ -32,7 +56,14 @@ export const useRemoteData = ({
 // 数据初始化
 export const useInitApp = () => {
   const { token } = useSelector(state => state.app);
+  const { switchTo, theme } = useTheme();
 
+  // 初始化主题
+  useEffect(() => {
+    switchTo(theme);
+  }, []);
+
+  // 请求数据字典
   useRemoteData({
     action: appSlice.actions.setDict,
     service: GET_ALL_DICT,
@@ -52,41 +83,4 @@ export const useInitApp = () => {
     ready: !!token,
     deps: [token]
   });
-};
-
-// 主题操作
-export const useTheme = () => {
-  const { theme } = useSelector(state => state.app);
-  const dispatch = useDispatch();
-  const switchTo = mode => {
-    dispatch(appSlice.actions.setTheme(mode));
-  };
-  const body = document.body;
-  const switchToLight = () => {
-    switchTo("light");
-  };
-  const switchToDark = () => {
-    switchTo("dark");
-  };
-  const toggleTheme = () => {
-    if (theme === "dark") {
-      switchToLight();
-    } else {
-      switchToDark();
-    }
-  };
-  const isDark = theme === "dark";
-
-  useEffect(() => {
-    if (theme === "light") {
-      body.removeAttribute("theme-mode");
-      body.classList.remove("dark");
-    }
-    if (theme === "dark") {
-      body.setAttribute("theme-mode", "dark");
-      body.classList.add("dark");
-    }
-    document.documentElement.style.colorScheme = theme;
-  }, [theme]);
-  return { theme, isDark, switchToDark, switchToLight, toggleTheme };
 };

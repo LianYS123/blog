@@ -92,7 +92,7 @@ const AppHeader = () => {
         {userId ? (
           <Dropdown
             // getPopupContainer={() => document.getElementById("header-right")}
-            trigger="click"
+            // trigger="click"
             render={
               <Dropdown.Menu>
                 <Dropdown.Item onClick={() => history.push(routers.EDITOR)}>
@@ -107,7 +107,9 @@ const AppHeader = () => {
               </Dropdown.Menu>
             }
           >
-            <UserAvatar size="small" userInfo={userInfo} />
+            <span>
+              <UserAvatar size="small" userInfo={userInfo} />
+            </span>
           </Dropdown>
         ) : (
           <button

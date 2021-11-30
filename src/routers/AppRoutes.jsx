@@ -51,6 +51,7 @@ const AppRoutes = () => {
     <Router>
       <Switch>
         <Route path={routers.LOGIN} component={Login} />
+        <Route path="/test" component={loadable("test")} />
         <Route path="/pages">
           <AppLayout>
             <Switch>
@@ -69,6 +70,7 @@ const AppRoutes = () => {
                   />
                 );
               })}
+              <Redirect to={routers.NOT_FOUND} />
             </Switch>
           </AppLayout>
         </Route>

@@ -11,10 +11,10 @@ const Essay = () => {
     service: GET_ESSAY_LIST
   });
   const { dataSource, pagination } = tableProps;
-  const { open, ...essayModalProps } = useModalAction();
+  const { open: openEssayModal, ...essayModalProps } = useModalAction();
   return (
     <div className="container">
-      <Button onClick={() => open()}>写</Button>
+      <Button onClick={() => openEssayModal()}>写</Button>
       <div className="space-y-3 mb-4">
         {dataSource.length ? (
           dataSource.map(it => (
@@ -24,7 +24,11 @@ const Essay = () => {
               loading={loading}
               placeholder={<ArticlePlaceholder />}
             >
-              <EssayItem {...it} />
+              <EssayItem
+                openEssayModal={openEssayModal}
+                reload={reload}
+                {...it}
+              />
             </Skeleton>
           ))
         ) : (
@@ -38,7 +42,9 @@ const Essay = () => {
         )}
       </div>
       {dataSource.length ? <Pagination {...pagination} /> : null}
-      <EditEssayModal {...essayModalProps} reload={reload} />
+      {essayModalProps.visible ? (
+        <EditEssayModal {...essayModalProps} reload={reload} />
+      ) : null}
     </div>
   );
 };

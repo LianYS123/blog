@@ -38,8 +38,19 @@ export const appSlice = createSlice({
       state.local = action.payload;
     },
     setTheme: (state, action) => {
+      const body = document.body;
+      const isDark = action.payload === "dark";
       localStorage.setItem("theme", action.payload);
       state.theme = action.payload;
+      if (isDark) {
+        body.setAttribute("theme-mode", "dark");
+        body.classList.add("dark");
+        document.documentElement.style.colorScheme = "dark";
+      } else {
+        body.removeAttribute("theme-mode");
+        body.classList.remove("dark");
+        document.documentElement.style.colorScheme = "light";
+      }
     }
   }
 });

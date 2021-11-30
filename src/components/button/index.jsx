@@ -1,30 +1,27 @@
 import React from "react";
-import { Modal, Typography } from "@douyinfe/semi-ui";
+import { Typography } from "@douyinfe/semi-ui";
 import { useMutation } from "hooks";
+import { deleteConfirmModalAction } from "utils";
 
 // 通用删除按钮
-export const CommonDeleteButton = ({ service, id, onFinish, ...rest }) => {
+export const CommonDeleteButton = ({
+  service,
+  id,
+  onFinish,
+  children = "删除",
+  ...rest
+}) => {
   const [del] = useMutation(service);
   return (
     <Typography.Text
       link
       className="danger"
       onClick={() => {
-        Modal.warning({
-          title: "确认删除？",
-          content: "删除后不可恢复，请谨慎操作。",
-          okButtonProps: { type: "danger" },
-          onOk: async () => {
-            const result = await del({ id });
-            if (onFinish) {
-              onFinish(result);
-            }
-          }
-        });
+        deleteConfirmModalAction({ method: del, id, onFinish });
       }}
       {...rest}
     >
-      删除
+      {children}
     </Typography.Text>
   );
 };

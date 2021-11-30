@@ -1,3 +1,4 @@
+import { Modal } from "@douyinfe/semi-ui";
 import dayjs from "dayjs";
 import fileSize from "filesize";
 
@@ -39,4 +40,18 @@ export const getDefaultFileObj = ({ src, size = 0, showSize, name }) => {
     }
   };
   return file;
+};
+
+export const deleteConfirmModalAction = ({ method, id, onFinish }) => {
+  Modal.warning({
+    title: "确认删除？",
+    content: "删除后不可恢复，请谨慎操作。",
+    okButtonProps: { type: "danger" },
+    onOk: async () => {
+      const result = await method({ id });
+      if (onFinish) {
+        onFinish(result);
+      }
+    }
+  });
 };

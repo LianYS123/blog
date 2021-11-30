@@ -16,15 +16,17 @@ export const FormModal = ({
   getParams = values => values,
   record,
   children,
-  onFinish
+  onFinish,
+  modalProps = {},
+  formProps = {}
 }) => {
   const [load, { loading }] = useMutation(service);
   const formApiRef = useRef();
   const handleSubmit = async values => {
-    if (record?.id) {
-      values.id = record.id;
-    }
     const params = getParams(values);
+    if (record?.id) {
+      params.id = record.id;
+    }
     if (!params) {
       // eslint-disable-next-line no-console
       console.warn("请求数据不存在。");
@@ -48,12 +50,14 @@ export const FormModal = ({
       okButtonProps={{ loading }}
       onCancel={close || onCancel}
       visible={visible}
+      {...modalProps}
     >
       <Form
         {...COMMON_FORM_ITEM_LAYOUT}
         initValues={initialValues}
         getFormApi={api => (formApiRef.current = api)}
         onSubmit={handleSubmit}
+        {...formProps}
       >
         {children}
       </Form>
