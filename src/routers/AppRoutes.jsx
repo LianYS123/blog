@@ -6,14 +6,43 @@ import AppLayout from "layout";
 import routers from "./index";
 
 import Login from "pages/login";
-import Home from "pages/home";
-import NotFound from "pages/404";
-import Editor from "pages/editor/index";
-import Detial from "pages/detail/index";
 import { useInitApp } from "hooks/app";
-import Space from "pages/space";
-import ArticleList from "pages/list";
-import Essay from "pages/essay";
+import loadable from "utils/loadable";
+
+const routes = [
+  {
+    path: routers.HOME,
+    component: "home"
+  },
+  {
+    path: routers.ARTICLE_LIST,
+    component: "list"
+  },
+  {
+    path: routers.EDITOR,
+    component: "editor"
+  },
+  {
+    path: routers.EDITOR_EDIT,
+    component: "editor"
+  },
+  {
+    path: routers.DETAIL,
+    component: "detail"
+  },
+  {
+    path: routers.USER_SPACE,
+    component: "space"
+  },
+  {
+    path: routers.ESSAY,
+    component: "essay"
+  },
+  {
+    path: routers.NOT_FOUND,
+    component: "404"
+  }
+];
 
 // 页面路由
 const AppRoutes = () => {
@@ -25,16 +54,21 @@ const AppRoutes = () => {
         <Route path="/pages">
           <AppLayout>
             <Switch>
-              <Route path={routers.HOME} component={Home} />
-              <Route path={routers.ARTICLE_LIST} component={ArticleList} />
-              <Route exact path={routers.EDITOR} component={Editor} />
-              <Route path={routers.EDITOR_EDIT} component={Editor} />
-              <Route path={routers.DETAIL} component={Detial} />
-              <Route path={routers.USER_SPACE} component={Space} />
-              <Route path={routers.ESSAY} component={Essay} />
-
-              <Route path={routers.NOT_FOUND} component={NotFound} />
-              <Redirect to={routers.NOT_FOUND} />
+              {routes.map(({ path, component, ...rest }) => {
+                const Comp =
+                  typeof component === "string"
+                    ? loadable(component)
+                    : component;
+                return (
+                  <Route
+                    key={path}
+                    path={path}
+                    exact={true}
+                    component={Comp}
+                    {...rest}
+                  />
+                );
+              })}
             </Switch>
           </AppLayout>
         </Route>
