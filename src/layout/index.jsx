@@ -15,7 +15,7 @@ const AppLayout = ({ children }) => {
       </div>
       <main
         id="container"
-        className={classNames("h-full", { "mt-14": !isHomePage })}
+        className={classNames("h-full", { "pt-14": !isHomePage })}
         // style={{ height: !isHomePage ? "calc(100vh - 56px)" : "100vh" }}
       >
         {children}
