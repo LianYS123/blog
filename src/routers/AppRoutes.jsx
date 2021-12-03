@@ -14,18 +14,6 @@ const APP_ROUTES = [
     component: "login"
   },
   {
-    path: "/test",
-    component: "test"
-  },
-  {
-    path: routers.EDITOR,
-    component: "editor"
-  },
-  {
-    path: routers.EDITOR_EDIT,
-    component: "editor"
-  },
-  {
     path: "/pages",
     component: AppLayout,
     children: [
@@ -34,20 +22,16 @@ const APP_ROUTES = [
         component: "home"
       },
       {
-        path: routers.ARTICLE_LIST,
-        component: "article"
+        path: routers.DICT,
+        component: "dict"
       },
       {
-        path: routers.DETAIL,
-        component: "detail"
+        path: routers.RESOURCE,
+        component: "resource"
       },
       {
-        path: routers.USER_SPACE,
-        component: "space"
-      },
-      {
-        path: routers.ESSAY,
-        component: "essay"
+        path: routers.TAG,
+        component: "tags"
       },
       {
         path: routers.NOT_FOUND,

@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { Nav, SideSheet } from "@douyinfe/semi-ui";
 import { FormattedMessage } from "react-intl";
 import { IconHome, IconSetting, IconUser } from "@douyinfe/semi-icons";
@@ -7,12 +6,37 @@ import routers from "routers";
 import { useHistory, useLocation } from "react-router";
 import "./styles.less";
 
-// 侧边栏
-const Sidebar = ({ visible, close }) => {
-  const menus = useSelector(state => state.app.menuList);
+export const SideNavBar = () => {
   const { pathname } = useLocation();
   const history = useHistory();
+  return (
+    <Nav
+      className="w-full h-full"
+      selectedKeys={[pathname]}
+      items={[
+        { itemKey: routers.HOME, text: "主页", icon: <IconHome /> },
+        { itemKey: routers.RESOURCE, text: "资源管理", icon: <IconUser /> },
+        {
+          text: "标签管理",
+          icon: <IconSetting />,
+          itemKey: routers.TAG
+        },
+        {
+          text: "字典管理",
+          icon: <IconSetting />,
+          itemKey: routers.DICT
+        }
+      ]}
+      onSelect={data => {
+        history.push({ pathname: data.itemKey });
+        // close();
+      }}
+    />
+  );
+};
 
+// 侧边栏
+const Sidebar = ({ visible, close }) => {
   return (
     <SideSheet
       className="sidebar"
@@ -38,23 +62,7 @@ const Sidebar = ({ visible, close }) => {
       placement="left"
       visible={visible}
     >
-      <Nav
-        className="w-full border-0"
-        selectedKeys={[pathname]}
-        items={[
-          { itemKey: routers.HOME, text: "主页", icon: <IconHome /> },
-          { itemKey: routers.USER_SPACE, text: "个人资料", icon: <IconUser /> },
-          {
-            text: "系统设置",
-            icon: <IconSetting />,
-            itemKey: routers.SETTING
-          }
-        ]}
-        onSelect={data => {
-          history.push({ pathname: data.itemKey });
-          close();
-        }}
-      />
+      <SideNavBar />
     </SideSheet>
   );
 };

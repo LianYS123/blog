@@ -26,42 +26,44 @@ const Login = () => {
   };
 
   return (
-    <Form
-      labelAlign="right"
-      labelCol={{ span: 6 }}
-      labelPosition="left"
-      className="w-96 mt-64 mx-auto"
-      onSubmit={handleLogin}
-    >
-      <div className="text-center text-lg">
-        <FormattedMessage id="WEBSITE_NAME" />
-      </div>
-      <Form.Input
-        field="username"
-        label="用户名"
-        rules={[{ required: true }]}
-        size="large"
-        placeholder="请输入用户名"
-      />
-      <Form.Input
-        type="password"
-        field="password"
-        label="密码"
-        rules={[{ required: true }]}
-        size="large"
-        placeholder="请输入密码"
-      />
-
-      <Button
-        loading={loading}
-        block
-        size="large"
-        htmlType="submit"
-        type="primary"
+    <div className="container overflow-auto">
+      <Form
+        labelAlign="right"
+        labelCol={{ span: 6 }}
+        labelPosition="left"
+        className="w-96 mt-64 mx-auto"
+        onSubmit={handleLogin}
       >
-        登录
-      </Button>
-    </Form>
+        <div className="text-center text-lg">
+          <FormattedMessage id="WEBSITE_NAME" />
+        </div>
+        <Form.Input
+          field="username"
+          label="用户名"
+          rules={[{ required: true }]}
+          size="large"
+          placeholder="请输入用户名"
+        />
+        <Form.Input
+          type="password"
+          field="password"
+          label="密码"
+          rules={[{ required: true }]}
+          size="large"
+          placeholder="请输入密码"
+        />
+
+        <Button
+          loading={loading}
+          block
+          size="large"
+          htmlType="submit"
+          type="primary"
+        >
+          登录
+        </Button>
+      </Form>
+    </div>
   );
 };
 
