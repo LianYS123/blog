@@ -5,18 +5,17 @@ import { BrowserRouter as Router } from "react-router-dom";
 import AppLayout from "layout";
 import routers from "./index";
 
-import Login from "pages/login";
 import { useInitApp } from "hooks/app";
 import loadable from "utils/loadable";
 
-const routes = [
+const APP_ROUTES = [
   {
-    path: routers.HOME,
-    component: "home"
+    path: routers.LOGIN,
+    component: "login"
   },
   {
-    path: routers.ARTICLE_LIST,
-    component: "list"
+    path: "/test",
+    component: "test"
   },
   {
     path: routers.EDITOR,
@@ -27,57 +26,74 @@ const routes = [
     component: "editor"
   },
   {
-    path: routers.DETAIL,
-    component: "detail"
+    path: "/pages",
+    component: AppLayout,
+    children: [
+      {
+        path: routers.HOME,
+        component: "home"
+      },
+      {
+        path: routers.ARTICLE_LIST,
+        component: "article"
+      },
+      {
+        path: routers.DETAIL,
+        component: "detail"
+      },
+      {
+        path: routers.USER_SPACE,
+        component: "space"
+      },
+      {
+        path: routers.ESSAY,
+        component: "essay"
+      },
+      {
+        path: routers.NOT_FOUND,
+        component: "404"
+      },
+      {
+        key: "redirect",
+        redirect: routers.NOT_FOUND
+      }
+    ]
   },
   {
-    path: routers.USER_SPACE,
-    component: "space"
-  },
-  {
-    path: routers.ESSAY,
-    component: "essay"
-  },
-  {
-    path: routers.NOT_FOUND,
-    component: "404"
+    key: "redirect",
+    redirect: routers.HOME
   }
 ];
 
 // 页面路由
 const AppRoutes = () => {
   useInitApp(); // 初始化应用数据
-  return (
-    <Router>
+  const getPageComponent = component => {
+    if (!component) return null;
+    const Comp =
+      typeof component === "string" ? loadable(component) : component;
+    return Comp;
+  };
+  const renderAppRoutes = routes => {
+    return (
       <Switch>
-        <Route path={routers.LOGIN} component={Login} />
-        <Route path="/test" component={loadable("test")} />
-        <Route path="/pages">
-          <AppLayout>
-            <Switch>
-              {routes.map(({ path, component, ...rest }) => {
-                const Comp =
-                  typeof component === "string"
-                    ? loadable(component)
-                    : component;
-                return (
-                  <Route
-                    key={path}
-                    path={path}
-                    exact={true}
-                    component={Comp}
-                    {...rest}
-                  />
-                );
-              })}
-              <Redirect to={routers.NOT_FOUND} />
-            </Switch>
-          </AppLayout>
-        </Route>
-        <Redirect to={routers.HOME} />
+        {routes.map(({ path, component, children, redirect, key, ...rest }) => {
+          if (redirect) {
+            return <Redirect key={key || redirect} to={redirect} />;
+          }
+          const Comp = getPageComponent(component);
+          const commonProps = { key: key || path, path, ...rest };
+          return children?.length ? (
+            <Comp {...commonProps}>{renderAppRoutes(children)}</Comp>
+          ) : (
+            <Route exact={true} component={Comp} {...commonProps} />
+          );
+        })}
       </Switch>
-    </Router>
-  );
+    );
+  };
+  const routes = renderAppRoutes(APP_ROUTES);
+  return <Router>{routes}</Router>;
 };
 
 export default AppRoutes;
