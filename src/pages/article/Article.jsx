@@ -2,7 +2,7 @@ import { Tag, Typography } from "@douyinfe/semi-ui";
 import React from "react";
 import { useHistory } from "react-router";
 import routers from "routers";
-import { renderDateTime } from "utils";
+import { timestampFormat } from "utils";
 
 export const Article = ({
   cover,
@@ -66,7 +66,7 @@ export const Article = ({
             <span className="text-green-600 text-base sm:text-lg font-light hover:underline">
               {authorName}
             </span>
-            <span>{renderDateTime(createTime)}</span>
+            <span>{timestampFormat(createTime)}</span>
           </div>
         </div>
       </div>

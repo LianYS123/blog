@@ -1,10 +1,10 @@
-import { Button, Dropdown, Modal } from "@douyinfe/semi-ui";
+import { Button, Dropdown } from "@douyinfe/semi-ui";
 import { UserAvatar } from "components/user";
 import { useMutation } from "hooks";
 import React from "react";
 import { useSelector } from "react-redux";
 import { DELETE_ESSAY } from "services/essay";
-import { deleteConfirmModalAction, renderDateTime } from "utils";
+import { deleteConfirmModalAction, timestampFormat } from "utils";
 
 export const EssayItem = ({ openEssayModal, reload, ...record }) => {
   const { createTime, html, author, id } = record;
@@ -71,7 +71,7 @@ export const EssayItem = ({ openEssayModal, reload, ...record }) => {
         </div>
         <div className="font-semibold">
           <div className="text-gray-500 font-thin space-x-2">
-            <span>{renderDateTime(createTime)}</span>
+            <span>{timestampFormat(createTime)}</span>
           </div>
         </div>
       </div>
