@@ -1,5 +1,6 @@
 import { Notification } from "@douyinfe/semi-ui";
 import { useMessageUtils } from "hooks";
+import { noop } from "lodash";
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { getAPIMethod } from "utils/apiUtils";
@@ -39,7 +40,10 @@ export const useMutation = (service, initialData = {}, config = {}) => {
     autoHandleError = true,
     showActionMessage = false,
     successMessageId,
-    successMessage
+    successMessage,
+    onSuccess = noop,
+    onError = noop,
+    onFinish = noop
   } = config;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
@@ -76,11 +80,13 @@ export const useMutation = (service, initialData = {}, config = {}) => {
       // 报错数据
       if (res.code === "0000") {
         setData(res.data || {});
+        onSuccess(res.data, data);
       }
 
       setLoading(false);
       return res;
     } catch (e) {
+      onError(e);
       setLoading(false);
       setError(e);
       // if (autoHandleError) {
@@ -89,6 +95,7 @@ export const useMutation = (service, initialData = {}, config = {}) => {
       // eslint-disable-next-line no-console
       console.error(e);
     }
+    onFinish();
   };
 
   return [loadData, { loading, error, data }];

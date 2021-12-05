@@ -2,6 +2,9 @@ import { Modal } from "@douyinfe/semi-ui";
 import dayjs from "dayjs";
 import fileSize from "filesize";
 
+export const delay = (t = 500) =>
+  new Promise(resolve => setTimeout(resolve, t));
+
 export const secretPhone = phone => {
   if (!phone) return "";
   return phone.replace(/(\d{1,4})\w{4}(\d{1,3})/, "$1****$2");

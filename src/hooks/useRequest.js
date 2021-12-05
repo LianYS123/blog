@@ -29,7 +29,7 @@ export const useRequest = ({
     paramRef.current = _params;
     if (!requestState.loading) {
       const realParams = { ...necessaryParamsRef.current, ..._params }; //每次请求都带上necessaryParams
-      _service(realParams);
+      return _service(realParams);
     }
   };
 

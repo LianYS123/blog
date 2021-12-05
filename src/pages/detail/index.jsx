@@ -111,11 +111,7 @@ function Detail() {
                 </div>
               )}
               {outline && outline.length ? (
-                <Anchor
-                  getContainer={() => document.getElementById("container")}
-                >
-                  {renderLink(outline)}
-                </Anchor>
+                <Anchor>{renderLink(outline)}</Anchor>
               ) : null}
             </div>
           </div>

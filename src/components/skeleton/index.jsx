@@ -1,5 +1,5 @@
 import React from "react";
-import { Skeleton } from "@douyinfe/semi-ui";
+import { Empty, Skeleton } from "@douyinfe/semi-ui";
 
 export const ArticlePlaceholder = ({ showImage = true, showButton = true }) => (
   <section className="shadow-sm px-4 py-3 flex rounded">
@@ -22,3 +22,34 @@ export const ArticlePlaceholder = ({ showImage = true, showButton = true }) => (
     </div>
   </section>
 );
+
+export const SkeletonList = ({
+  loading,
+  count,
+  children = <Empty />,
+  showButton,
+  showImage
+}) => {
+  const renderSkeleton = (loading, count = 5) => {
+    const arr = [];
+    for (let i = 0; i < count; i++) arr.push(i);
+    return loading
+      ? arr.map(index => (
+          <Skeleton
+            active
+            key={index}
+            loading={loading}
+            placeholder={
+              <ArticlePlaceholder
+                showButton={showButton}
+                showImage={showImage}
+              />
+            }
+          >
+            {children}
+          </Skeleton>
+        ))
+      : null;
+  };
+  return renderSkeleton(loading, count);
+};
