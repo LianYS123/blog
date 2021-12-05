@@ -1,9 +1,10 @@
-import { Button, Empty, Form, Pagination, Skeleton } from "@douyinfe/semi-ui";
+import { Empty, Pagination, Skeleton } from "@douyinfe/semi-ui";
 import { ArticlePlaceholder } from "components/skeleton";
-import { useModalAction, useMutation, useTable } from "hooks";
+import { useModalAction, useTable } from "hooks";
 import React from "react";
-import { ADD_ESSAY, GET_ESSAY_LIST } from "services/essay";
+import { GET_ESSAY_LIST } from "services/essay";
 import { EditEssayModal } from "./EditEssayModal";
+import { EssayEditor } from "./EssayEditor";
 import { EssayItem } from "./EssayItem";
 
 const Essay = () => {
@@ -12,9 +13,15 @@ const Essay = () => {
   });
   const { dataSource, pagination } = tableProps;
   const { open: openEssayModal, ...essayModalProps } = useModalAction();
+  const skeletonPlaceholder = (
+    <ArticlePlaceholder showButton={false} showImage={false} />
+  );
   return (
     <div className="container">
-      <Button onClick={() => openEssayModal()}>写</Button>
+      {/* <Button onClick={() => openEssayModal()}>写</Button> */}
+      <div className="mb-8">
+        <EssayEditor reload={reload} />
+      </div>
       <div className="space-y-3 mb-4">
         {dataSource.length ? (
           dataSource.map(it => (
@@ -22,7 +29,7 @@ const Essay = () => {
               active
               key={it.id}
               loading={loading}
-              placeholder={<ArticlePlaceholder />}
+              placeholder={skeletonPlaceholder}
             >
               <EssayItem
                 openEssayModal={openEssayModal}
@@ -32,11 +39,7 @@ const Essay = () => {
             </Skeleton>
           ))
         ) : (
-          <Skeleton
-            active
-            loading={loading}
-            placeholder={<ArticlePlaceholder />}
-          >
+          <Skeleton active loading={loading} placeholder={skeletonPlaceholder}>
             <Empty />
           </Skeleton>
         )}

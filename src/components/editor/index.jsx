@@ -5,13 +5,9 @@ import { fontFamilies, simpleControls } from "./config";
 import { withField } from "@douyinfe/semi-ui";
 import { upload } from "utils/fetch";
 
-const EditorField = withField(BraftEditor);
-
 export function Editor({ ...props }) {
   return (
-    <EditorField
-      noLabel={true}
-      field="editorState"
+    <BraftEditor
       controls={simpleControls}
       fontFamilies={fontFamilies}
       media={{
@@ -42,3 +38,5 @@ export function Editor({ ...props }) {
     />
   );
 }
+
+export const EditorField = withField(Editor);
