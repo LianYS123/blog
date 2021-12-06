@@ -3,7 +3,12 @@ import { parseAPI } from "./apiUtils";
 const SIMPLE_REQUEST_METHODS = ["GET", "DELETE"];
 
 const xFetch = function (url, data, options = {}) {
-  const { parsedUrl, method, parsedData } = parseAPI(url, data);
+  const {
+    parsedUrl,
+    method,
+    parsedData,
+    apiPrefix = "/api"
+  } = parseAPI(url, data);
   const headers = {};
 
   const token = localStorage.getItem("acc");
@@ -19,7 +24,7 @@ const xFetch = function (url, data, options = {}) {
   if (!SIMPLE_REQUEST_METHODS.includes(method)) {
     opts.body = JSON.stringify(parsedData);
   }
-  return fetch(parsedUrl, opts).then(res => res.json());
+  return fetch(apiPrefix + parsedUrl, opts).then(res => res.json());
 };
 
 // 文件上传
