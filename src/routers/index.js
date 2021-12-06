@@ -4,7 +4,8 @@ const routers = {
   NOT_FOUND: "/pages/404",
   DICT: "/pages/dict",
   RESOURCE: "/pages/resource",
-  TAG: "/pages/tag"
+  TAG: "/pages/tag",
+  ARTICLE: "/pages/article"
 };
 
 export default routers;

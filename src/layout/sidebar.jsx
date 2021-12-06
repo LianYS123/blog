@@ -15,6 +15,11 @@ export const SideNavBar = () => {
       selectedKeys={[pathname]}
       items={[
         { itemKey: routers.HOME, text: "主页", icon: <IconHome /> },
+        {
+          text: "文章管理",
+          icon: <IconSetting />,
+          itemKey: routers.ARTICLE
+        },
         { itemKey: routers.RESOURCE, text: "资源管理", icon: <IconUser /> },
         {
           text: "标签管理",
