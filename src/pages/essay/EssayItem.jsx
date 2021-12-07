@@ -5,8 +5,14 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { DELETE_ESSAY } from "services/essay";
 import { deleteConfirmModalAction, timestampFormat } from "utils";
+import { EssayEditor } from "./EssayEditor";
 
-export const EssayItem = ({ openEssayModal, reload, ...record }) => {
+export const EssayItem = ({
+  editorRecord,
+  setEditorRecord,
+  reload,
+  ...record
+}) => {
   const { createTime, html, author, id } = record;
   const [deleteEssay] = useMutation(DELETE_ESSAY);
   const { userInfo } = useSelector(state => state.app);
@@ -30,11 +36,12 @@ export const EssayItem = ({ openEssayModal, reload, ...record }) => {
               {/* 只有发布者有编辑权限 */}
               {userInfo.id === author?.id ? (
                 <Dropdown
+                  trigger="click"
                   menu={[
                     {
                       node: "item",
                       name: "编辑",
-                      onClick: () => openEssayModal({ isEdit: true, record })
+                      onClick: () => setEditorRecord(record)
                     },
                     {
                       node: "item",
@@ -62,10 +69,20 @@ export const EssayItem = ({ openEssayModal, reload, ...record }) => {
               {summary}
             </p> */}
             <div className="w-full mb-1">
-              <article
-                id="htmlTemplate"
-                dangerouslySetInnerHTML={{ __html: html }}
-              ></article>
+              {editorRecord?.id === id ? (
+                <EssayEditor
+                  onCancel={() => setEditorRecord(null)}
+                  onSuccess={() => setEditorRecord(null)}
+                  isEdit={true}
+                  record={record}
+                  reload={reload}
+                />
+              ) : (
+                <article
+                  id="htmlTemplate"
+                  dangerouslySetInnerHTML={{ __html: html }}
+                ></article>
+              )}
             </div>
           </div>
         </div>

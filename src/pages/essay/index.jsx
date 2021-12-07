@@ -1,13 +1,12 @@
 import { SkeletonList } from "components/skeleton";
 import { useFetchList, useModalAction } from "hooks";
-import React from "react";
+import React, { useState } from "react";
 import { GET_ESSAY_LIST } from "services/essay";
 import { EditEssayModal } from "./EditEssayModal";
 import { EssayEditor } from "./EssayEditor";
 import { EssayItem } from "./EssayItem";
 
 const Essay = () => {
-  const { open: openEssayModal, ...essayModalProps } = useModalAction();
   const {
     list = [],
     reload,
@@ -17,6 +16,7 @@ const Essay = () => {
   } = useFetchList({
     service: GET_ESSAY_LIST
   });
+  const [editorRecord, setEditorRecord] = useState();
   return (
     <div className="container pb-8 md:pb-16">
       <div className="mb-8">
@@ -31,7 +31,8 @@ const Essay = () => {
         {list.map(it => (
           <EssayItem
             key={it.id}
-            openEssayModal={openEssayModal}
+            setEditorRecord={setEditorRecord}
+            editorRecord={editorRecord}
             reload={refresh}
             {...it}
           />
@@ -42,9 +43,9 @@ const Essay = () => {
           loading={loadingMore}
         />
       </div>
-      {essayModalProps.visible ? (
+      {/* {essayModalProps.visible ? (
         <EditEssayModal {...essayModalProps} reload={refresh} />
-      ) : null}
+      ) : null} */}
     </div>
   );
 };
