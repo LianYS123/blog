@@ -8,6 +8,14 @@ import routers from "./index";
 import { useInitApp } from "hooks/app";
 import loadable from "utils/loadable";
 
+import Editor from "pages/editor";
+import Home from "pages/home";
+import ArticleList from "pages/article";
+import Detail from "pages/detail";
+import Space from "pages/space";
+import Essay from "pages/essay";
+import NotFound from "pages/404";
+
 const APP_ROUTES = [
   {
     path: routers.LOGIN,
@@ -19,11 +27,11 @@ const APP_ROUTES = [
   },
   {
     path: routers.EDITOR,
-    component: "editor"
+    component: Editor
   },
   {
     path: routers.EDITOR_EDIT,
-    component: "editor"
+    component: Editor
   },
   {
     path: "/pages",
@@ -31,27 +39,27 @@ const APP_ROUTES = [
     children: [
       {
         path: routers.HOME,
-        component: "home"
+        component: Home
       },
       {
         path: routers.ARTICLE_LIST,
-        component: "article"
+        component: ArticleList
       },
       {
         path: routers.DETAIL,
-        component: "detail"
+        component: Detail
       },
       {
         path: routers.USER_SPACE,
-        component: "space"
+        component: Space
       },
       {
         path: routers.ESSAY,
-        component: "essay"
+        component: Essay
       },
       {
         path: routers.NOT_FOUND,
-        component: "404"
+        component: NotFound
       },
       {
         key: "redirect",
