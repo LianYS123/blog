@@ -22,6 +22,10 @@ const APP_ROUTES = [
         component: "home"
       },
       {
+        path: routers.USERS,
+        component: "users"
+      },
+      {
         path: routers.ARTICLE,
         component: "article"
       },

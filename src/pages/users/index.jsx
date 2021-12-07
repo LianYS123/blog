@@ -1,41 +1,38 @@
-import { Button, Input, Modal, Table, Typography } from "@douyinfe/semi-ui";
+import { Avatar, Button, Input, Table, Typography } from "@douyinfe/semi-ui";
 import { useModalAction, useTable } from "hooks";
 import React, { useState } from "react";
+import { EditUserModal } from "./EditUserModal";
 import { IconPlus } from "@douyinfe/semi-icons";
 import { CommonDeleteButton } from "components/button";
 import { renderDateTime } from "utils";
-import { EditResourceModal } from "./EditResourceModal";
-import fileSize from "filesize";
-import { DELETE_RESOURCE, GET_RESOURCE_LIST } from "services/resource";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import { DELETE_USER, GET_USER_LIST } from "services/user";
 
-const ResourceManager = () => {
+const UserManager = () => {
   const { open, ...modalProps } = useModalAction();
-  const { open: openPreview, ...previewModalProps } = useModalAction();
   const [keyword, setKeyword] = useState();
   const { tableProps, search, reload } = useTable({
-    service: GET_RESOURCE_LIST
+    service: GET_USER_LIST
   });
+
   const handleSearch = () => {
     search({ keyword });
   };
+
   const columns = [
     {
-      title: "资源名称",
-      dataIndex: "resourceName"
+      title: "用户名",
+      dataIndex: "username"
     },
     {
-      title: "文件大小",
-      dataIndex: "size",
-      render: size => fileSize(size)
-    },
-    // {
-    //   title: "资源名称",
-    //   dataIndex: "src"
-    // },
-    {
-      title: "类型",
-      dataIndex: "type"
+      title: "头像",
+      dataIndex: "avatar",
+      render: avatar => {
+        return avatar ? (
+          <Avatar size="small" src={avatar} />
+        ) : (
+          <Avatar size="small">U</Avatar>
+        );
+      }
     },
     {
       title: "创建时间",
@@ -59,12 +56,9 @@ const ResourceManager = () => {
             >
               编辑
             </Typography.Text>
-            <Typography.Text link onClick={() => openPreview({ ...record })}>
-              预览
-            </Typography.Text>
             <CommonDeleteButton
               id={record.id}
-              service={DELETE_RESOURCE}
+              service={DELETE_USER}
               onFinish={reload}
             />
           </div>
@@ -86,28 +80,14 @@ const ResourceManager = () => {
             type="primary"
             onClick={() => open()}
           >
-            新增资源
+            创建用户
           </Button>
         </div>
       </div>
       <Table {...tableProps} columns={columns} />
-      <EditResourceModal {...modalProps} reload={reload} />
-      {/* 图片预览 */}
-      <Modal
-        visible={previewModalProps.visible}
-        title={previewModalProps.resourceName}
-        // onCancel={previewModalProps.close}
-        hasCancel={false}
-        onOk={previewModalProps.close}
-      >
-        <LazyLoadImage
-          className="w-full max-h-64 object-contain"
-          src={previewModalProps.src}
-          alt={previewModalProps.resourceName}
-        />
-      </Modal>
+      <EditUserModal {...modalProps} reload={reload} />
     </div>
   );
 };
 
-export default ResourceManager;
+export default UserManager;

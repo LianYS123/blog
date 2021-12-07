@@ -5,7 +5,8 @@ const routers = {
   DICT: "/pages/dict",
   RESOURCE: "/pages/resource",
   TAG: "/pages/tag",
-  ARTICLE: "/pages/article"
+  ARTICLE: "/pages/article",
+  USERS: "/pages/users"
 };
 
 export default routers;

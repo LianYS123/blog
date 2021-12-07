@@ -57,3 +57,25 @@ export const BREAKPOINT = {
   xl: "(min-width: 1280px)",
   "2xl": "(min-width: 1536px)"
 };
+
+// 图片媒体类型
+export const IMAGE_MIME_TYPES = [
+  "image/gif",
+  "image/jpeg",
+  "image/png",
+  "image/svg+xml"
+];
+
+export const VIDEO_MINE_TYPES = [
+  "video/mpeg",
+  "video/mp4",
+  "video/ogg",
+  "video/quicktime",
+  "video/webm"
+];
+
+// video/mpeg：MPEG-1视频文件
+// video/mp4：MP4视频文件
+// video/ogg：Ogg视频文件
+// video/quicktime：QuickTime视频文件
+// video/webm：WebM视频文件（基于Matroska基础）
