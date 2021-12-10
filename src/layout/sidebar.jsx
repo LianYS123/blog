@@ -7,7 +7,8 @@ import Icon, {
   IconImage,
   IconPriceTag,
   IconSetting,
-  IconUser
+  IconUser,
+  IconUserGroup
 } from "@douyinfe/semi-icons";
 import routers from "routers";
 import { useHistory, useLocation } from "react-router";
@@ -22,7 +23,8 @@ export const SideNavBar = () => {
       selectedKeys={[pathname]}
       items={[
         { itemKey: routers.HOME, text: "主页", icon: <IconHome /> },
-        { itemKey: routers.USERS, text: "用户管理", icon: <IconUser /> },
+        { itemKey: routers.USER, text: "用户管理", icon: <IconUser /> },
+        { itemKey: routers.ROLE, text: "角色管理", icon: <IconUserGroup /> },
         {
           text: "文章管理",
           icon: <IconArticle />,

@@ -8,10 +8,19 @@ import routers from "./index";
 import { useInitApp } from "hooks/app";
 import loadable from "utils/loadable";
 
+import Home from "pages/home";
+import UserManager from "pages/users";
+import ArticleManager from "pages/article";
+import DictManager from "pages/dict";
+import ResourceManager from "pages/resource";
+import TagManager from "pages/tags";
+import NotFound from "pages/404";
+import RoleManager from "pages/role";
+
 const APP_ROUTES = [
   {
     path: routers.LOGIN,
-    component: "login"
+    component: "login" // 字符串路径或组件都可
   },
   {
     path: "/pages",
@@ -19,31 +28,35 @@ const APP_ROUTES = [
     children: [
       {
         path: routers.HOME,
-        component: "home"
+        component: Home
       },
       {
-        path: routers.USERS,
-        component: "users"
+        path: routers.USER,
+        component: UserManager
       },
       {
         path: routers.ARTICLE,
-        component: "article"
+        component: ArticleManager
       },
       {
         path: routers.DICT,
-        component: "dict"
+        component: DictManager
       },
       {
         path: routers.RESOURCE,
-        component: "resource"
+        component: ResourceManager
       },
       {
         path: routers.TAG,
-        component: "tags"
+        component: TagManager
+      },
+      {
+        path: routers.ROLE,
+        component: RoleManager
       },
       {
         path: routers.NOT_FOUND,
-        component: "404"
+        component: NotFound
       },
       {
         key: "redirect",
