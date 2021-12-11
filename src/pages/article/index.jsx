@@ -1,16 +1,17 @@
 import { Button, Input, Table, Tag, Typography } from "@douyinfe/semi-ui";
-import { useTable } from "hooks";
+import { useModalAction, useTable } from "hooks";
 import React, { useState } from "react";
-import { IconPlus } from "@douyinfe/semi-icons";
 import { CommonDeleteButton } from "components/button";
 import { renderDateTime } from "utils";
 import { DELETE_ARTICLE, ARTICLE_LIST } from "services/article";
+import { CheckModal } from "./CheckModal";
 
 const ArticleManager = () => {
   const [keyword, setKeyword] = useState();
   const { tableProps, search, reload } = useTable({
     service: ARTICLE_LIST
   });
+  const { open: openCheckModal, ...checkModalProps } = useModalAction();
   const handleSearch = () => {
     search({ keyword });
   };
@@ -39,6 +40,11 @@ const ArticleManager = () => {
       dataIndex: "authorName"
     },
     {
+      title: "文章状态",
+      dataIndex: "status",
+      render: status => status || "正常"
+    },
+    {
       title: "创建时间",
       dataIndex: "createTime",
       render: renderDateTime
@@ -55,8 +61,9 @@ const ArticleManager = () => {
         return (
           <div className="space-x-2 whitespace-nowrap">
             <Typography.Text link>查看详情</Typography.Text>
-            <Typography.Text link>审核通过</Typography.Text>
-            <Typography.Text link>审核拒绝</Typography.Text>
+            <Typography.Text onClick={() => openCheckModal({ record })} link>
+              文章审核
+            </Typography.Text>
             <CommonDeleteButton
               id={record.id}
               service={DELETE_ARTICLE}
@@ -76,6 +83,7 @@ const ArticleManager = () => {
         </div>
       </div>
       <Table {...tableProps} columns={columns} />
+      <CheckModal {...checkModalProps} />
     </div>
   );
 };
