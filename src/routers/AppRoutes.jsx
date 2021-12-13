@@ -26,14 +26,6 @@ const APP_ROUTES = [
     component: "test"
   },
   {
-    path: routers.EDITOR,
-    component: Editor
-  },
-  {
-    path: routers.EDITOR_EDIT,
-    component: Editor
-  },
-  {
     path: "/pages",
     component: AppLayout,
     children: [
@@ -60,6 +52,14 @@ const APP_ROUTES = [
       {
         path: routers.NOT_FOUND,
         component: NotFound
+      },
+      {
+        path: routers.EDITOR, // 新增文章
+        component: Editor
+      },
+      {
+        path: routers.EDITOR_EDIT, // 编辑文章
+        component: Editor
       },
       {
         key: "redirect",
