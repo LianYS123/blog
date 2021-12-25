@@ -19,12 +19,7 @@ const useRequestErrorHandler = () => {
         showError({ id: "SERVICE_API_ERR" });
       }
     };
-    if (code === "1001") {
-      showErrorMessage();
-      history.push("/login");
-    } else {
-      showErrorMessage();
-    }
+    showErrorMessage();
   };
   return handler;
 };
@@ -53,10 +48,10 @@ export const useMutation = (service, initialData = {}, config = {}) => {
       const request =
         typeof service === "function" ? service : xFetch.bind(null, service);
       const res = await request(params, config);
-      const { code = "", message } = res;
+      const { code = "", success } = res;
 
       // 处理操作成功和失败的提示
-      if (code === "0000") {
+      if (success) {
         const method = getAPIMethod(service) || config.method;
         const actionMessageMap = {
           POST: "OPERATE_SUCCESS",
@@ -74,7 +69,7 @@ export const useMutation = (service, initialData = {}, config = {}) => {
         handler(res);
       }
       // 报错数据
-      if (res.code === "0000") {
+      if (success) {
         setData(res.data || {});
       }
 

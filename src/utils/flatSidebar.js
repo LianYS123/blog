@@ -1,5 +1,3 @@
-import loadable from "utils/loadable";
-
 //  权限注册 格式化
 export function flatSidebarAuthList(arr) {
   const list = [];
@@ -33,18 +31,3 @@ export function flatSibarConfig(sidebarList) {
 
   return list;
 }
-
-//  注册路由  格式化菜单
-export const flatSidebarRouteList = arr => {
-  const list = [];
-  for (let item of arr) {
-    const { path, component, includes = [] } = item;
-
-    list.push({ path, component: loadable(component) });
-    for (let i of includes) {
-      const { path, component } = i;
-      list.push({ path, component: loadable(component) });
-    }
-  }
-  return list;
-};

@@ -13,7 +13,7 @@ react 项目快速开发脚手架
 在 xFetch 中对 api 的处理进行了处理，现在可以通过更加方便的方式识别请求方式和路由参数:
 
 ```js
-xFetch("GET /api/user/{id}", { id: 1, username: "abc" }) -> fetch("/api/user/1?username=abc")
+xFetch("GET /api/user/{id}", { id: 1, account: "abc" }) -> fetch("/api/user/1?account=abc")
 ```
 
 所有的请求尽量都走 hooks,因为在 useMutation 自动处理了错误提示和 post/delete 等请求成功提示, 以及添加与全局状态相关的参数

@@ -21,7 +21,7 @@ const UserManager = () => {
   const columns = [
     {
       title: "用户名",
-      dataIndex: "username"
+      dataIndex: "account"
     },
     {
       title: "头像",

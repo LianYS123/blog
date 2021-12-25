@@ -23,7 +23,7 @@ const TagManager = () => {
     },
     {
       title: "标签颜色",
-      dataIndex: "color",
+      dataIndex: "tagColor",
       render: color => <Tag color={color}>{color}</Tag>
     },
     // {
@@ -32,13 +32,13 @@ const TagManager = () => {
     // },
     {
       title: "创建时间",
-      dataIndex: "createTime",
-      render: renderDateTime
+      dataIndex: "createTime"
+      // render: renderDateTime
     },
     {
       title: "修改时间",
-      dataIndex: "updateTime",
-      render: renderDateTime
+      dataIndex: "updateTime"
+      // render: renderDateTime
     },
     {
       title: "操作",
@@ -65,10 +65,10 @@ const TagManager = () => {
   return (
     <div className="container">
       <div className="flex justify-between">
-        <div className="flex space-x-2 my-2">
+        {/* <div className="flex space-x-2 my-2">
           <Input onEnterPress={handleSearch} onChange={setKeyword} />
           <Button onClick={handleSearch}>搜索</Button>
-        </div>
+        </div> */}
         <div>
           <Button
             theme="solid"

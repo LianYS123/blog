@@ -2,9 +2,7 @@ import { useMutation } from "hooks";
 import { appSlice } from "models/app";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { GET_ALL_DICT } from "services/dict";
-import { CONFIG_APP } from "services/app";
-import { USER_INFO } from "services/user";
+import { USER_INFO } from "services/app";
 
 // 主题操作
 export const useTheme = () => {
@@ -43,7 +41,7 @@ export const useRemoteData = ({
   const request = async () => {
     if (ready) {
       const res = await load();
-      if (res?.code === "0000") {
+      if (res?.success) {
         dispatch(action(getData(res)));
       }
     }
@@ -64,17 +62,17 @@ export const useInitApp = () => {
   }, []);
 
   // 请求数据字典
-  useRemoteData({
-    action: appSlice.actions.setDict,
-    service: GET_ALL_DICT,
-    ready: !!token
-  });
+  // useRemoteData({
+  //   action: appSlice.actions.setDict,
+  //   service: GET_ALL_DICT,
+  //   ready: !!token
+  // });
 
   // 请求初始化配置信息
-  useRemoteData({
-    action: appSlice.actions.setConfig,
-    service: CONFIG_APP
-  });
+  // useRemoteData({
+  //   action: appSlice.actions.setConfig,
+  //   service: CONFIG_APP
+  // });
 
   // token变化时请求用户信息并存储到全局
   useRemoteData({

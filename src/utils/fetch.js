@@ -38,7 +38,7 @@ export const upload = file => {
   return fetch(url, {
     method: "POST",
     headers: {
-      Authorization: token
+      Authorization: `Bearer ${token}`
     },
     body: formData
   }).then(res => res.json());

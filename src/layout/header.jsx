@@ -6,12 +6,13 @@ import classNames from "classnames";
 import { useTheme } from "hooks/app";
 import { UserAvatar } from "components/user";
 import { Dropdown } from "@douyinfe/semi-ui";
+import { Avatar } from "@douyinfe/semi-ui/lib/es/skeleton/item";
 
 // header
 const AppHeader = () => {
   const history = useHistory();
   const { userInfo } = useSelector(state => state.app);
-  const { id: userId } = userInfo;
+  const { userId } = userInfo;
   const { toggleTheme, isDark } = useTheme();
   return (
     <section
@@ -90,7 +91,7 @@ const AppHeader = () => {
             }
           >
             <span>
-              <UserAvatar size="small" userInfo={userInfo} />
+              <Avatar size="small">{userInfo?.nickName?.[0] || "U"}</Avatar>
             </span>
           </Dropdown>
         ) : (

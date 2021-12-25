@@ -6,7 +6,8 @@ import { FormattedMessage } from "react-intl";
 import { Button, Form } from "@douyinfe/semi-ui";
 import { useDispatch } from "react-redux";
 import { appSlice } from "models/app";
-import { AUTH_LOGIN } from "services/app";
+import { AUTH_LOGIN } from "services/auth";
+import cookie from "js-cookie";
 
 const Login = () => {
   const [submit, { loading }] = useMutation(AUTH_LOGIN);
@@ -16,11 +17,12 @@ const Login = () => {
   const handleLogin = async values => {
     // history.push(routers.HOME);
     const result = await submit(values);
-    const { data: token, userInfos, code } = result;
+    const { data: token, userInfos, success } = result;
 
-    if (code === "0000") {
+    if (success) {
       localStorage.setItem("acc", token);
       dispatch(appSlice.actions.setToken(token));
+      cookie.set("Authorization", token);
       history.push(routers.HOME);
     }
   };
@@ -38,7 +40,7 @@ const Login = () => {
           <FormattedMessage id="WEBSITE_NAME" />
         </div>
         <Form.Input
-          field="username"
+          field="account"
           label="用户名"
           rules={[{ required: true }]}
           size="large"

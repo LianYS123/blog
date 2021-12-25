@@ -26,10 +26,10 @@ const colors = [
 // 编辑标签
 export const EditTagModal = props => {
   const { record = {} } = props;
-  const { tagName, description, color, id } = record;
+  const { tagName, tagDesc, tagColor, id } = record;
   const service = id ? EDIT_TAG : ADD_TAG;
   const title = id ? "编辑标签" : "新增标签";
-  const initialValues = { tagName, description, color };
+  const initialValues = { tagName, tagDesc, tagColor };
   return (
     <FormModal
       initialValues={initialValues}
@@ -46,7 +46,7 @@ export const EditTagModal = props => {
       <Form.Select
         rules={[{ required: true }]}
         label="标签颜色"
-        field="color"
+        field="tagColor"
         placeholder="请选择标签颜色"
         className="w-full"
       >

@@ -14,9 +14,9 @@ export const EditUserModal = props => {
     >
       <Form.Input
         rules={[{ required: true }]}
-        initValue={record.username}
+        initValue={record.account}
         label="用户名"
-        field="username"
+        field="account"
         placeholder="请输入用户名"
       />
       {/* 只有创建时才需要输入密码 */}
