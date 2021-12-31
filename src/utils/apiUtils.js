@@ -14,7 +14,7 @@ export const getAPIMethod = url => {
 export const parseAPI = (url, data) => {
   const method = getAPIMethod(url);
 
-  let parsedUrl = url.replace(methodReg, "").replace(/\s/g, "");
+  let parsedUrl = url.replace(methodReg, "").replace(/^\s+/g, "");
   const parsedData = { ...data };
   const paramsReg = /\{(.*?)\}/g;
 

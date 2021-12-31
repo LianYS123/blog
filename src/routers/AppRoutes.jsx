@@ -6,7 +6,7 @@ import AppLayout from "layout";
 import routers from "./index";
 
 import { useInitApp } from "hooks/app";
-import loadable from "utils/loadable";
+// import loadable from "utils/loadable";
 
 import Editor from "pages/editor";
 import Home from "pages/home";
@@ -15,16 +15,17 @@ import Detail from "pages/detail";
 import Space from "pages/space";
 import Essay from "pages/essay";
 import NotFound from "pages/404";
+import Login from "pages/login";
 
 const APP_ROUTES = [
   {
     path: routers.LOGIN,
-    component: "login"
+    component: Login
   },
-  {
-    path: "/test",
-    component: "test"
-  },
+  // {
+  //   path: "/test",
+  //   component: "test"
+  // },
   {
     path: "/pages",
     component: AppLayout,
@@ -76,27 +77,29 @@ const APP_ROUTES = [
 // 页面路由
 const AppRoutes = () => {
   useInitApp(); // 初始化应用数据
-  const getPageComponent = component => {
-    if (!component) return null;
-    const Comp =
-      typeof component === "string" ? loadable(component) : component;
-    return Comp;
-  };
+  // const getPageComponent = component => {
+  //   if (!component) return null;
+  //   const Comp =
+  //     typeof component === "string" ? loadable(component) : component;
+  //   return Comp;
+  // };
   const renderAppRoutes = routes => {
     return (
       <Switch>
-        {routes.map(({ path, component, children, redirect, key, ...rest }) => {
-          if (redirect) {
-            return <Redirect key={key || redirect} to={redirect} />;
+        {routes.map(
+          ({ path, component: Comp, children, redirect, key, ...rest }) => {
+            if (redirect) {
+              return <Redirect key={key || redirect} to={redirect} />;
+            }
+            // const Comp = getPageComponent(component);
+            const commonProps = { key: key || path, path, ...rest };
+            return children?.length ? (
+              <Comp {...commonProps}>{renderAppRoutes(children)}</Comp>
+            ) : (
+              <Route exact={true} component={Comp} {...commonProps} />
+            );
           }
-          const Comp = getPageComponent(component);
-          const commonProps = { key: key || path, path, ...rest };
-          return children?.length ? (
-            <Comp {...commonProps}>{renderAppRoutes(children)}</Comp>
-          ) : (
-            <Route exact={true} component={Comp} {...commonProps} />
-          );
-        })}
+        )}
       </Switch>
     );
   };

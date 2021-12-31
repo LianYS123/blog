@@ -13,8 +13,9 @@ export function Editor({ ...props }) {
       media={{
         accepts: { audio: true, video: true },
         async uploadFn({ success, error, file }) {
-          const { code, data: url } = await upload(file);
-          if (code === "0000" && url) {
+          const res = await upload(file);
+          const { data: url } = res;
+          if (res.success && url) {
             success({
               url,
               meta: {

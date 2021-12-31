@@ -1,4 +1,5 @@
 import { Modal } from "@douyinfe/semi-ui";
+import { ENCRYPT_PUBLICKEY } from "constants";
 import dayjs from "dayjs";
 import fileSize from "filesize";
 
@@ -116,4 +117,10 @@ export const deleteConfirmModalAction = ({ method, id, onFinish }) => {
       }
     }
   });
+};
+
+export const encrypt = password => {
+  const sm2 = require("sm-crypto").sm2;
+  const encryptData = sm2.doEncrypt(password, ENCRYPT_PUBLICKEY, 1);
+  return encryptData;
 };

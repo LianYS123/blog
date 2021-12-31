@@ -7,18 +7,21 @@ import { Button, Form } from "@douyinfe/semi-ui";
 import { useDispatch } from "react-redux";
 import { appSlice } from "models/app";
 import { AUTH_LOGIN } from "services/app";
+import { encrypt } from "utils";
+import { USER_LOGIN } from "services/auth";
 
 const Login = () => {
-  const [submit, { loading }] = useMutation(AUTH_LOGIN);
+  const [submit, { loading }] = useMutation(USER_LOGIN);
   const dispatch = useDispatch();
   const history = useHistory();
 
   const handleLogin = async values => {
     // history.push(routers.HOME);
+    values.password = encrypt(values.password); // 加密
     const result = await submit(values);
-    const { data: token, userInfos, code } = result;
+    const { data: token, userInfos, success } = result;
 
-    if (code === "0000") {
+    if (success) {
       localStorage.setItem("acc", token);
       dispatch(appSlice.actions.setToken(token));
       history.push(routers.HOME);
@@ -37,7 +40,7 @@ const Login = () => {
         <FormattedMessage id="WEBSITE_NAME" />
       </div>
       <Form.Input
-        field="username"
+        field="account"
         label="用户名"
         rules={[{ required: true }]}
         size="large"

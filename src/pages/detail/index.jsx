@@ -93,8 +93,8 @@ function Detail() {
                         title: "你确定要删除该文章吗？",
                         content: "删除后不可恢复，请谨慎操作",
                         onOk: async () => {
-                          const { code } = await deleteArticle({ id });
-                          if (code === "0000") {
+                          const { success } = await deleteArticle({ id });
+                          if (success) {
                             history.push(routers.HOME);
                           }
                         },

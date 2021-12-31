@@ -33,8 +33,8 @@ export const FormModal = ({
       return;
     }
     const result = await load(params);
-    const { code } = result;
-    if (code === "0000") {
+    const { code, success } = result;
+    if (success) {
       close && close();
       reload && reload();
       onFinish && onFinish(result);

@@ -36,8 +36,8 @@ function Editor() {
     }
 
     const requestParams = { html, raw, ...rest };
-    const { code, data } = await load({ ...requestParams, id });
-    if (code === "0000") {
+    const { success, data } = await load({ ...requestParams, id });
+    if (success) {
       history.push(routers.DETAIL.replace(":id", data));
     }
   };

@@ -17,7 +17,7 @@ const getProxy = () => {
   return proxy;
 };
 
-const devPort = 3000;
+const devPort = 3080;
 
 module.exports = merge(baseConfig, {
   mode: "development",

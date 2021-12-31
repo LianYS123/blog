@@ -1,5 +1,6 @@
 import { IMAGE_UPLOAD } from "services/app";
 import { parseAPI } from "./apiUtils";
+
 const SIMPLE_REQUEST_METHODS = ["GET", "DELETE"];
 
 const xFetch = function (url, data, options = {}) {
@@ -11,11 +12,15 @@ const xFetch = function (url, data, options = {}) {
   } = parseAPI(url, data);
   const headers = {};
 
-  const token = localStorage.getItem("acc");
+  const acc = localStorage.getItem("acc");
+
+  const token = `Bearer ${acc}`;
+  if (acc) {
+    headers.Authorization = token;
+  }
   const opts = {
     method,
     headers: {
-      Authorization: token,
       "Content-Type": "application/json",
       ...headers
     },

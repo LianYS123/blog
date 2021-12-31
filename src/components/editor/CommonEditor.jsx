@@ -48,8 +48,8 @@ export const CommonEditor = ({
         params.id = record.id;
       }
       const result = await request(params);
-      const { code } = result;
-      if (code === "0000") {
+      const { success } = result;
+      if (success) {
         Toast.success({ content: "发布成功", showClose: false });
         setState(BraftEditor.createEditorState(null));
         onSuccess(result);
