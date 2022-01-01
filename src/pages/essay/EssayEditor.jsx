@@ -1,8 +1,8 @@
 import React from "react";
 
-import { ADD_ESSAY, EDIT_ESSAY } from "services/essay";
 import { noop } from "lodash";
 import { CommonEditor } from "components/editor/CommonEditor";
+import { ADD_MOMENT, EDIT_MOMENT } from "services/essay";
 
 export const EssayEditor = ({
   reload,
@@ -18,7 +18,7 @@ export const EssayEditor = ({
         html={record?.html}
         raw={record?.raw}
         contentStyle={{ height: 160 }}
-        service={isEdit ? EDIT_ESSAY : ADD_ESSAY}
+        service={isEdit ? EDIT_MOMENT : ADD_MOMENT}
         onSuccess={onSuccess}
         onCancel={onCancel}
       />

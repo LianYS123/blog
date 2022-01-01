@@ -1,8 +1,7 @@
 import { SkeletonList } from "components/skeleton";
 import { useFetchList, useModalAction } from "hooks";
 import React, { useState } from "react";
-import { GET_ESSAY_LIST } from "services/essay";
-import { EditEssayModal } from "./EditEssayModal";
+import { MOMENT_LIST } from "services/essay";
 import { EssayEditor } from "./EssayEditor";
 import { EssayItem } from "./EssayItem";
 
@@ -14,7 +13,7 @@ const Essay = () => {
     loadingFirstPage,
     loadingMore
   } = useFetchList({
-    service: GET_ESSAY_LIST
+    service: MOMENT_LIST
   });
   const [editorRecord, setEditorRecord] = useState();
   return (

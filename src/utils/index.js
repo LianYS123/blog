@@ -14,8 +14,9 @@ export const secretPhone = phone => {
 export const renderDateTime = time =>
   time ? dayjs(time * 1000).format("YYYY-MM-DD HH:mm:ss") : null;
 
-export function timestampFormat(timestamp) {
+export function timestampFormat(time) {
   // const timestamp = time * 1000;
+  const timestamp = Math.floor(new Date(time).getTime() / 1000);
   function zeroize(num) {
     return (String(num).length == 1 ? "0" : "") + num;
   }

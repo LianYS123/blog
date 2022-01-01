@@ -30,15 +30,19 @@ function Editor() {
     const raw = editorState.toRAW();
 
     // 自动提取文章第一张图片作为封面
-    const src = $(html).find("img").attr("src");
+    const $html = $(html);
+    const src = $html.find("img").attr("src");
+    const summary = $html.text().substring(0, 100);
     if (src) {
       rest.cover = src;
     }
+    rest.summary = summary;
 
     const requestParams = { html, raw, ...rest };
     const { success, data } = await load({ ...requestParams, id });
     if (success) {
-      history.push(routers.DETAIL.replace(":id", data));
+      // history.push(routers.DETAIL.replace(":id", data));
+      history.push(routers.ARTICLE_LIST);
     }
   };
 

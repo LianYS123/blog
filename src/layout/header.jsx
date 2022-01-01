@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import routers from "routers";
 import { useIntl } from "react-intl";
 import { useHistory, useLocation } from "react-router";
@@ -6,33 +6,36 @@ import { useSelector } from "react-redux";
 import classNames from "classnames";
 import { useTheme } from "hooks/app";
 import { useWindowScroll } from "react-use";
-import { UserAvatar } from "components/user";
-import { Dropdown } from "@douyinfe/semi-ui";
+import { Avatar, Dropdown } from "@douyinfe/semi-ui";
 
 // header
 const AppHeader = () => {
   const history = useHistory();
   const intl = useIntl();
   const { userInfo } = useSelector(state => state.app);
-  const { id: userId } = userInfo;
+  const { id: userId, account = "" } = userInfo;
   const { y } = useWindowScroll();
   const { toggleTheme, isDark } = useTheme();
   const { pathname } = useLocation();
-  const isHomePage = pathname === routers.HOME;
+  // const isHomePage = pathname === routers.HOME;
+  const toLogin = () => {
+    localStorage.removeItem("acc");
+    history.push(routers.LOGIN);
+  };
   return (
     <header
       className={classNames(
         "flex w-full justify-between items-center pl-1 sm:pl-4 pr-6 py-3 z-20 transition-shadow fixed bg-white dark:bg-gray-900",
         {
-          shadow: y > 10,
-          "text-white": isHomePage && y < 20
+          shadow: y > 10
+          // "text-white": isHomePage && y < 20
           // "bg-gray-50 text-black": isHomePage && top > 100
         }
       )}
-      style={{
-        background: isHomePage && y < 20 ? "transparent" : undefined,
-        maxHeight: 52
-      }}
+      // style={{
+      //   background: isHomePage && y < 20 ? "transparent" : undefined,
+      //   maxHeight: 52
+      // }}
     >
       <div className="space-x-3 sm:space-x-4 ml-4 sm:ml-8">
         <button
@@ -101,21 +104,16 @@ const AppHeader = () => {
                 <Dropdown.Item onClick={() => history.push(routers.USER_SPACE)}>
                   个人空间
                 </Dropdown.Item>
-                <Dropdown.Item onClick={() => history.push(routers.LOGIN)}>
-                  退出
-                </Dropdown.Item>
+                <Dropdown.Item onClick={toLogin}>退出</Dropdown.Item>
               </Dropdown.Menu>
             }
           >
             <span>
-              <UserAvatar size="small" userInfo={userInfo} />
+              <Avatar size="small">{(account[0] || "U").toUpperCase()}</Avatar>
             </span>
           </Dropdown>
         ) : (
-          <button
-            onClick={() => history.push(routers.LOGIN)}
-            className="hover:underline"
-          >
+          <button onClick={toLogin} className="hover:underline">
             登录
           </button>
         )}

@@ -1,10 +1,9 @@
 import { IconDelete, IconEdit } from "@douyinfe/semi-icons";
-import { Button, Dropdown, Tag } from "@douyinfe/semi-ui";
-import { UserAvatar } from "components/user";
+import { Avatar, Tag } from "@douyinfe/semi-ui";
 import { useMutation } from "hooks";
 import React from "react";
 import { useSelector } from "react-redux";
-import { DELETE_ESSAY } from "services/essay";
+import { DELETE_MOMENT } from "services/essay";
 import { deleteConfirmModalAction, timestampFormat } from "utils";
 import { EssayEditor } from "./EssayEditor";
 
@@ -15,7 +14,7 @@ export const EssayItem = ({
   ...record
 }) => {
   const { createTime, html, author, id } = record;
-  const [deleteEssay] = useMutation(DELETE_ESSAY);
+  const [deleteEssay] = useMutation(DELETE_MOMENT);
   const { userInfo } = useSelector(state => state.app);
   const renderOperator = () => {
     const menus = [
@@ -68,7 +67,7 @@ export const EssayItem = ({
             </h3> */}
             <div className="space-x-2">
               <span>
-                <UserAvatar size="extra-small" userInfo={author} />
+                <Avatar size="extra-small">U</Avatar>
               </span>
               <span className="text-green-600 text-base sm:text-lg font-light hover:underline">
                 {author?.username}

@@ -1,8 +1,8 @@
 import React from "react";
 import { FormModal } from "components/modal";
-import { ADD_ESSAY, EDIT_ESSAY } from "services/essay";
 import { EditorField } from "components/editor";
 import BraftEditor from "braft-editor";
+import { ADD_MOMENT, EDIT_MOMENT } from "services/essay";
 
 export const EditEssayModal = ({ isEdit = false, record, ...props }) => {
   const getParams = values => {
@@ -20,7 +20,7 @@ export const EditEssayModal = ({ isEdit = false, record, ...props }) => {
           ? BraftEditor.createEditorState(record.raw || record.html)
           : undefined
       }}
-      service={isEdit ? EDIT_ESSAY : ADD_ESSAY}
+      service={isEdit ? EDIT_MOMENT : ADD_MOMENT}
       record={record}
       modalProps={{ okText: !isEdit ? "发布" : "保存" }}
       {...props}

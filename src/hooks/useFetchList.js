@@ -27,10 +27,10 @@ export const useFetchList = ({ service, ...rest }) => {
   const autoSetRef = useRef(true); // 自动合并搜索列表到list中
   const requestResult = useRequest({
     service,
-    necessaryParams: { pageSize: 10 },
+    necessaryParams: { pageNo: 1, pageSize: 10 },
     onSuccess: (newData, oldData) => {
       if (autoSetRef.current) {
-        const newList = uniqBy([...list, ...newData.list], it => it.id);
+        const newList = uniqBy([...list, ...newData.rows], it => it.id);
         setList(newList);
       } else {
         autoSetRef.current = true;
@@ -40,23 +40,25 @@ export const useFetchList = ({ service, ...rest }) => {
   });
   const { loading, reload, data, params, search } = requestResult;
   const isBottom = useIsBottom();
+  const hasNextPage = data.pageNo < data.totalPage;
+  const nextPage = data.pageNo + 1;
   const fetchMore = async () => {
     setLoadingMore(true);
     await search({
       ...params,
-      page: data.nextPage
+      pageNo: nextPage
     });
     setLoadingMore(false);
   };
   useEffect(() => {
-    if (isBottom && !loading && data.hasNextPage) {
+    if (isBottom && !loading && hasNextPage) {
       fetchMore();
     }
   }, [isBottom]);
   const refresh = async () => {
     const { data } = await search({
       ...params,
-      page: 1
+      pageNo: 1
     });
     autoSetRef.current = false;
     setList(data.list);
