@@ -10,6 +10,7 @@ import { useDeepCompareEffect } from "./useUtils";
  * @param {*} config.necessaryParams 必要参数
  * @param {*} config.ready === true时发起请求，默认值为true
  * @param {*} config.initialData === 初始数据
+ * @param {*} config.deps === 依赖项
  * @param {*} config.rest 请求方法额外参数, onError事件等options可以通过这个参数传递
  */
 export const useRequest = ({
@@ -18,6 +19,7 @@ export const useRequest = ({
   necessaryParams,
   ready = true,
   initialData,
+  deps = [],
   ...config
 }) => {
   const [_service, requestState] = useMutation(service, initialData, config);
@@ -42,7 +44,7 @@ export const useRequest = ({
     if (ready === true) {
       loadData();
     }
-  }, [necessaryParams, ready]);
+  }, [necessaryParams, ready, ...deps]);
 
   return {
     search: loadData,

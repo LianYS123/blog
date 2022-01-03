@@ -1,7 +1,10 @@
 import { Notification } from "@douyinfe/semi-ui";
+import { LOGIN_STATUS } from "constants/index";
 import { useMessageUtils } from "hooks";
 import { noop } from "lodash";
+import { appSlice } from "models/app";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { getAPIMethod } from "utils/apiUtils";
 import xFetch from "utils/fetch";
@@ -32,7 +35,7 @@ const useRequestErrorHandler = () => {
  */
 export const useMutation = (service, initialData = {}, config = {}) => {
   const {
-    autoHandleError = true,
+    autoHandleError = false,
     showActionMessage = false,
     successMessageId,
     successMessage,
@@ -45,6 +48,7 @@ export const useMutation = (service, initialData = {}, config = {}) => {
   const [data, setData] = useState(initialData);
   const { showError, showSuccess } = useMessageUtils();
   const handler = useRequestErrorHandler();
+  const dispatch = useDispatch();
 
   const loadData = async (params, config) => {
     try {
@@ -52,7 +56,7 @@ export const useMutation = (service, initialData = {}, config = {}) => {
       const request =
         typeof service === "function" ? service : xFetch.bind(null, service);
       const res = await request(params, config);
-      const { success } = res;
+      const { success, code } = res;
 
       // 处理操作成功和失败的提示
       if (success) {
@@ -74,8 +78,12 @@ export const useMutation = (service, initialData = {}, config = {}) => {
       }
       // 报错数据
       if (success) {
+        onSuccess(res.data, data, res); // 新数据、老数据、请求结果
         setData(res.data || {});
-        onSuccess(res.data, data);
+      } else if (code === 1011008) {
+        // 登录已过期
+        dispatch(appSlice.actions.clearToken()); // 清除token
+        dispatch(appSlice.actions.setLoginStatus(LOGIN_STATUS.LOGIN_EXPIRED)); // 修改登录状态，(弹出登录提示框)
       }
 
       setLoading(false);
@@ -89,8 +97,9 @@ export const useMutation = (service, initialData = {}, config = {}) => {
       // }
       // eslint-disable-next-line no-console
       console.error(e);
+    } finally {
+      onFinish();
     }
-    onFinish();
   };
 
   return [loadData, { loading, error, data }];

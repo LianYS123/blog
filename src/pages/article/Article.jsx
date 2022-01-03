@@ -11,7 +11,8 @@ export const Article = ({
   createTime,
   authorName,
   id,
-  tags
+  tags,
+  handleTagClick
 }) => {
   const history = useHistory();
   return (
@@ -28,7 +29,11 @@ export const Article = ({
             <span className="space-x-1">
               {tags &&
                 tags.map(it => (
-                  <Tag key={it.id} color={it.color}>
+                  <Tag
+                    onClick={() => handleTagClick(it)}
+                    key={it.tagName}
+                    color={it.tagColor || "white"}
+                  >
                     {it.tagName}
                   </Tag>
                 ))}

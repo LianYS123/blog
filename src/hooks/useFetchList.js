@@ -1,7 +1,11 @@
 import { useRequest } from "hooks";
 import { uniqBy } from "lodash";
 import { useEffect, useRef, useState } from "react";
-import { useWindowScroll, useWindowSize } from "react-use";
+import {
+  useDeepCompareEffect,
+  useWindowScroll,
+  useWindowSize
+} from "react-use";
 
 function getDocHeight() {
   var D = document;
@@ -21,19 +25,27 @@ const useIsBottom = (dis = 0) => {
   return y + height + dis >= getDocHeight();
 };
 
-export const useFetchList = ({ service, ...rest }) => {
+export const useFetchList = ({ service, necessaryParams = {}, ...rest }) => {
   const [list, setList] = useState([]);
   const [loadingMore, setLoadingMore] = useState(false);
   const autoSetRef = useRef(true); // 自动合并搜索列表到list中
+  useDeepCompareEffect(() => {
+    autoSetRef.current = false;
+  }, [necessaryParams]);
   const requestResult = useRequest({
     service,
-    necessaryParams: { pageNo: 1, pageSize: 10 },
+    necessaryParams: {
+      pageNo: 1,
+      pageSize: 10,
+      ...necessaryParams
+    },
     onSuccess: (newData, oldData) => {
       if (autoSetRef.current) {
         const newList = uniqBy([...list, ...newData.rows], it => it.id);
         setList(newList);
       } else {
-        autoSetRef.current = true;
+        // autoSetRef.current = true;
+        setList(newData.rows);
       }
     },
     ...rest
@@ -56,12 +68,10 @@ export const useFetchList = ({ service, ...rest }) => {
     }
   }, [isBottom]);
   const refresh = async () => {
-    const { data } = await search({
+    await search({
       ...params,
       pageNo: 1
     });
-    autoSetRef.current = false;
-    setList(data.list);
   };
   return {
     ...requestResult,

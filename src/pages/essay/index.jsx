@@ -17,7 +17,7 @@ const Essay = () => {
   });
   const [editorRecord, setEditorRecord] = useState();
   return (
-    <div className="container pb-8 md:pb-16">
+    <div className="container py-8 md:pb-16">
       <div className="mb-8">
         <EssayEditor reload={refresh} />
       </div>

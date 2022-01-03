@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { LOGIN_STATUS } from "constants/index";
 
 export const appSlice = createSlice({
   name: "app",
@@ -8,16 +9,23 @@ export const appSlice = createSlice({
     menuList: [],
     userInfo: {},
     loadingApp: false,
-    local: localStorage.getItem("lang") || "en_US",
+    local: localStorage.getItem("lang") || "zh_CN",
     config: {},
     dictMap: {},
-    theme: localStorage.getItem("theme") || "light" // 默认暗色主题
+    theme: localStorage.getItem("theme") || "light", // 默认暗色主题
+    isAppLoaded: false, // 应用初始化完成，可以加载子页面
+    loginStatus: LOGIN_STATUS.NOT_LOGIN // 未登录：NOT_LOGIN, 已登录：LOGGED, 登录过期：LOGIN_EXPIRED, LOGGING: 正在登录
   },
   reducers: {
     // 将token保存在全局
     setToken: (state, action) => {
       state.token = action.payload;
       localStorage.setItem("acc", action.payload);
+    },
+    // 清除token
+    clearToken: state => {
+      state.token = null;
+      localStorage.removeItem("acc");
     },
     setMenu: (state, action) => {
       state.menuList = action.payload;
@@ -51,6 +59,12 @@ export const appSlice = createSlice({
         body.classList.remove("dark");
         document.documentElement.style.colorScheme = "light";
       }
+    },
+    setIsAppLoaded: (state, action) => {
+      state.isAppLoaded = action.payload;
+    },
+    setLoginStatus: (state, action) => {
+      state.loginStatus = action.payload;
     }
   }
 });

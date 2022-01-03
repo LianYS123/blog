@@ -84,12 +84,11 @@ const Home = () => {
         "bg-gray-50 dark:bg-black"
       )}
     >
-      Home Page
-      {/* {data.map(it => {
+      {data.map(it => {
         const { type, id } = it;
         const Comp = PanelMap[type] || "div";
         return <Comp key={id} {...it} />;
-      })} */}
+      })}
       {/* <MenuButton /> */}
     </div>
   );

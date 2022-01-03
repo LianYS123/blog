@@ -3,7 +3,7 @@ import { parseAPI } from "./apiUtils";
 
 const SIMPLE_REQUEST_METHODS = ["GET", "DELETE"];
 
-const xFetch = function (url, data, options = {}) {
+const xFetch = async function (url, data, options = {}) {
   const {
     parsedUrl,
     method,
@@ -29,7 +29,10 @@ const xFetch = function (url, data, options = {}) {
   if (!SIMPLE_REQUEST_METHODS.includes(method)) {
     opts.body = JSON.stringify(parsedData);
   }
-  return fetch(apiPrefix + parsedUrl, opts).then(res => res.json());
+  const result = await fetch(apiPrefix + parsedUrl, opts).then(res =>
+    res.json()
+  );
+  return result;
 };
 
 // 文件上传

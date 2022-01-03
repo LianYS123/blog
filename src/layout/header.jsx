@@ -2,11 +2,12 @@ import React from "react";
 import routers from "routers";
 import { useIntl } from "react-intl";
 import { useHistory, useLocation } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 import { useTheme } from "hooks/app";
 import { useWindowScroll } from "react-use";
 import { Avatar, Dropdown } from "@douyinfe/semi-ui";
+import { appSlice } from "models/app";
 
 // header
 const AppHeader = () => {
@@ -18,8 +19,9 @@ const AppHeader = () => {
   const { toggleTheme, isDark } = useTheme();
   const { pathname } = useLocation();
   // const isHomePage = pathname === routers.HOME;
+  const dispatch = useDispatch();
   const toLogin = () => {
-    localStorage.removeItem("acc");
+    dispatch(appSlice.actions.clearToken()); // 清除token
     history.push(routers.LOGIN);
   };
   return (

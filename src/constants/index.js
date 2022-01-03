@@ -61,3 +61,11 @@ export const BREAKPOINT = {
 // 密码加密公钥
 export const ENCRYPT_PUBLICKEY =
   "04298364ec840088475eae92a591e01284d1abefcda348b47eb324bb521bb03b0b2a5bc393f6b71dabb8f15c99a0050818b56b23f31743b93df9cf8948f15ddb54";
+
+// 登录状态
+export const LOGIN_STATUS = {
+  NOT_LOGIN: "NOT_LOGIN", // 未登录
+  LOGGING: "LOGGING", // 正在登录
+  LOGGED: "LOGGED", // 已登录
+  LOGIN_EXPIRED: "LOGIN_EXPIRED" //登录过期
+};
