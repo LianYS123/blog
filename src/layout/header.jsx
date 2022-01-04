@@ -14,7 +14,7 @@ const AppHeader = () => {
   const history = useHistory();
   const intl = useIntl();
   const { userInfo } = useSelector(state => state.app);
-  const { id: userId, account = "" } = userInfo;
+  const { id: userId, account = "", avatar } = userInfo;
   const { y } = useWindowScroll();
   const { toggleTheme, isDark } = useTheme();
   const { pathname } = useLocation();
@@ -111,7 +111,16 @@ const AppHeader = () => {
             }
           >
             <span>
-              <Avatar size="small">{(account[0] || "U").toUpperCase()}</Avatar>
+              {avatar ? (
+                <Avatar
+                  src={`/api/sysFileInfo/preview?id=${avatar}`}
+                  size="small"
+                />
+              ) : (
+                <Avatar size="small">
+                  {(account[0] || "U").toUpperCase()}
+                </Avatar>
+              )}
             </span>
           </Dropdown>
         ) : (

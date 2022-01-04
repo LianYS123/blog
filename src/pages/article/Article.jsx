@@ -26,18 +26,6 @@ export const Article = ({
             >
               {articleName}
             </h3>
-            <span className="space-x-1">
-              {tags &&
-                tags.map(it => (
-                  <Tag
-                    onClick={() => handleTagClick(it)}
-                    key={it.tagName}
-                    color={it.tagColor || "white"}
-                  >
-                    {it.tagName}
-                  </Tag>
-                ))}
-            </span>
           </div>
           <div className="flex">
             {/* <p
@@ -66,12 +54,30 @@ export const Article = ({
             ) : null}
           </div>
         </div>
-        <div className="font-semibold">
-          <div className="text-gray-500 font-thin space-x-2">
+        <div>
+          <div className="space-x-2 flex items-center">
             <span className="text-green-600 text-base sm:text-lg font-light hover:underline">
               {authorName}
             </span>
-            <span>{timestampFormat(createTime)}</span>
+            <span className="text-gray-500 font-thin">
+              {timestampFormat(createTime)}
+            </span>
+            <span className="flex">
+              {tags &&
+                tags.slice(0, 5).map(it => (
+                  <Tag
+                    className="cursor-pointer mx-1"
+                    onClick={() => handleTagClick(it)}
+                    key={it.tagName}
+                    color={it.tagColor || "white"}
+                  >
+                    {it.tagName}
+                  </Tag>
+                ))}
+              <span className="text-gray-500 font-thin">
+                {tags.length > 5 ? "..." : null}
+              </span>
+            </span>
           </div>
         </div>
       </div>
