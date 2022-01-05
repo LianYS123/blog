@@ -22,6 +22,10 @@ const APP_ROUTES = [
     path: routers.LOGIN,
     component: Login
   },
+  {
+    path: routers.HOME,
+    component: Home
+  },
   // {
   //   path: "/test",
   //   component: "test"
@@ -30,10 +34,6 @@ const APP_ROUTES = [
     path: "/pages",
     component: AppLayout,
     children: [
-      {
-        path: routers.HOME,
-        component: Home
-      },
       {
         path: routers.ARTICLE_LIST,
         component: ArticleList

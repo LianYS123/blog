@@ -1,3 +1,4 @@
+/* eslint-disable no-control-regex */
 import React, { useRef } from "react";
 import BraftEditor from "braft-editor";
 
@@ -23,6 +24,16 @@ function Editor() {
 
   const isSM = useMedia(BREAKPOINT.sm);
 
+  // 一个汉字相当于两个英文字符
+  const getSummary = (text, count = 200) => {
+    let resultStr = "";
+    for (let i = 0; i < count && i < text.length; ) {
+      i += /[^\x00-\xff]/.test(text[i]) ? 2 : 1;
+      resultStr += text[i];
+    }
+    return resultStr;
+  };
+
   // 保存文章
   const handleSubmit = async values => {
     const { editorState, ...rest } = values;
@@ -32,7 +43,7 @@ function Editor() {
     // 自动提取文章第一张图片作为封面
     const $html = $(html);
     const src = $html.find("img").attr("src");
-    const summary = $html.text().substring(0, 100);
+    const summary = getSummary($html.text());
     if (src) {
       rest.cover = src;
     }
