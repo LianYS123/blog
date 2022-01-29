@@ -27,8 +27,12 @@ function Editor() {
   // 一个汉字相当于两个英文字符
   const getSummary = (text, count = 200) => {
     let resultStr = "";
-    for (let i = 0; i < count && i < text.length; ) {
-      i += /[^\x00-\xff]/.test(text[i]) ? 2 : 1;
+    let n = 0;
+    for (let i = 0; i < text.length; i++) {
+      if (n > count) {
+        return resultStr + "...";
+      }
+      n += /[^\x00-\xff]/.test(text[i]) ? 2 : 1;
       resultStr += text[i];
     }
     return resultStr;

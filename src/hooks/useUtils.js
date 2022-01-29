@@ -10,7 +10,8 @@ import isEqual from "fast-deep-equal";
 
 import { useIntl } from "react-intl";
 import { Notification } from "@douyinfe/semi-ui";
-import { useMedia } from "react-use";
+import { useWindowScroll, useWindowSize } from "react-use";
+import { getDocHeight } from "utils";
 
 /**
  * @description: 自定义useEffect的更新逻辑
@@ -164,4 +165,14 @@ export const useCountDown = ({
     return () => clearInterval(timerRef.current); // 清除定时器
   }, [isPaused]);
   return { count, start, pause, isPaused, reset };
+};
+
+/**
+ * @param {number} dis 距离底部的距离
+ * @returns 是否已经到达底部
+ */
+export const useIsBottom = (dis = 0) => {
+  const { y } = useWindowScroll();
+  const { height } = useWindowSize();
+  return y + height + dis >= getDocHeight();
 };

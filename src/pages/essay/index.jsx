@@ -9,17 +9,17 @@ const Essay = () => {
   const {
     list = [],
     reload,
-    refresh,
     loadingFirstPage,
     loadingMore
   } = useFetchList({
-    service: MOMENT_LIST
+    service: MOMENT_LIST,
+    necessaryParams: { pageSize: 10 }
   });
   const [editorRecord, setEditorRecord] = useState();
   return (
     <div className="container py-8 md:pb-16">
       <div className="mb-8">
-        <EssayEditor reload={refresh} />
+        <EssayEditor reload={reload} />
       </div>
       <div className="space-y-3 mb-4">
         <SkeletonList
@@ -32,7 +32,7 @@ const Essay = () => {
             key={it.id}
             setEditorRecord={setEditorRecord}
             editorRecord={editorRecord}
-            reload={refresh}
+            reload={reload}
             {...it}
           />
         ))}

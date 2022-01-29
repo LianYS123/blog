@@ -70,7 +70,7 @@ export const EssayItem = ({
                 <Avatar size="extra-small">U</Avatar>
               </span>
               <span className="text-green-600 text-base sm:text-lg font-light hover:underline">
-                {author?.username}
+                {author?.nickName}
               </span>
             </div>
             <div>

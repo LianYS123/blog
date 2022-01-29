@@ -1,109 +1,93 @@
-import { IconSearch } from "@douyinfe/semi-icons";
-import { Typography } from "@material-ui/core";
-import classNames from "classnames";
-import LoginExpiredDialog from "components/dialog/LoginExpiredDialog";
-// import { MenuButton } from "components/button/MenuButton";
-import { useRequest } from "hooks";
-import { stringify } from "query-string";
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import routers from "routers";
-import { GET_ALL_TAGS } from "services/tag";
-import { PanelList } from "./components/PanelList";
-import { PanelWall } from "./components/PanelWall";
-import ShadowCard from "./components/ShadowCard";
-import { SingleArticle } from "./components/SingleArticle";
-import { SingleItem } from "./components/SingleItem";
-import styles from "./styles.module.less";
+/* eslint no-undef: 0 */
+/* eslint arrow-parens: 0 */
+import React from "react";
+import { enquireScreen } from "enquire-js";
 
-const PanelMap = {
-  SINGLE_ITEM: SingleItem,
-  SINGLE_ARTICLE: SingleArticle,
-  PANEL_LIST: PanelList,
-  PANEL_WALL: PanelWall,
-  SHADOW_CARD: ShadowCard
-};
+import Nav2 from "./Nav2";
+import Banner0 from "./Banner0";
+import Feature1 from "./Feature1";
+import Footer2 from "./Footer2";
 
-const Home = () => {
-  const [keyword, setKeyword] = useState();
-  const history = useHistory();
-  const handleSearch = (kw = keyword) => {
-    // 搜索
-    if (kw) {
-      // console.log(kw);
-      history.push({
-        pathname: routers.ARTICLE_LIST,
-        search: stringify({ keyword: kw })
-      });
+import {
+  Nav20DataSource,
+  Banner00DataSource,
+  Feature10DataSource,
+  Footer20DataSource
+} from "./data.source";
+import "./less/antMotionStyle.less";
+
+let isMobile;
+enquireScreen(b => {
+  isMobile = b;
+});
+
+const { location = {} } = typeof window !== "undefined" ? window : {};
+
+export default class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isMobile,
+      show: !location.port // 如果不是 dva 2.0 请删除
+    };
+  }
+
+  componentDidMount() {
+    // 适配手机屏幕;
+    enquireScreen(b => {
+      this.setState({ isMobile: !!b });
+    });
+    // dva 2.0 样式在组件渲染之后动态加载，导致滚动组件不生效；线上不影响；
+    /* 如果不是 dva 2.0 请删除 start */
+    if (location.port) {
+      // 样式 build 时间在 200-300ms 之间;
+      setTimeout(() => {
+        this.setState({
+          show: true
+        });
+      }, 500);
     }
-  };
-  const { data: tags = [] } = useRequest({
-    service: GET_ALL_TAGS,
-    initialData: []
-  });
-  const showTags = tags.slice(0, 15);
-  const showTagsLength = showTags.length;
-  return (
-    <div className="h-full">
+    /* 如果不是 dva 2.0 请删除 end */
+  }
+
+  render() {
+    const children = [
+      <Nav2
+        id="Nav2_0"
+        key="Nav2_0"
+        dataSource={Nav20DataSource}
+        isMobile={this.state.isMobile}
+      />,
+      <Banner0
+        id="Banner0_0"
+        key="Banner0_0"
+        dataSource={Banner00DataSource}
+        isMobile={this.state.isMobile}
+      />,
+      <Feature1
+        id="Feature1_0"
+        key="Feature1_0"
+        dataSource={Feature10DataSource}
+        isMobile={this.state.isMobile}
+      />,
+      <Footer2
+        id="Footer2_0"
+        key="Footer2_0"
+        dataSource={Footer20DataSource}
+        isMobile={this.state.isMobile}
+      />
+    ];
+    return (
       <div
-        className="bg-center bg-cover bg-no-repeat h-full flex flex-col items-center px-4 py-40"
-        style={{
-          background:
-            "url(https://liuli-1259462774.cos.ap-shanghai.myqcloud.com/c39d7a8e-90fb-4ec3-9db4-6eb4d728ff92cat-6747298_1280.jpeg)"
+        className="templates-wrapper"
+        ref={d => {
+          this.dom = d;
         }}
       >
-        {/* <div className="mb-4">Stunning free images & royalty free stock</div> */}
-        {/* <Typography gutterBottom variant="h5" component="h5">
-          Lian's Blog
-        </Typography>
-        <Typography gutterBottom variant="h6" component="h6">
-          记录技术、生活、心情、想法，以及一些有趣的事
-        </Typography> */}
-        {/* <div className="mb-8">
-        </div> */}
-        <div className="w-full" style={{ maxWidth: 800 }}>
-          {/* 搜索框 */}
-          <div className="rounded-lg flex items-center bg-white text-gray-500 h-14">
-            <div
-              onClick={() => handleSearch()}
-              className="search-icon-box px-4 pt-1"
-            >
-              <IconSearch />
-            </div>
-            <div className="input-box flex-auto">
-              <input
-                type="text"
-                value={keyword}
-                onChange={ev => setKeyword(ev.target.value)}
-                className="h-6 block outline-none bg-white"
-                onKeyPress={ev => {
-                  if (ev.key === "Enter") {
-                    handleSearch();
-                  }
-                }}
-                placeholder="输入关键词搜索"
-              />
-            </div>
-          </div>
-          {/* 热词 */}
-          <div className="mb-4 mt-2 text-left">
-            <span className="text-xs text-gray-300 mr-1">快速搜索: </span>
-            {showTags.map((tag, index) => (
-              <span
-                key={index}
-                onClick={() => handleSearch(tag.tagName)}
-                className="cursor-pointer text-xs text-gray-300 hover:text-white"
-              >
-                <span className="hover:underline">{tag.tagName}</span>
-                {index === showTagsLength - 1 ? "" : "，"}
-              </span>
-            ))}
-          </div>
-        </div>
+        {/* 如果不是 dva 2.0 替换成 {children} start */}
+        {this.state.show && children}
+        {/* 如果不是 dva 2.0 替换成 {children} end */}
       </div>
-      {/* 登录状态验证 */}
-      <LoginExpiredDialog />
-    </div>
-  );
-};
-export default Home;
+    );
+  }
+}

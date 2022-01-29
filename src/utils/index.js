@@ -125,3 +125,16 @@ export const encrypt = password => {
   const encryptData = sm2.doEncrypt(password, ENCRYPT_PUBLICKEY, 1);
   return encryptData;
 };
+
+// 计算文档和滚动距离总高度
+export function getDocHeight() {
+  var D = document;
+  return Math.max(
+    D.body.scrollHeight,
+    D.documentElement.scrollHeight,
+    D.body.offsetHeight,
+    D.documentElement.offsetHeight,
+    D.body.clientHeight,
+    D.documentElement.clientHeight
+  );
+}

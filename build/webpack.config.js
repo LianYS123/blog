@@ -58,7 +58,15 @@ module.exports = {
         test: /\.less$/,
         include: [src],
         exclude: /\.module\.less$/,
-        use: [...getExtraLoaders(), "less-loader"]
+        use: [
+          ...getExtraLoaders(),
+          {
+            loader: "less-loader",
+            options: {
+              javascriptEnabled: true
+            }
+          }
+        ]
       },
       {
         test: /\.module\.less$/,
