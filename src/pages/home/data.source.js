@@ -16,7 +16,7 @@ export const Nav20DataSource = {
         name: "linkNav",
         to: routers.HOME,
         children: "首页",
-        className: "menu-item"
+        className: "menu-item active"
       },
       {
         name: "linkNav~kyzmiq0v89f",

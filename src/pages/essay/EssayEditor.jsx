@@ -15,10 +15,11 @@ export const EssayEditor = ({
     <div className="shadow">
       <CommonEditor
         reload={reload}
-        html={record?.html}
-        raw={record?.raw}
+        record={record}
         contentStyle={{ height: 160 }}
         service={isEdit ? EDIT_MOMENT : ADD_MOMENT}
+        isEdit={isEdit}
+        showCancelButton={isEdit}
         onSuccess={onSuccess}
         onCancel={onCancel}
       />

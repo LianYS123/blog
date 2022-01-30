@@ -1,8 +1,10 @@
-import { IconDelete, IconEdit } from "@douyinfe/semi-icons";
-import { Avatar, Tag } from "@douyinfe/semi-ui";
+import { IconDelete, IconEdit, IconMore } from "@douyinfe/semi-icons";
+import { Avatar, Button, Dropdown, Tag } from "@douyinfe/semi-ui";
+import { Fab, IconButton } from "@material-ui/core";
 import { useMutation } from "hooks";
 import React from "react";
 import { useSelector } from "react-redux";
+import { FILE_PREVIEW } from "services/app";
 import { DELETE_MOMENT } from "services/essay";
 import { deleteConfirmModalAction, timestampFormat } from "utils";
 import { EssayEditor } from "./EssayEditor";
@@ -13,7 +15,7 @@ export const EssayItem = ({
   reload,
   ...record
 }) => {
-  const { createTime, html, author, id } = record;
+  const { createTime, html, authorName, id, authorAvatar, createUser } = record;
   const [deleteEssay] = useMutation(DELETE_MOMENT);
   const { userInfo } = useSelector(state => state.app);
   const renderOperator = () => {
@@ -21,7 +23,7 @@ export const EssayItem = ({
       {
         node: "item",
         name: "编辑",
-        color: "blue",
+        color: "primary",
         icon: <IconEdit />,
         onClick: () => setEditorRecord(record)
       },
@@ -29,7 +31,7 @@ export const EssayItem = ({
         node: "item",
         type: "danger",
         name: "删除",
-        color: "red",
+        color: "secondary",
         icon: <IconDelete />,
         onClick: () =>
           deleteConfirmModalAction({
@@ -40,15 +42,12 @@ export const EssayItem = ({
       }
     ];
     return (
-      <div className="space-x-2">
-        {menus.map(({ color, name, icon, onClick }) => (
-          <span key={name} className="cursor-pointer" onClick={onClick}>
-            <Tag color={color}>
-              {icon}
-              {name}
-            </Tag>
-          </span>
-        ))}
+      <div>
+        <Dropdown menu={menus}>
+          <IconButton>
+            <IconMore />
+          </IconButton>
+        </Dropdown>
       </div>
     );
     // return (
@@ -67,15 +66,22 @@ export const EssayItem = ({
             </h3> */}
             <div className="space-x-2">
               <span>
-                <Avatar size="extra-small">U</Avatar>
+                {!authorAvatar ? (
+                  <Avatar size="extra-small">U</Avatar>
+                ) : (
+                  <Avatar
+                    src={`${FILE_PREVIEW}?id=${authorAvatar}`}
+                    size="extra-small"
+                  />
+                )}
               </span>
               <span className="text-green-600 text-base sm:text-lg font-light hover:underline">
-                {author?.nickName}
+                {authorName}
               </span>
             </div>
             <div>
               {/* 只有发布者有编辑权限 */}
-              {userInfo.id === author?.id ? renderOperator() : null}
+              {userInfo.id === createUser ? renderOperator() : null}
             </div>
           </div>
           <div className="flex">

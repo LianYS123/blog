@@ -1,6 +1,6 @@
 const routers = {
   LOGIN: "/login",
-  HOME: "/pages/home",
+  HOME: "/home",
   ARTICLE_LIST: "/pages/list",
   ESSAY: "/pages/essay",
   NOT_FOUND: "/pages/404",
@@ -9,7 +9,8 @@ const routers = {
   DETAIL: "/pages/detail/:id",
 
   USER_SPACE: "/pages/space",
-  SETTING: "/pages/setting"
+  SETTING: "/pages/setting",
+  ABOUT: "/pages/about"
 };
 
 export default routers;

@@ -13,6 +13,7 @@ import zh_CN from "locales/zh_CN";
 import AppRoutes from "routers/AppRoutes";
 
 import "./app.less";
+import { createTheme, MuiThemeProvider } from "@material-ui/core";
 
 const locales = {
   en_US,
@@ -20,14 +21,22 @@ const locales = {
 };
 
 const App = () => {
-  const { local } = useSelector(({ app }) => app);
+  const { local, theme } = useSelector(({ app }) => app);
   return (
     <IntlProvider
       messages={locales[local]}
       locale={localMap[local]}
       defaultLocale="en"
     >
-      <AppRoutes />
+      <MuiThemeProvider
+        theme={createTheme({
+          palette: {
+            type: theme // Switching the dark mode on is a single property value change.
+          }
+        })}
+      >
+        <AppRoutes />
+      </MuiThemeProvider>
     </IntlProvider>
   );
 };
