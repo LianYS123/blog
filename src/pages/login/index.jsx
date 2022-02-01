@@ -6,14 +6,16 @@ import { FormattedMessage } from "react-intl";
 import { Button, Form } from "@douyinfe/semi-ui";
 import { useDispatch } from "react-redux";
 import { appSlice } from "models/app";
-import { AUTH_LOGIN } from "services/app";
 import { encrypt } from "utils";
 import { USER_LOGIN } from "services/auth";
+import { useLocation } from "react-use";
+import { parse } from "query-string";
 
 const Login = () => {
   const [submit, { loading }] = useMutation(USER_LOGIN);
   const dispatch = useDispatch();
   const history = useHistory();
+  const { search } = useLocation();
 
   const handleLogin = async values => {
     // history.push(routers.HOME);
@@ -24,7 +26,12 @@ const Login = () => {
     if (success) {
       localStorage.setItem("acc", token);
       dispatch(appSlice.actions.setToken(token));
-      history.push(routers.HOME);
+      const { redirect } = parse(search);
+      if (redirect) {
+        history.push(redirect);
+      } else {
+        history.push(routers.HOME);
+      }
     }
   };
 
@@ -33,7 +40,7 @@ const Login = () => {
       labelAlign="right"
       labelCol={{ span: 6 }}
       labelPosition="left"
-      className="w-96 mt-64 mx-auto"
+      className="w-96 px-4 mt-48 mx-auto"
       onSubmit={handleLogin}
     >
       <div className="text-center text-lg">

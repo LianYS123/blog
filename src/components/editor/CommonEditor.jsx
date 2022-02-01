@@ -39,6 +39,9 @@ export const useEditorState = ({ record }) => {
 
   // 校验用户输入是否为空
   const isEmpty = () => {
+    if (!editorState) {
+      return true;
+    }
     const params = getParams();
     return !params.html || params.html === "<p></p>";
   };

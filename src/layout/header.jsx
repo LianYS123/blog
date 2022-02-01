@@ -10,6 +10,7 @@ import { Avatar, Dropdown, Tooltip } from "@douyinfe/semi-ui";
 import { appSlice } from "models/app";
 import { Link } from "react-router-dom";
 import { FILE_PREVIEW } from "services/app";
+import { stringify } from "query-string";
 
 // header
 const AppHeader = () => {
@@ -24,7 +25,10 @@ const AppHeader = () => {
   const dispatch = useDispatch();
   const toLogin = () => {
     dispatch(appSlice.actions.clearToken()); // 清除token
-    history.push(routers.LOGIN);
+    history.push({
+      pathname: routers.LOGIN,
+      search: stringify({ redirect: pathname })
+    });
   };
   const navs = [
     {
@@ -51,7 +55,7 @@ const AppHeader = () => {
   return (
     <header
       className={classNames(
-        "flex w-full justify-between items-center px-1 md:px-24 z-20 transition-shadow fixed bg-white dark:bg-gray-900 header",
+        "flex w-full justify-between items-center px-2 md:px-24 z-20 transition-shadow fixed bg-white dark:bg-gray-900 header",
         {
           shadow: y > 10
         }

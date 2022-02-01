@@ -4,7 +4,7 @@ import BraftEditor from "braft-editor";
 import { controls, simpleControls } from "./config";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useRequest } from "hooks";
-import { Button, Form, Spin } from "@douyinfe/semi-ui";
+import { Button, Form, Spin, Tag } from "@douyinfe/semi-ui";
 import { parse } from "marked";
 import routers from "routers";
 import $ from "jquery";
@@ -19,9 +19,10 @@ import { CommonEditor } from "components/editor/CommonEditor";
 import { useEditorState } from "components/editor/CommonEditor";
 import { getSummary } from "utils";
 import { Paper } from "@material-ui/core";
-import { pick } from "lodash";
+import { cloneDeep, pick } from "lodash";
 import { useEffect } from "react";
 import _ from "lodash";
+import { GET_ALL_TAGS } from "services/tag";
 
 function Editor() {
   const formApiRef = useRef();
@@ -37,28 +38,46 @@ function Editor() {
     ready: !!id
   });
 
-  useEffect(() => {
-    if (!_.isEmpty(data)) {
-      const initValues = pick(data, ["articleName"]);
-      formApiRef.current.setValues(initValues);
-    }
-  }, [data]);
-
-  // 新增/修改文章
-  const [load] = useMutation(id ? EDIT_ARTICLE : ADD_ARTICLE, null, {
-    autoHandleError: true
+  // 请求可选标签
+  const { data: allTags = [] } = useRequest({
+    service: GET_ALL_TAGS,
+    initialData: []
   });
 
-  // 是否是电脑端
-  const isSM = useMedia(BREAKPOINT.sm);
+  const tagColorMap = allTags.reduce(
+    (res, cur) => ({ ...res, [cur.tagName]: cur.tagColor }),
+    {}
+  );
 
   // 编辑器状态操作
   const { reset, isEmpty, getParams, ...editorProps } = useEditorState({
     record: data
   });
 
+  // 初始化表单
+  useEffect(() => {
+    if (!_.isEmpty(data)) {
+      const { tags } = data;
+      const initValues = pick(data, ["articleName"]);
+      if (!_.isEmpty(tags)) {
+        initValues.tags = tags.map(it => it.tagName);
+      }
+      formApiRef.current.setValues(initValues);
+    }
+  }, [data]);
+
+  // 新增/修改文章
+  const [load] = useMutation(id ? EDIT_ARTICLE : ADD_ARTICLE, null, {
+    autoHandleError: true,
+    successMessage: isEdit ? "文章修改成功" : "文章发布成功"
+  });
+
+  // 是否是电脑端
+  const isSM = useMedia(BREAKPOINT.sm);
+
   // 保存文章
-  const handleSubmit = async values => {
+  const handleSubmit = async _values => {
+    const values = cloneDeep(_values);
     if (isEmpty()) {
       return;
     }
@@ -72,6 +91,14 @@ function Editor() {
       params.cover = src;
     }
     params.summary = getSummary($html.text());
+
+    if (!isEmpty(values.tags)) {
+      // 为标签指定颜色
+      values.tags = values.tags.map(tagName => ({
+        tagName,
+        tagColor: tagColorMap[tagName] || "white"
+      }));
+    }
 
     const { success, data } = await load({ ...values, ...params });
     if (success) {
@@ -111,18 +138,40 @@ function Editor() {
     <div className="container h-full">
       <Spin className="h-full" spinning={loading}>
         <Form
+          className="md:flex"
           getFormApi={formApi => (formApiRef.current = formApi)}
           onSubmit={handleSubmit}
         >
           {/* 文章标题 */}
-          <Form.Input
-            size="large"
-            className="w-full"
-            field="articleName"
-            noLabel
-            placeholder="请输入标题"
-            rules={[{ required: true }]}
-          />
+          <div className="flex-auto md:mr-2">
+            <Form.Input
+              size="large"
+              field="articleName"
+              noLabel
+              placeholder="请输入标题"
+              rules={[{ required: true }]}
+            />
+          </div>
+          {/* 标签 */}
+          <div className="w-full md:w-64">
+            <Form.Select
+              className="w-full"
+              field="tags"
+              multiple
+              noLabel
+              size={"large"}
+              placeholder="请选择标签"
+            >
+              {allTags.map(({ tagName, tagColor, id }) => {
+                return (
+                  <Form.Select.Option value={tagName} key={id}>
+                    {tagName}
+                    {/* <Tag color={tagColor}>{tagName}</Tag> */}
+                  </Form.Select.Option>
+                );
+              })}
+            </Form.Select>
+          </div>
         </Form>
         <Paper>
           <CommonEditor

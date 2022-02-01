@@ -1,16 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import { Upload, Avatar, Toast } from "@douyinfe/semi-ui";
 import { IconCamera } from "@douyinfe/semi-icons";
 import { FILE_PREVIEW, FILE_UPLOAD } from "services/app";
 import { useSelector } from "react-redux";
+import { useMutation } from "hooks";
+import { CHANGE_AVATAR } from "services/user";
+import { useReloadUserInfo } from "./hooks";
 
 export const ChangeAvatar = () => {
   const { userInfo } = useSelector(state => state.app);
-  const [url, setUrl] = useState(`${FILE_PREVIEW}?id=${userInfo.avatar}`);
-  const onSuccess = (response, file) => {
+  const { avatar, id } = userInfo;
+  const [changeAvatar] = useMutation(
+    CHANGE_AVATAR,
+    {},
+    { showActionMessage: true, autoHandleError: true }
+  );
+  const reloadUserInfo = useReloadUserInfo();
+
+  const onSuccess = async (response, file) => {
     const { data } = response;
-    setUrl(`${FILE_PREVIEW}?id=${data}`);
-    Toast.success("头像更新成功");
+    const { success } = await changeAvatar({ avatar: data, id });
+    if (success) {
+      reloadUserInfo();
+    }
   };
 
   const style = {
@@ -39,7 +51,11 @@ export const ChangeAvatar = () => {
       showUploadList={false}
       onError={() => Toast.error("上传失败")}
     >
-      <Avatar src={url} style={{ margin: 4 }} hoverMask={hoverMask} />
+      <Avatar
+        src={`${FILE_PREVIEW}?id=${avatar}`}
+        style={{ margin: 4 }}
+        hoverMask={hoverMask}
+      />
     </Upload>
   );
 };

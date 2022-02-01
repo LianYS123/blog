@@ -12,17 +12,24 @@ import { useSelector } from "react-redux";
 import { LOGIN_STATUS } from "constants/index";
 import { useDispatch } from "react-redux";
 import { appSlice } from "models/app";
+import { stringify } from "query-string";
+import { useLocation } from "react-use";
 
 const LoginExpiredDialog = () => {
   const history = useHistory();
   const { loginStatus } = useSelector(state => state.app);
+  const { pathname } = useLocation();
   const dispatch = useDispatch();
   const handleClose = () => {
     dispatch(appSlice.actions.setLoginStatus(LOGIN_STATUS.NOT_LOGIN));
   };
   const handleToLogin = () => {
     dispatch(appSlice.actions.setLoginStatus(LOGIN_STATUS.NOT_LOGIN));
-    history.push(routers.LOGIN);
+    dispatch(appSlice.actions.clearToken()); // 清除token
+    history.push({
+      pathname: routers.LOGIN,
+      search: stringify({ redirect: pathname })
+    });
   };
   return (
     <Dialog

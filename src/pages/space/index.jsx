@@ -9,6 +9,7 @@ import { ChangePasswordModal } from "./ChangePasswordModal";
 import { ChangeAvatar } from "./ChangeAvatar";
 import { Paper } from "@material-ui/core";
 import dayjs from "dayjs";
+import { useReloadUserInfo } from "./hooks";
 
 const fields = ["birthday", "email", "nickName", "phone", "sex", "tel"];
 
@@ -21,7 +22,7 @@ const Space = () => {
   );
   const { open: openChangePasswordModal, ...passwordModalProps } =
     useModalAction();
-  // const { open: openChangeAvatarModal, ...avatarModalProps } = useModalAction();
+  const reloadUserInfo = useReloadUserInfo();
 
   const onSubmit = async _values => {
     const values = cloneDeep(_values);
@@ -30,7 +31,10 @@ const Space = () => {
       values.birthday = dayjs(birthday).format("YYYY-MM-DD");
     }
     values.id = userInfo.id;
-    const { code } = await changeUserInfo(values);
+    const { success } = await changeUserInfo(values);
+    if (success) {
+      reloadUserInfo();
+    }
   };
   return (
     <div

@@ -1,34 +1,44 @@
 import React from "react";
 import { useIntl } from "react-intl";
-import { useDocAuth, useHtmlAndOutline } from "./hooks";
-import {
-  Anchor,
-  Empty,
-  Modal,
-  Select,
-  Spin,
-  Tag,
-  Typography
-} from "@douyinfe/semi-ui";
+import { Anchor, Empty, Modal, Spin, Tag, Typography } from "@douyinfe/semi-ui";
 
 import { useHistory, useParams } from "react-router";
 import routers from "routers";
 import { IconDelete, IconEdit } from "@douyinfe/semi-icons";
-import { useMutation } from "hooks";
-import { DELETE_ARTICLE } from "services/article";
+import { useMutation, useRequest } from "hooks";
+import { DELETE_ARTICLE, GET_ARTICLE_DETAIL } from "services/article";
+import { getHtmlAndOutline } from "./utils";
+import { useSelector } from "react-redux";
+import { GET_ALL_TAGS } from "services/tag";
 
 const { Link } = Anchor;
 
+/**
+ * 文章详情
+ */
 function Detail() {
-  const { id: resourceId } = useParams();
+  const { id: resourceId } = useParams(); // 文章id
+
+  const { userInfo } = useSelector(state => state.app);
+  const { id: userId } = userInfo; // 用户信息
+
   const intl = useIntl();
   const history = useHistory();
 
-  const auth = useDocAuth();
-  const { html, outline, loading, id, tags, articleName } =
-    useHtmlAndOutline(resourceId);
-  const [deleteArticle] = useMutation(DELETE_ARTICLE);
+  // 请求文章详情
+  const { data, loading } = useRequest({
+    service: GET_ARTICLE_DETAIL,
+    necessaryParams: { id: resourceId },
+    ready: !!resourceId && resourceId !== "undefined",
+    initialData: { html: "" }
+  });
+  const { id, tags, articleName, authorId } = data;
 
+  const isCurrentUser = userId === authorId; // 是否是当前用户
+
+  // 生成文章导航
+  const { outline, html } = getHtmlAndOutline(data.html);
+  // 渲染文章导航
   const renderLink = list => {
     return list.map(item => {
       let { id, children, title } = item;
@@ -44,21 +54,44 @@ function Detail() {
     });
   };
 
+  // 删除文章操作
+  const [deleteArticle] = useMutation(DELETE_ARTICLE, null, {
+    autoHandleError: true
+  });
+  const handleDelete = () => {
+    Modal.warning({
+      title: "你确定要删除该文章吗？",
+      content: "删除后不可恢复，请谨慎操作",
+      onOk: async () => {
+        const { success } = await deleteArticle({ id });
+        if (success) {
+          history.push(routers.HOME);
+        }
+      },
+      okButtonProps: {
+        type: "danger"
+      }
+    });
+  };
+
   return (
-    <div className="container">
+    <div className="container py-4">
       <Spin className="w-full" spinning={loading}>
         <div className="relative mb-8">
+          {/* 标题 */}
           <div className="mb-2">
             <Typography.Title>{articleName}</Typography.Title>
           </div>
+          {/* 标签 */}
           <div>
             {tags &&
               tags.map(it => (
-                <Tag className="m-1" key={it.id} color={it.color}>
+                <Tag className="m-1" key={it.id} color={it.tagColor || "white"}>
                   {it.tagName}
                 </Tag>
               ))}
           </div>
+          {/* 正文 */}
           <div className="mr-0 sm:mr-52 mt-4">
             {html ? (
               <article
@@ -69,10 +102,13 @@ function Detail() {
               <Empty className="my-12" />
             )}
           </div>
+          {/* 右侧内容 */}
           <div className="absolute hidden sm:block right-0 top-4">
             <div className="fixed right-0 w-64">
-              {auth && (
+              {/* 操作栏，对作者显示 */}
+              {isCurrentUser && (
                 <div className="flex mb-4 -ml-2">
+                  {/* 编辑文章按钮 */}
                   <span
                     onClick={() => {
                       const pathname = routers.EDITOR_EDIT.replace(
@@ -87,22 +123,9 @@ function Detail() {
                     {intl.formatMessage({ id: "EDIT_ARTICLE" })}
                   </span>
 
+                  {/* 删除文章按钮 */}
                   <span
-                    onClick={() => {
-                      Modal.warning({
-                        title: "你确定要删除该文章吗？",
-                        content: "删除后不可恢复，请谨慎操作",
-                        onOk: async () => {
-                          const { success } = await deleteArticle({ id });
-                          if (success) {
-                            history.push(routers.HOME);
-                          }
-                        },
-                        okButtonProps: {
-                          type: "danger"
-                        }
-                      });
-                    }}
+                    onClick={handleDelete}
                     className="flex items-center hover:underline cursor-pointer text-red-500"
                   >
                     <IconDelete className="mx-1" />
@@ -110,6 +133,7 @@ function Detail() {
                   </span>
                 </div>
               )}
+              {/* 文章快速跳转导航栏 */}
               {outline && outline.length ? (
                 <Anchor>{renderLink(outline)}</Anchor>
               ) : null}

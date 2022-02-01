@@ -18,10 +18,10 @@ import NotFound from "pages/404";
 import Login from "pages/login";
 
 const APP_ROUTES = [
-  {
-    path: routers.LOGIN,
-    component: Login
-  },
+  // {
+  //   path: routers.LOGIN,
+  //   component: Login
+  // },
   {
     path: routers.HOME,
     component: Home
@@ -34,6 +34,10 @@ const APP_ROUTES = [
     path: "/pages",
     component: AppLayout,
     children: [
+      {
+        path: routers.LOGIN,
+        component: Login
+      },
       {
         path: routers.ARTICLE_LIST,
         component: ArticleList
