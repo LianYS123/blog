@@ -67,7 +67,7 @@ const AppHeader = () => {
           src="https://blog-1259462774.cos.ap-shanghai.myqcloud.com/illustrations/%E6%98%9F%E8%BD%A8.svg"
           alt="logo"
         />
-        <span className="ml-2">Blog</span>
+        {/* <span className="ml-2">Blog</span> */}
         {/* <Link to={routers.HOME}>主页</Link>
         <Link to={routers.ARTICLE_LIST}>文章</Link>
         <Link to={routers.ESSAY}>随笔</Link> */}

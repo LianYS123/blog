@@ -1,111 +1,104 @@
-import { Avatar, Button, Form } from "@douyinfe/semi-ui";
-import React, { useEffect, useState } from "react";
-import { IconCamera } from "@douyinfe/semi-icons";
+import { Button, Form } from "@douyinfe/semi-ui";
+import React from "react";
 import { useSelector } from "react-redux";
 import { useModalAction, useMutation } from "hooks";
-import { ChangePassword } from "./ChangePassword";
 import { COMMON_FORM_ITEM_LAYOUT } from "constants";
-import { getDefaultFileObj } from "utils";
 import { CHANGE_USER_INFO } from "services/user";
-import { IMAGE_UPLOAD } from "services/app";
+import { cloneDeep, pick } from "lodash";
+import { ChangePasswordModal } from "./ChangePasswordModal";
+import { ChangeAvatar } from "./ChangeAvatar";
+import { Paper } from "@material-ui/core";
+import dayjs from "dayjs";
+
+const fields = ["birthday", "email", "nickName", "phone", "sex", "tel"];
 
 const Space = () => {
-  const style = {
-    backgroundColor: "rgba(0,0,0,.4)",
-    height: "100%",
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "#FFF"
-  };
   const { userInfo } = useSelector(state => state.app);
-  const { username = "", avatar } = userInfo;
-  const [url, setUrl] = useState(avatar);
-
-  const initialValues = {
-    username,
-    files: avatar ? [getDefaultFileObj({ src: avatar })] : []
-  };
-
-  useEffect(() => {
-    setUrl(avatar);
-  }, [avatar]);
   const [changeUserInfo, { loading }] = useMutation(
     CHANGE_USER_INFO,
     {},
-    { showActionMessage: true }
+    { showActionMessage: true, autoHandleError: true }
   );
-  const { open: openChangePasswordModal, ...changePasswordModalProps } =
+  const { open: openChangePasswordModal, ...passwordModalProps } =
     useModalAction();
+  // const { open: openChangeAvatarModal, ...avatarModalProps } = useModalAction();
 
-  const hoverMask = (
-    <div style={style}>
-      <IconCamera />
-    </div>
-  );
-  const onSubmit = async values => {
-    const { files, ...rest } = values;
-    const { response } = files[0];
-    const avatar = response.data;
-    const requestParams = { avatar, ...rest };
-    const { code } = await changeUserInfo(requestParams);
+  const onSubmit = async _values => {
+    const values = cloneDeep(_values);
+    const { birthday } = values;
+    if (birthday) {
+      values.birthday = dayjs(birthday).format("YYYY-MM-DD");
+    }
+    values.id = userInfo.id;
+    const { code } = await changeUserInfo(values);
   };
   return (
-    <div className="mx-auto w-full sm:w-1/2 h-96 p-8 sm:shadow">
+    <div
+      className="mx-auto flex justify-between py-8 w-full"
+      style={{ maxWidth: 800 }}
+    >
+      <div>
+        <ChangeAvatar />
+      </div>
       <Form
-        className="h-full mx-4"
-        initValues={initialValues}
+        className="h-full mx-4 flex-auto"
         {...COMMON_FORM_ITEM_LAYOUT}
         onSubmit={onSubmit}
+        initValues={pick(userInfo, fields)}
       >
         {({ formApi, values }) => {
           return (
-            <div className="flex h-full flex-col justify-between">
-              <div>
-                <Form.Input
-                  label="用户名"
-                  field="username"
-                  placeholder="请输入用户名"
-                />
-                <Form.Upload
-                  field="files"
-                  label="头像"
-                  fileName="file"
-                  accept={"image/*"}
-                  showUploadList={false}
-                  rules={[{ required: true }]}
-                  headers={{ Authorization: localStorage.getItem("acc") }}
-                  limit={1}
-                  action={IMAGE_UPLOAD}
-                  onChange={({ currentFile: file }) => {
-                    setUrl(file.url);
-                  }}
-                >
-                  {url ? (
-                    <Avatar
-                      src={url}
-                      style={{ margin: 4 }}
-                      hoverMask={hoverMask}
-                    />
-                  ) : (
-                    <Avatar>{username[0]}</Avatar>
-                  )}
-                </Form.Upload>
-              </div>
+            <Paper className="p-8 flex h-full flex-col justify-between">
+              <Form.Input
+                label="昵称"
+                field="nickName"
+                placeholder="请输入用户名"
+              />
+              <Form.DatePicker
+                label="生日"
+                field="birthday"
+                placeholder="请选择生日"
+              />
+              <Form.RadioGroup
+                field="sex"
+                label="性别"
+                rules={[{ required: true, message: "请选择性别" }]}
+              >
+                <Form.Radio value={1}>男</Form.Radio>
+                <Form.Radio value={2}>女</Form.Radio>
+              </Form.RadioGroup>
+              <Form.Input
+                label="手机"
+                field="phone"
+                placeholder="请输入手机号"
+                rules={[
+                  { required: true, message: "请输入手机号" },
+                  { pattern: /1\d{10}/, message: "手机号格式不正确" }
+                ]}
+              />
+              <Form.Input
+                label="电话"
+                field="tel"
+                placeholder="请输入电话号码"
+              />
+              <Form.Input
+                label="邮箱"
+                field="email"
+                placeholder="请输入邮箱地址"
+              />
               <div className="space-x-4 text-center">
-                <Button type="primary" loading={loading} htmlType="submit">
-                  保存
-                </Button>
                 <Button onClick={() => openChangePasswordModal()}>
                   修改密码
                 </Button>
+                <Button theme="solid" loading={loading} htmlType="submit">
+                  保存
+                </Button>
               </div>
-            </div>
+            </Paper>
           );
         }}
       </Form>
-      <ChangePassword {...changePasswordModalProps} />
+      <ChangePasswordModal {...passwordModalProps} />
     </div>
   );
 };

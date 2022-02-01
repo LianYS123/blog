@@ -1,6 +1,6 @@
 import { IconDelete, IconEdit, IconMore } from "@douyinfe/semi-icons";
 import { Avatar, Button, Dropdown, Tag } from "@douyinfe/semi-ui";
-import { Fab, IconButton } from "@material-ui/core";
+import { Fab, IconButton, Paper } from "@material-ui/core";
 import { useMutation } from "hooks";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -57,14 +57,15 @@ export const EssayItem = ({
     // );
   };
   return (
-    <section className="flex pb-2 border-b border-gray-200">
+    // <section className="flex pb-2 border-b border-gray-200">
+    <Paper className="px-4 py-3">
       <div className="flex w-full flex-col justify-between">
         <div className="space-y-1">
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center border-b border-white dark:border-gray-500">
             {/* <h3 className="text-lg mb-1 cursor-pointer font-bold hover:underline">
               {author.username}
             </h3> */}
-            <div className="space-x-2">
+            <div className="space-x-2 flex items-center">
               <span>
                 {!authorAvatar ? (
                   <Avatar size="extra-small">U</Avatar>
@@ -110,11 +111,12 @@ export const EssayItem = ({
           </div>
         </div>
         <div className="font-semibold">
-          <div className="text-gray-500 font-thin space-x-2">
+          <div className="text-gray-500 dark:text-gray-50 font-thin space-x-2">
             <span>{timestampFormat(createTime)}</span>
           </div>
         </div>
       </div>
-    </section>
+    </Paper>
+    // </section>
   );
 };

@@ -1,62 +1,80 @@
-/* eslint-disable no-control-regex */
 import React, { useRef } from "react";
 import BraftEditor from "braft-editor";
 
 import { controls, simpleControls } from "./config";
-import { useArticle } from "./hooks";
 import { useHistory, useParams } from "react-router";
-import { useMutation } from "hooks";
+import { useMutation, useRequest } from "hooks";
 import { Button, Form, Spin } from "@douyinfe/semi-ui";
 import { parse } from "marked";
 import routers from "routers";
 import $ from "jquery";
 import { useMedia } from "react-use";
 import { BREAKPOINT } from "constants/index";
-import { ADD_ARTICLE, EDIT_ARTICLE } from "services/article";
-import { EditorField } from "components/editor";
+import {
+  ADD_ARTICLE,
+  EDIT_ARTICLE,
+  GET_ARTICLE_DETAIL
+} from "services/article";
+import { CommonEditor } from "components/editor/CommonEditor";
+import { useEditorState } from "components/editor/CommonEditor";
+import { getSummary } from "utils";
+import { Paper } from "@material-ui/core";
+import { pick } from "lodash";
+import { useEffect } from "react";
+import _ from "lodash";
 
 function Editor() {
   const formApiRef = useRef();
   const history = useHistory();
   const { id } = useParams();
-  const { loading } = useArticle({ formApi: formApiRef, id });
-  const [load] = useMutation(id ? EDIT_ARTICLE : ADD_ARTICLE);
 
+  const isEdit = !!id;
+
+  // 请求文章数据
+  const { loading, data } = useRequest({
+    service: GET_ARTICLE_DETAIL,
+    necessaryParams: { id },
+    ready: !!id
+  });
+
+  useEffect(() => {
+    if (!_.isEmpty(data)) {
+      const initValues = pick(data, ["articleName"]);
+      formApiRef.current.setValues(initValues);
+    }
+  }, [data]);
+
+  // 新增/修改文章
+  const [load] = useMutation(id ? EDIT_ARTICLE : ADD_ARTICLE, null, {
+    autoHandleError: true
+  });
+
+  // 是否是电脑端
   const isSM = useMedia(BREAKPOINT.sm);
 
-  // 一个汉字相当于两个英文字符
-  const getSummary = (text, count = 200) => {
-    let resultStr = "";
-    let n = 0;
-    for (let i = 0; i < text.length; i++) {
-      if (n > count) {
-        return resultStr + "...";
-      }
-      n += /[^\x00-\xff]/.test(text[i]) ? 2 : 1;
-      resultStr += text[i];
-    }
-    return resultStr;
-  };
+  // 编辑器状态操作
+  const { reset, isEmpty, getParams, ...editorProps } = useEditorState({
+    record: data
+  });
 
   // 保存文章
   const handleSubmit = async values => {
-    const { editorState, ...rest } = values;
-    const html = editorState.toHTML();
-    const raw = editorState.toRAW();
+    if (isEmpty()) {
+      return;
+    }
+    const params = getParams();
+    const { html } = params;
 
     // 自动提取文章第一张图片作为封面
     const $html = $(html);
     const src = $html.find("img").attr("src");
-    const summary = getSummary($html.text());
     if (src) {
-      rest.cover = src;
+      params.cover = src;
     }
-    rest.summary = summary;
+    params.summary = getSummary($html.text());
 
-    const requestParams = { html, raw, ...rest };
-    const { success, data } = await load({ ...requestParams, id });
+    const { success, data } = await load({ ...values, ...params });
     if (success) {
-      // history.push(routers.DETAIL.replace(":id", data));
       history.push(routers.ARTICLE_LIST);
     }
   };
@@ -80,19 +98,19 @@ function Editor() {
         {
           key: "my-button",
           type: "button",
-          title: "自动解析markdown文章",
-          text: "markdown",
+          title: "自动解析 .md 文章",
+          text: "Markdown",
           onClick: handleConvert
         }
       ]
     : [];
 
+  const cs = isSM ? controls : simpleControls;
+
   return (
     <div className="container h-full">
       <Spin className="h-full" spinning={loading}>
         <Form
-          className="h-full"
-          labelPosition="left"
           getFormApi={formApi => (formApiRef.current = formApi)}
           onSubmit={handleSubmit}
         >
@@ -105,28 +123,21 @@ function Editor() {
             placeholder="请输入标题"
             rules={[{ required: true }]}
           />
-
-          {/* 文章内容 */}
-          <EditorField
-            noLabel={true}
-            field="editorState"
-            placeholder={
-              id
-                ? "按 Ctrl + S / Command + S 保存"
-                : "按 Ctrl + S / Command + S 发布"
-            }
-            controls={isSM ? controls : simpleControls}
-            extendControls={extendControls}
-          />
-          <div className="text-center space-x-2 pb-4">
-            <Button size="large" theme="solid" htmlType="submit">
-              保存
-            </Button>
-            <Button size="large" onClick={history.goBack}>
-              返回
-            </Button>
-          </div>
         </Form>
+        <Paper>
+          <CommonEditor
+            {...editorProps}
+            // contentStyle={{ height: 160 }}
+            isEdit={isEdit}
+            showCancelButton={isEdit}
+            onSubmit={() => formApiRef.current.submitForm()}
+            controls={cs}
+            extendControls={extendControls}
+            onCancel={() => {
+              history.goBack();
+            }}
+          />
+        </Paper>
       </Spin>
     </div>
   );

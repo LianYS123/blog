@@ -138,3 +138,18 @@ export function getDocHeight() {
     D.documentElement.clientHeight
   );
 }
+
+// 一个汉字相当于两个英文字符
+export const getSummary = (text, count = 200) => {
+  let resultStr = "";
+  let n = 0;
+  for (let i = 0; i < text.length; i++) {
+    if (n > count) {
+      return resultStr + "...";
+    }
+    // eslint-disable-next-line no-control-regex
+    n += /[^\x00-\xff]/.test(text[i]) ? 2 : 1;
+    resultStr += text[i];
+  }
+  return resultStr;
+};

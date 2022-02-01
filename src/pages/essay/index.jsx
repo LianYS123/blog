@@ -1,3 +1,4 @@
+import { Paper } from "@material-ui/core";
 import { SkeletonList } from "components/skeleton";
 import { useFetchList, useModalAction } from "hooks";
 import React, { useState } from "react";
@@ -19,7 +20,9 @@ const Essay = () => {
   return (
     <div className="container py-8 md:pb-16">
       <div className="mb-8">
-        <EssayEditor reload={reload} />
+        <Paper>
+          <EssayEditor reload={reload} />
+        </Paper>
       </div>
       <div className="space-y-3 mb-4">
         <SkeletonList

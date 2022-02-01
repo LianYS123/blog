@@ -17,32 +17,5 @@ export const useArticle = ({ id, formApi }) => {
   const { html, raw, articleName, cover, tags } = data;
   const template = raw || html;
 
-  const file = {
-    uid: "1",
-    name: cover,
-    status: "success",
-    // size: "130KB",
-    response: {
-      code: "0000",
-      data: cover
-    },
-    preview: true,
-    url: cover
-  };
-
-  useEffect(() => {
-    if (template && formApi.current) {
-      const initValues = {
-        editorState: BraftEditor.createEditorState(template, { fontFamilies }),
-        articleName,
-        tags: tags ? tags.map(it => it.id) : []
-      };
-      if (cover) {
-        initValues.cover = [file];
-      }
-      formApi.current.setValues(initValues);
-    }
-  }, [template]);
-
   return { ...result, ...data, template };
 };

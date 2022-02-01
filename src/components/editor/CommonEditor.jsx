@@ -2,37 +2,20 @@ import React, { useEffect, useState } from "react";
 
 import BraftEditor from "braft-editor";
 import { Editor } from "components/editor";
-import { useMutation } from "hooks";
-import { Button, Toast } from "@douyinfe/semi-ui";
+// import { Button } from "@douyinfe/semi-ui";
 import { noop } from "lodash";
-import { Checkbox, FormControlLabel } from "@material-ui/core";
+import { Button, Checkbox, FormControlLabel } from "@material-ui/core";
 
-// 带请求逻辑的富文本编辑器封装
-export const CommonEditor = ({
-  record,
-  reload = noop,
-  onCancel = noop,
-  onSuccess = noop,
-  service,
-  isEdit,
-  okText = isEdit ? "保存" : "发布",
-  cancelText = "取消",
-  showOkButton = true,
-  showCancelButton = true,
-  showOptions = true,
-  ...editorProps
-}) => {
-  const [request] = useMutation(service);
+/**
+ * 编辑器操作封装
+ * @param {{record: Object}}
+ * @returns {{ value: Object, onChange: Function, visibleStatus: *, onVisibleStatusChange: Function, getParams: Function, isEmpty: Function, reset: Function }}
+ */
+export const useEditorState = ({ record }) => {
   const [editorState, setState] = useState();
   const [visibleStatus, setVisibleStatus] = useState(
     record?.visibleStatus || 0
   ); // 是否仅自己可见 0: 是，1：否
-
-  const getParams = editorState => {
-    const html = editorState.toHTML();
-    const raw = editorState.toRAW();
-    return { html, raw };
-  };
 
   // 编辑时初始化内容
   useEffect(() => {
@@ -43,33 +26,64 @@ export const CommonEditor = ({
     }
   }, [record]);
 
-  const handleSubmit = async () => {
-    if (editorState) {
-      const params = getParams(editorState);
-      if (!params.html || params.html === "<p></p>") {
-        return;
-      }
-      if (record?.id) {
-        params.id = record.id;
-      }
-      params.visibleStatus = visibleStatus;
-      const result = await request(params);
-      const { success } = result;
-      if (success) {
-        Toast.success({ content: "发布成功", showClose: false });
-        setState(BraftEditor.createEditorState(null));
-        onSuccess(result);
-        reload();
-      }
+  // 获取请求参数
+  const getParams = () => {
+    const html = editorState.toHTML();
+    const raw = editorState.toRAW();
+    const params = { html, raw, visibleStatus };
+    if (record?.id) {
+      params.id = record.id;
     }
+    return params;
   };
 
+  // 校验用户输入是否为空
+  const isEmpty = () => {
+    const params = getParams();
+    return !params.html || params.html === "<p></p>";
+  };
+
+  // 重置输入
+  const reset = () => {
+    setState(
+      BraftEditor.createEditorState(record?.raw || record?.html || null)
+    );
+  };
+
+  return {
+    value: editorState,
+    onChange: setState,
+    visibleStatus,
+    onVisibleStatusChange: setVisibleStatus,
+    getParams,
+    isEmpty,
+    reset
+  };
+};
+
+// 带请求逻辑的富文本编辑器封装
+export const CommonEditor = ({
+  value,
+  onChange,
+  onCancel = noop,
+  onSubmit = noop,
+  service,
+  isEdit,
+  okText = isEdit ? "保存" : "发布",
+  cancelText = "取消",
+  showOkButton = true,
+  showCancelButton = true,
+  showOptions = true,
+  visibleStatus,
+  onVisibleStatusChange,
+  ...editorProps
+}) => {
   return (
     <div>
       <Editor
-        value={editorState}
-        onChange={setState}
-        onSave={handleSubmit}
+        value={value}
+        onChange={onChange}
+        onSave={onSubmit}
         placeholder={
           isEdit
             ? "按 Ctrl + S / Command + S 保存"
@@ -86,7 +100,7 @@ export const CommonEditor = ({
                 size="small"
                 color="primary"
                 onChange={(ev, checked) => {
-                  setVisibleStatus(checked ? 1 : 0);
+                  onVisibleStatusChange(checked ? 1 : 0);
                 }}
               />
             }
@@ -94,14 +108,14 @@ export const CommonEditor = ({
           />
         </div>
         {showOptions ? (
-          <div className="text-right space-x-1">
+          <div className="text-right">
             {showCancelButton ? (
               <Button size="large" onClick={onCancel}>
                 {cancelText}
               </Button>
             ) : null}
             {showOkButton && (
-              <Button size="large" onClick={handleSubmit}>
+              <Button size="large" onClick={ev => onSubmit(value, ev)}>
                 {okText}
               </Button>
             )}

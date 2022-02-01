@@ -1,4 +1,4 @@
-import { IMAGE_UPLOAD } from "services/app";
+import { FILE_UPLOAD } from "services/app";
 import { parseAPI } from "./apiUtils";
 
 const SIMPLE_REQUEST_METHODS = ["GET", "DELETE"];
@@ -37,7 +37,7 @@ const xFetch = async function (url, data, options = {}) {
 
 // 文件上传
 export const upload = file => {
-  const url = IMAGE_UPLOAD;
+  const url = FILE_UPLOAD;
   const token = localStorage.getItem("acc");
 
   const formData = new FormData();

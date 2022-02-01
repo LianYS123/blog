@@ -35,8 +35,8 @@ const useRequestErrorHandler = () => {
  */
 export const useMutation = (service, initialData = {}, config = {}) => {
   const {
-    autoHandleError = false,
-    showActionMessage = false,
+    autoHandleError = false, // 请求出错弹出错误提示
+    showActionMessage = false, // POST请求成功弹出提示信息
     successMessageId,
     successMessage,
     onSuccess = noop,

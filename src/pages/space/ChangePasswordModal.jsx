@@ -4,7 +4,7 @@ import { FormModal } from "components/modal";
 import { CHANGE_PASSWORD } from "services/user";
 
 // 修改密码弹出框
-export const ChangePassword = props => {
+export const ChangePasswordModal = props => {
   const getPasswordRule = values => {
     return {
       validator: (rule, value) => {
@@ -26,7 +26,7 @@ export const ChangePassword = props => {
             <Form.Input
               rules={[{ required: true }]}
               noLabel={true}
-              field="oldPassword"
+              field="password"
               placeholder="请输入旧密码"
             />
             <Form.Input
