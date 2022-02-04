@@ -1,4 +1,5 @@
 import { Tag, Typography } from "@douyinfe/semi-ui";
+import { Chip } from "@material-ui/core";
 import React from "react";
 import { useHistory } from "react-router";
 import routers from "routers";
@@ -15,6 +16,7 @@ export const Article = ({
   handleTagClick
 }) => {
   const history = useHistory();
+  const tagArr = tags ? tags.split("|") : [];
   return (
     <section className="flex pb-2 border-b border-gray-200">
       <div className="flex w-full flex-col justify-between">
@@ -62,20 +64,18 @@ export const Article = ({
             <span className="text-gray-500 font-thin">
               {timestampFormat(createTime)}
             </span>
-            <span className="flex">
-              {tags &&
-                tags.slice(0, 5).map(it => (
-                  <Tag
-                    className="cursor-pointer mx-1"
-                    onClick={() => handleTagClick(it)}
-                    key={it.tagName}
-                    color={it.tagColor || "white"}
-                  >
-                    {it.tagName}
-                  </Tag>
-                ))}
+            <span className="flex space-x-1">
+              {tagArr.slice(0, 5).map(tag => (
+                <Chip
+                  size="small"
+                  className="cursor-pointer mr-1"
+                  onClick={() => handleTagClick(tag)}
+                  key={tag}
+                  label={tag}
+                />
+              ))}
               <span className="text-gray-500 font-thin">
-                {tags.length > 5 ? "..." : null}
+                {tagArr.length > 5 ? "..." : null}
               </span>
             </span>
           </div>

@@ -5,14 +5,14 @@ import { noop } from "lodash";
 import { appSlice } from "models/app";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
+import routers from "routers";
 import { getAPIMethod } from "utils/apiUtils";
 import xFetch from "utils/fetch";
 
 // 处理服务器返回错误消息
 const useRequestErrorHandler = () => {
   const { showError, showSuccess } = useMessageUtils();
-  const history = useHistory();
 
   const handler = res => {
     const { message } = res;
@@ -47,6 +47,7 @@ export const useMutation = (service, initialData = {}, config = {}) => {
   const [error, setError] = useState();
   const [data, setData] = useState(initialData);
   const { showError, showSuccess } = useMessageUtils();
+  const history = useHistory();
   const handler = useRequestErrorHandler();
   const dispatch = useDispatch();
 
@@ -84,6 +85,12 @@ export const useMutation = (service, initialData = {}, config = {}) => {
         // 登录已过期
         dispatch(appSlice.actions.clearToken()); // 清除token
         dispatch(appSlice.actions.setLoginStatus(LOGIN_STATUS.LOGIN_EXPIRED)); // 修改登录状态，(弹出登录提示框)
+      } else if (code === 1011006) {
+        // 请求token错误
+        dispatch(appSlice.actions.clearToken()); // 清除token
+        history.push(routers.LOGIN);
+        // dispatch(appSlice.actions.setLoginStatus(LOGIN_STATUS.LOGIN_EXPIRED)); // 修改登录状态，(弹出登录提示框)
+        // location.reload();
       }
 
       setLoading(false);

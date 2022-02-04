@@ -9,7 +9,7 @@ import { useMutation, useRequest } from "hooks";
 import { DELETE_ARTICLE, GET_ARTICLE_DETAIL } from "services/article";
 import { getHtmlAndOutline } from "./utils";
 import { useSelector } from "react-redux";
-import { GET_ALL_TAGS } from "services/tag";
+import { Chip } from "@material-ui/core";
 
 const { Link } = Anchor;
 
@@ -33,6 +33,7 @@ function Detail() {
     initialData: { html: "" }
   });
   const { id, tags, articleName, authorId } = data;
+  const tagArr = tags ? tags.split("|") : [];
 
   const isCurrentUser = userId === authorId; // 是否是当前用户
 
@@ -83,13 +84,13 @@ function Detail() {
             <Typography.Title>{articleName}</Typography.Title>
           </div>
           {/* 标签 */}
+
           <div>
-            {tags &&
-              tags.map(it => (
-                <Tag className="m-1" key={it.id} color={it.tagColor || "white"}>
-                  {it.tagName}
-                </Tag>
+            <span className="flex space-x-1">
+              {tagArr.map(tag => (
+                <Chip size="small" key={tag} label={tag} />
               ))}
+            </span>
           </div>
           {/* 正文 */}
           <div className="mr-0 sm:mr-52 mt-4">

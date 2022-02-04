@@ -60,7 +60,7 @@ function Editor() {
       const { tags } = data;
       const initValues = pick(data, ["articleName"]);
       if (!_.isEmpty(tags)) {
-        initValues.tags = tags.map(it => it.tagName);
+        initValues.tags = tags.split("|");
       }
       formApiRef.current.setValues(initValues);
     }
@@ -92,13 +92,10 @@ function Editor() {
     }
     params.summary = getSummary($html.text());
 
-    if (!isEmpty(values.tags)) {
-      // 为标签指定颜色
-      values.tags = values.tags.map(tagName => ({
-        tagName,
-        tagColor: tagColorMap[tagName] || "white"
-      }));
-    }
+    // if (!isEmpty(values.tags)) {
+    //   // 为标签指定颜色
+    //   values.tags = values.tags.join("|");
+    // }
 
     const { success, data } = await load({ ...values, ...params });
     if (success) {
@@ -154,23 +151,14 @@ function Editor() {
           </div>
           {/* 标签 */}
           <div className="w-full md:w-64">
-            <Form.Select
+            <Form.TagInput
               className="w-full"
               field="tags"
               multiple
               noLabel
               size={"large"}
               placeholder="请选择标签"
-            >
-              {allTags.map(({ tagName, tagColor, id }) => {
-                return (
-                  <Form.Select.Option value={tagName} key={id}>
-                    {tagName}
-                    {/* <Tag color={tagColor}>{tagName}</Tag> */}
-                  </Form.Select.Option>
-                );
-              })}
-            </Form.Select>
+            />
           </div>
         </Form>
         <Paper>
