@@ -1,5 +1,5 @@
 import { Tag, Typography } from "@douyinfe/semi-ui";
-import { Chip } from "@material-ui/core";
+import { Chip } from "@mui/material";
 import React from "react";
 import { useHistory } from "react-router";
 import routers from "routers";

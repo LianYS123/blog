@@ -7,7 +7,7 @@ import { CHANGE_USER_INFO } from "services/user";
 import { cloneDeep, pick } from "lodash";
 import { ChangePasswordModal } from "./ChangePasswordModal";
 import { ChangeAvatar } from "./ChangeAvatar";
-import { Paper } from "@material-ui/core";
+import { Paper } from "@mui/material";
 import dayjs from "dayjs";
 import { useReloadUserInfo } from "./hooks";
 

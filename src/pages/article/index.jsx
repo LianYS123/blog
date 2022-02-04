@@ -9,7 +9,7 @@ import { parse, stringify } from "query-string";
 import routers from "routers";
 import { useHistory } from "react-router-dom";
 import { IconSearch } from "@douyinfe/semi-icons";
-import { Chip } from "@material-ui/core";
+import { Chip } from "@mui/material";
 
 const ArticleList = () => {
   const { search: searchStr } = useLocation();

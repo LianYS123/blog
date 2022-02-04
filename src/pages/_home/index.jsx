@@ -1,5 +1,5 @@
 import { IconSearch } from "@douyinfe/semi-icons";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import classNames from "classnames";
 import LoginExpiredDialog from "components/dialog/LoginExpiredDialog";
 // import { MenuButton } from "components/button/MenuButton";

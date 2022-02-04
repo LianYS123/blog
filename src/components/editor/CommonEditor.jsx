@@ -4,7 +4,7 @@ import BraftEditor from "braft-editor";
 import { Editor } from "components/editor";
 // import { Button } from "@douyinfe/semi-ui";
 import { noop } from "lodash";
-import { Button, Checkbox, FormControlLabel } from "@material-ui/core";
+import { Button, Checkbox, FormControlLabel } from "@mui/material";
 
 /**
  * 编辑器操作封装

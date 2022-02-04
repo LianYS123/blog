@@ -1,4 +1,4 @@
-import { Paper } from "@material-ui/core";
+import { Paper } from "@mui/material";
 import { SkeletonList } from "components/skeleton";
 import { useFetchList, useModalAction } from "hooks";
 import React, { useState } from "react";

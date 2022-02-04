@@ -1,6 +1,6 @@
 import { IconDelete, IconEdit, IconMore } from "@douyinfe/semi-icons";
 import { Avatar, Button, Dropdown, Tag } from "@douyinfe/semi-ui";
-import { Fab, IconButton, Paper } from "@material-ui/core";
+import { Fab, IconButton, Paper } from "@mui/material";
 import { useMutation } from "hooks";
 import React from "react";
 import { useSelector } from "react-redux";

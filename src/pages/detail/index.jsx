@@ -4,12 +4,21 @@ import { Anchor, Empty, Modal, Spin, Tag, Typography } from "@douyinfe/semi-ui";
 
 import { useHistory, useParams } from "react-router";
 import routers from "routers";
-import { IconDelete, IconEdit } from "@douyinfe/semi-icons";
+// import { IconDelete, IconEdit } from "@douyinfe/semi-icons";
 import { useMutation, useRequest } from "hooks";
-import { DELETE_ARTICLE, GET_ARTICLE_DETAIL } from "services/article";
+import {
+  DELETE_ARTICLE,
+  GET_ARTICLE_DETAIL,
+  SYNC_TO_MOMENT
+} from "services/article";
 import { getHtmlAndOutline } from "./utils";
 import { useSelector } from "react-redux";
-import { Chip } from "@material-ui/core";
+import { Chip } from "@mui/material";
+
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import { Edit, Delete, SyncAlt } from "@mui/icons-material";
 
 const { Link } = Anchor;
 
@@ -66,13 +75,23 @@ function Detail() {
       onOk: async () => {
         const { success } = await deleteArticle({ id });
         if (success) {
-          history.push(routers.HOME);
+          history.push(routers.ARTICLE_LIST);
         }
       },
       okButtonProps: {
         type: "danger"
       }
     });
+  };
+
+  // 同步到随笔
+  const [syncToMoment] = useMutation(SYNC_TO_MOMENT, null, {
+    autoHandleError: true,
+    successMessage: "同步成功"
+  });
+
+  const handleSyncToMoment = () => {
+    syncToMoment({ id });
   };
 
   return (
@@ -105,40 +124,44 @@ function Detail() {
           </div>
           {/* 右侧内容 */}
           <div className="absolute hidden sm:block right-0 top-4">
-            <div className="fixed right-0 w-64">
-              {/* 操作栏，对作者显示 */}
-              {isCurrentUser && (
-                <div className="flex mb-4 -ml-2">
-                  {/* 编辑文章按钮 */}
-                  <span
-                    onClick={() => {
-                      const pathname = routers.EDITOR_EDIT.replace(
-                        ":id",
-                        resourceId
-                      );
-                      history.push(pathname);
-                    }}
-                    className="flex items-center hover:underline cursor-pointer mr-2"
-                  >
-                    <IconEdit className="mx-1" />
-                    {intl.formatMessage({ id: "EDIT_ARTICLE" })}
-                  </span>
-
-                  {/* 删除文章按钮 */}
-                  <span
-                    onClick={handleDelete}
-                    className="flex items-center hover:underline cursor-pointer text-red-500"
-                  >
-                    <IconDelete className="mx-1" />
-                    删除文章
-                  </span>
-                </div>
-              )}
+            <div className="fixed right-0 w-64 pl-2">
               {/* 文章快速跳转导航栏 */}
               {outline && outline.length ? (
                 <Anchor>{renderLink(outline)}</Anchor>
               ) : null}
             </div>
+          </div>
+          <div className="fixed right-0 bottom-0">
+            {/* 操作栏，对作者显示 */}
+            {isCurrentUser && (
+              <SpeedDial
+                ariaLabel="操作"
+                sx={{ position: "absolute", bottom: 16, right: 16 }}
+                icon={<SpeedDialIcon />}
+              >
+                <SpeedDialAction
+                  onClick={handleDelete}
+                  icon={<Delete color="error" />}
+                  tooltipTitle="删除文章"
+                />
+                <SpeedDialAction
+                  onClick={handleSyncToMoment}
+                  icon={<SyncAlt />}
+                  tooltipTitle="同步到随笔"
+                />
+                <SpeedDialAction
+                  onClick={() => {
+                    const pathname = routers.EDITOR_EDIT.replace(
+                      ":id",
+                      resourceId
+                    );
+                    history.push(pathname);
+                  }}
+                  icon={<Edit />}
+                  tooltipTitle="编辑文章"
+                />
+              </SpeedDial>
+            )}
           </div>
         </div>
       </Spin>

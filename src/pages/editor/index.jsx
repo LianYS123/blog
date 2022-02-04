@@ -18,7 +18,7 @@ import {
 import { CommonEditor } from "components/editor/CommonEditor";
 import { useEditorState } from "components/editor/CommonEditor";
 import { getSummary } from "utils";
-import { Paper } from "@material-ui/core";
+import { Paper } from "@mui/material";
 import { cloneDeep, pick } from "lodash";
 import { useEffect } from "react";
 import _ from "lodash";
