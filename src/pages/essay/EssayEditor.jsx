@@ -7,7 +7,8 @@ import { useEditorState } from "components/editor/CommonEditor";
 import { useMutation } from "hooks";
 
 export const EssayEditor = ({
-  reload,
+  reload = noop,
+  editItem = noop,
   record,
   isEdit = false,
   onCancel = noop
@@ -23,10 +24,17 @@ export const EssayEditor = ({
     if (isEmpty()) {
       return;
     }
-    await request(params);
-    reset();
-    reload();
-    onCancel();
+    const { success } = await request(params);
+    if (success) {
+      if (!isEdit) {
+        // 如果是新增操作，成功后重置输入框
+        reset();
+      } else {
+        editItem({ ...record, ...params });
+      }
+      reload();
+      onCancel();
+    }
   };
   return (
     <CommonEditor

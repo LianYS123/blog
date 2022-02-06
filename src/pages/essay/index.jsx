@@ -11,7 +11,9 @@ const Essay = () => {
     list = [],
     reload,
     loadingFirstPage,
-    loadingMore
+    loadingMore,
+    removeItemById,
+    editItem
   } = useFetchList({
     service: MOMENT_LIST,
     necessaryParams: { pageSize: 10 }
@@ -36,6 +38,8 @@ const Essay = () => {
             setEditorRecord={setEditorRecord}
             editorRecord={editorRecord}
             reload={reload}
+            removeItemById={removeItemById}
+            editItem={editItem}
             {...it}
           />
         ))}

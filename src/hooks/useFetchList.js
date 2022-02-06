@@ -43,6 +43,17 @@ export const useFetchList = ({ service, necessaryParams = {} }) => {
     }
   };
 
+  // 根据id删除
+  const removeItemById = id => {
+    setList(list => list.filter(it => it.id !== id));
+  };
+
+  // 编辑指定项
+  const editItem = item => {
+    const newList = list.map(cur => (cur.id === item.id ? item : cur));
+    setList(newList);
+  };
+
   // 重新加载数据
   const reload = async () => {
     const result = await search({
@@ -71,6 +82,8 @@ export const useFetchList = ({ service, necessaryParams = {} }) => {
     reload,
     loading,
     loadingMore,
-    loadingFirstPage: loading && !list.length
+    loadingFirstPage: loading && !list.length,
+    removeItemById,
+    editItem
   };
 };

@@ -143,11 +143,13 @@ function Detail() {
                   onClick={handleDelete}
                   icon={<Delete color="error" />}
                   tooltipTitle="删除文章"
+                  // tooltipOpen
                 />
                 <SpeedDialAction
                   onClick={handleSyncToMoment}
                   icon={<SyncAlt />}
                   tooltipTitle="同步到随笔"
+                  // tooltipOpen
                 />
                 <SpeedDialAction
                   onClick={() => {
@@ -159,6 +161,7 @@ function Detail() {
                   }}
                   icon={<Edit />}
                   tooltipTitle="编辑文章"
+                  // tooltipOpen
                 />
               </SpeedDial>
             )}

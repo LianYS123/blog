@@ -16,7 +16,7 @@ export const renderDateTime = time =>
 
 export function timestampFormat(time) {
   // const timestamp = time * 1000;
-  const timestamp = Math.floor(new Date(time).getTime() / 1000);
+  const timestamp = Math.floor(dayjs(time).valueOf() / 1000);
   function zeroize(num) {
     return (String(num).length == 1 ? "0" : "") + num;
   }

@@ -1,78 +1,107 @@
-import { IconDelete, IconEdit, IconMore } from "@douyinfe/semi-icons";
-import { Avatar, Button, Dropdown, Tag } from "@douyinfe/semi-ui";
-import { Fab, IconButton, Paper } from "@mui/material";
-import { useMutation } from "hooks";
-import React from "react";
+import {
+  DeleteOutline,
+  EditOutlined,
+  Lock,
+  MoreHoriz
+} from "@mui/icons-material";
+import {
+  Avatar,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Paper,
+  Tooltip
+} from "@mui/material";
+import { useModalAction, useMutation } from "hooks";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { FILE_PREVIEW } from "services/app";
 import { DELETE_MOMENT } from "services/essay";
-import { deleteConfirmModalAction, timestampFormat } from "utils";
+import { timestampFormat } from "utils";
+import AlertDialog from "./AlertDialog";
 import { EssayEditor } from "./EssayEditor";
 
 export const EssayItem = ({
   editorRecord,
   setEditorRecord,
   reload,
+  removeItemById,
+  editItem,
   ...record
 }) => {
-  const { createTime, html, authorName, id, authorAvatar, createUser } = record;
-  const [deleteEssay] = useMutation(DELETE_MOMENT);
+  const { open: openAlertDialog, ...alertDialogProps } = useModalAction();
+  const {
+    createTime,
+    html,
+    authorName,
+    id,
+    authorAvatar,
+    createUser,
+    visibleStatus
+  } = record;
   const { userInfo } = useSelector(state => state.app);
-  const renderOperator = () => {
-    const menus = [
-      {
-        node: "item",
-        name: "编辑",
-        color: "primary",
-        icon: <IconEdit />,
-        onClick: () => setEditorRecord(record)
-      },
-      {
-        node: "item",
-        type: "danger",
-        name: "删除",
-        color: "secondary",
-        icon: <IconDelete />,
-        onClick: () =>
-          deleteConfirmModalAction({
-            method: deleteEssay,
-            id,
-            onFinish: reload
-          })
+  const [anchorEl, setAnchorEl] = useState();
+
+  // 删除
+  const [deleteEssay, { loading }] = useMutation(DELETE_MOMENT, null, {
+    successMessage: "删除成功"
+  });
+  const handleDelete = () => {
+    openAlertDialog({
+      onOk: async () => {
+        const { success } = await deleteEssay({ id: record.id });
+        if (success) {
+          removeItemById(id);
+        }
       }
-    ];
+    });
+  };
+
+  // 操作按钮
+  const renderOperator = () => {
     return (
       <div>
-        <Dropdown menu={menus}>
-          <IconButton>
-            <IconMore />
-          </IconButton>
-        </Dropdown>
+        <IconButton onClick={ev => setAnchorEl(ev.currentTarget)}>
+          <MoreHoriz />
+        </IconButton>
+        <Menu
+          open={!!anchorEl}
+          onClose={() => setAnchorEl(null)}
+          anchorEl={anchorEl}
+        >
+          <MenuItem onClick={() => setEditorRecord(record)}>
+            <ListItemIcon>
+              <EditOutlined />
+            </ListItemIcon>
+            <ListItemText>编辑</ListItemText>
+          </MenuItem>
+          <MenuItem onClick={handleDelete}>
+            <ListItemIcon>
+              <DeleteOutline />
+            </ListItemIcon>
+            <ListItemText>删除</ListItemText>
+          </MenuItem>
+        </Menu>
       </div>
     );
-    // return (
-    //   <Dropdown trigger="click" menu={menus}>
-    //     <Button>...</Button>
-    //   </Dropdown>
-    // );
   };
   return (
-    // <section className="flex pb-2 border-b border-gray-200">
     <Paper className="px-4 py-3">
       <div className="flex w-full flex-col justify-between">
         <div className="space-y-1">
           <div className="flex justify-between items-center border-b border-white dark:border-gray-500">
-            {/* <h3 className="text-lg mb-1 cursor-pointer font-bold hover:underline">
-              {author.username}
-            </h3> */}
+            {/* 发布者 */}
             <div className="space-x-2 flex items-center">
               <span>
                 {!authorAvatar ? (
-                  <Avatar size="extra-small">U</Avatar>
+                  <Avatar sx={{ width: 24, height: 24 }}>U</Avatar>
                 ) : (
                   <Avatar
+                    sx={{ width: 24, height: 24 }}
+                    alt="avatar"
                     src={`${FILE_PREVIEW}?id=${authorAvatar}`}
-                    size="extra-small"
                   />
                 )}
               </span>
@@ -80,18 +109,14 @@ export const EssayItem = ({
                 {authorName}
               </span>
             </div>
+            {/* 操作 */}
             <div>
               {/* 只有发布者有编辑权限 */}
               {userInfo.id === createUser ? renderOperator() : null}
             </div>
           </div>
+          {/* 内容 */}
           <div className="flex">
-            {/* <p
-              onClick={() => history.push(routers.DETAIL.replace(":id", id))}
-              className="text-base sm:text-xs text-gray-800 dark:text-gray-50 cursor-pointer flex-auto h-full md:text-base overflow-hidden hover:underline font-normal mr-1 md:mr-4"
-            >
-              {summary}
-            </p> */}
             <div className="w-full mb-1">
               {editorRecord?.id === id ? (
                 <EssayEditor
@@ -99,7 +124,8 @@ export const EssayItem = ({
                   onSuccess={() => setEditorRecord(null)}
                   isEdit={true}
                   record={record}
-                  reload={reload}
+                  editItem={editItem}
+                  // reload={reload}
                 />
               ) : (
                 <article
@@ -110,13 +136,25 @@ export const EssayItem = ({
             </div>
           </div>
         </div>
+        {/* 其他信息 */}
         <div className="font-semibold">
-          <div className="text-gray-500 dark:text-gray-50 font-thin space-x-2">
+          <div className="text-gray-500 dark:text-gray-50 font-thin space-x-2 flex items-center">
             <span>{timestampFormat(createTime)}</span>
+            {visibleStatus === 1 && (
+              <Tooltip title="仅自己可见">
+                <Lock sx={{ fontSize: 16 }} />
+              </Tooltip>
+            )}
           </div>
         </div>
       </div>
+      {/* 删除确认框 */}
+      <AlertDialog
+        title="你确定要删除吗？"
+        content="删除后不可恢复，请谨慎操作。"
+        loading={loading}
+        {...alertDialogProps}
+      />
     </Paper>
-    // </section>
   );
 };
