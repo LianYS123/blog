@@ -8,8 +8,6 @@ import {
 } from "react";
 import isEqual from "fast-deep-equal";
 
-import { useIntl } from "react-intl";
-import { Notification } from "@douyinfe/semi-ui";
 import { useWindowScroll, useWindowSize } from "react-use";
 import { getDocHeight } from "utils";
 
@@ -85,34 +83,6 @@ export const useModalAction = initialProps => {
     visible: flag,
     ...props
   };
-};
-
-/**
- * @description: 国际化消息提示
- * @param {*}
- * @return {{showSuccess: Function, showError: Function, showMessage: Function}}
- */
-export const useMessageUtils = () => {
-  const intl = useIntl();
-
-  const showMessage = (method, { id, ...rest }) => {
-    Notification[method]({
-      title: intl.formatMessage({
-        id
-      }),
-      ...rest
-    });
-  };
-
-  const showSuccess = params => {
-    showMessage("success", params);
-  };
-
-  const showError = params => {
-    showMessage("error", params);
-  };
-
-  return { showSuccess, showError, showMessage };
 };
 
 /**

@@ -14,6 +14,7 @@ import AppRoutes from "routers/AppRoutes";
 
 import "./app.less";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { SnackbarProvider } from "notistack";
 
 const locales = {
   en_US,
@@ -35,7 +36,9 @@ const App = () => {
           }
         })}
       >
-        <AppRoutes />
+        <SnackbarProvider maxSnack={3}>
+          <AppRoutes />
+        </SnackbarProvider>
       </ThemeProvider>
     </IntlProvider>
   );
