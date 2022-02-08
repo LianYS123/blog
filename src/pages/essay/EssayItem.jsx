@@ -14,13 +14,13 @@ import {
   Paper,
   Tooltip
 } from "@mui/material";
-import { useModalAction, useMutation } from "hooks";
+import { useMutation } from "hooks";
+import { useAlertDialog } from "providers/AlertDialogProvider";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { FILE_PREVIEW } from "services/app";
 import { DELETE_MOMENT } from "services/essay";
 import { timestampFormat } from "utils";
-import AlertDialog from "./AlertDialog";
 import { EssayEditor } from "./EssayEditor";
 
 export const EssayItem = ({
@@ -31,7 +31,6 @@ export const EssayItem = ({
   editItem,
   ...record
 }) => {
-  const { open: openAlertDialog, ...alertDialogProps } = useModalAction();
   const {
     createTime,
     html,
@@ -43,13 +42,17 @@ export const EssayItem = ({
   } = record;
   const { userInfo } = useSelector(state => state.app);
   const [anchorEl, setAnchorEl] = useState();
+  const { open: openDialog } = useAlertDialog();
 
   // 删除
   const [deleteEssay, { loading }] = useMutation(DELETE_MOMENT, null, {
     successMessage: "删除成功"
   });
+
   const handleDelete = () => {
-    openAlertDialog({
+    openDialog({
+      title: "你确定要删除吗？",
+      content: "删除后不可恢复，请谨慎操作",
       onOk: async () => {
         const { success } = await deleteEssay({ id: record.id });
         if (success) {
@@ -148,13 +151,6 @@ export const EssayItem = ({
           </div>
         </div>
       </div>
-      {/* 删除确认框 */}
-      <AlertDialog
-        title="你确定要删除吗？"
-        content="删除后不可恢复，请谨慎操作。"
-        loading={loading}
-        {...alertDialogProps}
-      />
     </Paper>
   );
 };

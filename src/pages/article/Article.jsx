@@ -30,12 +30,6 @@ export const Article = ({
             </h3>
           </div>
           <div className="flex">
-            {/* <p
-              onClick={() => history.push(routers.DETAIL.replace(":id", id))}
-              className="text-base sm:text-xs text-gray-800 dark:text-gray-50 cursor-pointer flex-auto h-full md:text-base overflow-hidden hover:underline font-normal mr-1 md:mr-4"
-            >
-              {summary}
-            </p> */}
             <div className="w-full mb-1">
               <Typography.Paragraph
                 onClick={() => history.push(routers.DETAIL.replace(":id", id))}

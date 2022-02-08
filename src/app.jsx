@@ -15,6 +15,7 @@ import AppRoutes from "routers/AppRoutes";
 import "./app.less";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { SnackbarProvider } from "notistack";
+import AlertDialogProvider from "providers/AlertDialogProvider";
 
 const locales = {
   en_US,
@@ -37,7 +38,9 @@ const App = () => {
         })}
       >
         <SnackbarProvider maxSnack={3}>
-          <AppRoutes />
+          <AlertDialogProvider>
+            <AppRoutes />
+          </AlertDialogProvider>
         </SnackbarProvider>
       </ThemeProvider>
     </IntlProvider>

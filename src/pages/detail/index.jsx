@@ -19,6 +19,7 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { Edit, Delete, SyncAlt } from "@mui/icons-material";
+import { useAlertDialog } from "providers/AlertDialogProvider";
 
 const { Link } = Anchor;
 
@@ -64,12 +65,15 @@ function Detail() {
     });
   };
 
+  const { open: openDialog } = useAlertDialog();
+
   // 删除文章操作
   const [deleteArticle] = useMutation(DELETE_ARTICLE, null, {
     autoHandleError: true
   });
+
   const handleDelete = () => {
-    Modal.warning({
+    openDialog({
       title: "你确定要删除该文章吗？",
       content: "删除后不可恢复，请谨慎操作",
       onOk: async () => {
@@ -77,9 +81,6 @@ function Detail() {
         if (success) {
           history.push(routers.ARTICLE_LIST);
         }
-      },
-      okButtonProps: {
-        type: "danger"
       }
     });
   };
@@ -91,7 +92,13 @@ function Detail() {
   });
 
   const handleSyncToMoment = () => {
-    syncToMoment({ id });
+    openDialog({
+      title: "你确定要将文章同步到动态？",
+      content: "",
+      onOk: async () => {
+        await syncToMoment({ id });
+      }
+    });
   };
 
   return (
@@ -103,7 +110,6 @@ function Detail() {
             <Typography.Title>{articleName}</Typography.Title>
           </div>
           {/* 标签 */}
-
           <div>
             <span className="flex space-x-1">
               {tagArr.map(tag => (

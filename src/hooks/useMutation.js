@@ -47,9 +47,9 @@ export const useMutation = (service, initialData = {}, config = {}) => {
           DELETE: "删除成功"
         };
         if (successMessage) {
-          enqueueSnackbar(successMessage, { variant: "success" });
+          enqueueSnackbar(successMessage);
         } else if (showActionMessage && actionMessageMap[method]) {
-          enqueueSnackbar(actionMessageMap[method], { variant: "success" });
+          enqueueSnackbar(actionMessageMap[method]);
         }
       } else if (autoHandleError) {
         if (message) {
@@ -71,8 +71,6 @@ export const useMutation = (service, initialData = {}, config = {}) => {
         // 请求token错误
         dispatch(appSlice.actions.clearToken()); // 清除token
         history.push(routers.LOGIN);
-        // dispatch(appSlice.actions.setLoginStatus(LOGIN_STATUS.LOGIN_EXPIRED)); // 修改登录状态，(弹出登录提示框)
-        // location.reload();
       }
 
       setLoading(false);
@@ -81,9 +79,6 @@ export const useMutation = (service, initialData = {}, config = {}) => {
       onError(e);
       setLoading(false);
       setError(e);
-      // if (autoHandleError) {
-      //   showError({ id: "SERVICE_API_ERR" });
-      // }
       // eslint-disable-next-line no-console
       console.error(e);
     } finally {
