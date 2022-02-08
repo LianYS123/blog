@@ -1,11 +1,9 @@
-import { LOGIN_STATUS } from "constants/index";
 import { noop } from "lodash";
 import { appSlice } from "models/app";
 import { useSnackbar } from "notistack";
+import { useLoginDialog } from "providers/LoginDialogProvider";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import routers from "routers";
 import { getAPIMethod } from "utils/apiUtils";
 import xFetch from "utils/fetch";
 
@@ -27,8 +25,8 @@ export const useMutation = (service, initialData = {}, config = {}) => {
   const [error, setError] = useState();
   const [data, setData] = useState(initialData);
   const { enqueueSnackbar } = useSnackbar();
-  const history = useHistory();
   const dispatch = useDispatch();
+  const { open: openLoginDialog } = useLoginDialog();
 
   const loadData = async (params, config) => {
     try {
@@ -65,12 +63,16 @@ export const useMutation = (service, initialData = {}, config = {}) => {
         setData(res.data || {});
       } else if (code === 1011008) {
         // 登录已过期
+        dispatch(appSlice.actions.setUserInfo({})); // 清空用户信息
         dispatch(appSlice.actions.clearToken()); // 清除token
-        dispatch(appSlice.actions.setLoginStatus(LOGIN_STATUS.LOGIN_EXPIRED)); // 修改登录状态，(弹出登录提示框)
+        dispatch(appSlice.actions.setLogged(false)); // 修改登录状态
+        openLoginDialog({ tip: "登录已过期, 请重新登录" });
       } else if (code === 1011006) {
         // 请求token错误
+        dispatch(appSlice.actions.setUserInfo({}));
         dispatch(appSlice.actions.clearToken()); // 清除token
-        history.push(routers.LOGIN);
+        dispatch(appSlice.actions.setLogged(false)); // 修改登录状态
+        openLoginDialog({ tip: "登录认证异常, 请重新登录" });
       }
 
       setLoading(false);

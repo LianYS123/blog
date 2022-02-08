@@ -1,4 +1,3 @@
-import LoginExpiredDialog from "components/dialog/LoginExpiredDialog";
 import Loading from "components/loading";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -22,7 +21,6 @@ const AppLayout = ({ children }) => {
       ) : (
         <Loading />
       )}
-      <LoginExpiredDialog />
     </>
   );
 };

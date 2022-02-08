@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import routers from "routers";
-import { useIntl } from "react-intl";
 import { useHistory, useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
@@ -9,21 +8,23 @@ import { useWindowScroll } from "react-use";
 import { appSlice } from "models/app";
 import { Link } from "react-router-dom";
 import { FILE_PREVIEW } from "services/app";
-import { stringify } from "query-string";
 import {
   Avatar,
+  Button,
   IconButton,
   Menu,
   MenuItem,
   SvgIcon,
   Tooltip
 } from "@mui/material";
+import { useLoginDialog } from "providers/LoginDialogProvider";
+import { USER_LOGOUT } from "services/auth";
+import { useSnackbar } from "notistack";
 
 // header
 const AppHeader = () => {
   const history = useHistory();
-  const intl = useIntl();
-  const { userInfo } = useSelector(state => state.app);
+  const { userInfo, logged } = useSelector(state => state.app);
   const { id: userId, account = "", avatar } = userInfo;
   const [anchorEl, setAnchorEl] = useState();
   const { y } = useWindowScroll();
@@ -31,13 +32,21 @@ const AppHeader = () => {
   const { pathname } = useLocation();
   // const isHomePage = pathname === routers.HOME;
   const dispatch = useDispatch();
-  const toLogin = () => {
+  const { open: openLoginDialog } = useLoginDialog();
+  const { enqueueSnackbar } = useSnackbar();
+  // const [logout] = useMutation(USER_LOGOUT);
+  const handleLogout = async () => {
+    await fetch(USER_LOGOUT); // 登出接口使用GET请求，且不会返回数据，因此直接使用fetch请求
+    dispatch(appSlice.actions.setUserInfo({}));
     dispatch(appSlice.actions.clearToken()); // 清除token
-    history.push({
-      pathname: routers.LOGIN,
-      search: stringify({ redirect: pathname })
-    });
+    dispatch(appSlice.actions.setLogged(false)); // 修改登录状态
+    enqueueSnackbar("已登出");
   };
+
+  const handleLogin = () => {
+    openLoginDialog();
+  };
+
   const navs = [
     {
       name: "linkNav",
@@ -136,7 +145,7 @@ const AppHeader = () => {
           </span>
         </Tooltip>
 
-        {userId ? (
+        {logged ? (
           <span
             className="cursor-pointer"
             onClick={ev => {
@@ -155,9 +164,7 @@ const AppHeader = () => {
             )}
           </span>
         ) : (
-          <button onClick={toLogin} className="hover:underline">
-            登录
-          </button>
+          <Button onClick={handleLogin}>登录</Button>
         )}
       </div>
       <Menu
@@ -169,7 +176,14 @@ const AppHeader = () => {
         <MenuItem onClick={() => history.push(routers.USER_SPACE)}>
           设置
         </MenuItem>
-        <MenuItem onClick={toLogin}>退出</MenuItem>
+        <MenuItem
+          onClick={() => {
+            setAnchorEl(null);
+            handleLogout();
+          }}
+        >
+          退出
+        </MenuItem>
       </Menu>
     </header>
   );

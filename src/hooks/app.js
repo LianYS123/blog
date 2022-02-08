@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { GET_LOGIN_USER } from "services/auth";
 import { noop } from "lodash";
 import { useRequest } from "./useRequest";
-import { LOGIN_STATUS } from "constants/index";
 
 // 主题操作
 export const useTheme = () => {
@@ -82,7 +81,7 @@ export const useInitApp = () => {
     onSuccess: data => {
       // 设置登录数据，修改登录状态为已登录
       dispatch(appSlice.actions.setUserInfo(data));
-      dispatch(appSlice.actions.setLoginStatus(LOGIN_STATUS.LOGGED));
+      dispatch(appSlice.actions.setLogged(true));
     },
     onFinish: () => {
       dispatch(appSlice.actions.setIsAppLoaded(true));

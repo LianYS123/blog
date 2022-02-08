@@ -74,13 +74,26 @@ export const EssayItem = ({
           onClose={() => setAnchorEl(null)}
           anchorEl={anchorEl}
         >
-          <MenuItem onClick={() => setEditorRecord(record)}>
+          {/* 编辑 */}
+          <MenuItem
+            onClick={() => {
+              setAnchorEl(null);
+              setEditorRecord(record);
+            }}
+          >
             <ListItemIcon>
               <EditOutlined />
             </ListItemIcon>
             <ListItemText>编辑</ListItemText>
           </MenuItem>
-          <MenuItem onClick={handleDelete}>
+
+          {/* 删除 */}
+          <MenuItem
+            onClick={() => {
+              setAnchorEl(null);
+              handleDelete();
+            }}
+          >
             <ListItemIcon>
               <DeleteOutline />
             </ListItemIcon>
