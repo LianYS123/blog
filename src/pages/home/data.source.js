@@ -27,7 +27,7 @@ export const Nav20DataSource = {
       {
         name: "linkNav~kyzmiyd5o7",
         to: routers.ESSAY,
-        children: "随笔",
+        children: "动态",
         className: "menu-item"
       },
       {

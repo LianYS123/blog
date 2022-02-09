@@ -85,7 +85,7 @@ function Detail() {
     });
   };
 
-  // 同步到随笔
+  // 同步到动态
   const [syncToMoment] = useMutation(SYNC_TO_MOMENT, null, {
     autoHandleError: true,
     successMessage: "同步成功"
@@ -154,7 +154,7 @@ function Detail() {
                 <SpeedDialAction
                   onClick={handleSyncToMoment}
                   icon={<SyncAlt />}
-                  tooltipTitle="同步到随笔"
+                  tooltipTitle="同步到动态"
                   // tooltipOpen
                 />
                 <SpeedDialAction

@@ -61,7 +61,7 @@ const AppHeader = () => {
     {
       name: "linkNav~kyzmiyd5o7",
       to: routers.ESSAY,
-      children: "随笔"
+      children: "动态"
     },
     {
       name: "linkNav~kyzmj59nff",
