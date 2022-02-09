@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 
 import BraftEditor from "braft-editor";
 import { Editor } from "components/editor";
-// import { Button } from "@douyinfe/semi-ui";
 import { noop } from "lodash";
 import { Button, Checkbox, FormControlLabel } from "@mui/material";
 
 /**
  * 编辑器操作封装
  * @param {{record: Object}}
- * @returns {{ value: Object, onChange: Function, visibleStatus: *, onVisibleStatusChange: Function, getParams: Function, isEmpty: Function, reset: Function }}
  */
 export const useEditorState = ({ record }) => {
   const [editorState, setState] = useState();

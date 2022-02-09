@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import BraftEditor from "braft-editor";
 
 import { allTags, controls, simpleControls } from "./config";
@@ -33,13 +33,12 @@ import {
 import _ from "lodash";
 
 function Editor() {
-  const formApiRef = useRef();
   const history = useHistory();
   const { id } = useParams();
 
   const [articleName, setArticleName] = useState("");
   const [tags, setTags] = useState([]);
-  const [visible, setVisible] = useState(); // 是否显示编辑标签弹出框
+  const [visible, setVisible] = useState(false); // 是否显示编辑标签弹出框
 
   const isEdit = !!id;
 
@@ -101,14 +100,13 @@ function Editor() {
 
   // 转换markdown
   const handleConvert = () => {
-    const editorState = formApiRef.current.getValue("editorState");
-    if (!editorState) {
+    if (isEmpty()) {
       return;
     }
+    const { value: editorState, onChange: setState } = editorProps;
     const text = editorState.toText();
     const html = parse(text);
-    const editor = BraftEditor.createEditorState(html);
-    formApiRef.current.setValue("editorState", editor);
+    setState(BraftEditor.createEditorState(html));
   };
 
   const extendControls = isSM
@@ -130,18 +128,21 @@ function Editor() {
     <div className="container h-full">
       <Spin className="h-full" spinning={loading}>
         <div className="space-y-2 my-2">
+          {/* 文章标题 */}
           <div>
             <TextField
               variant="standard"
               size="small"
               value={articleName}
-              onChange={setArticleName}
+              onChange={ev => setArticleName(ev.target.value)}
               name="articleName"
               fullWidth
               label="文章标题"
               placeholder="请输入文章标题"
             />
           </div>
+
+          {/* 标签 */}
           <div className="space-x-1 space-y-1">
             {(tags || []).map(tag => {
               return (
@@ -153,10 +154,9 @@ function Editor() {
               );
             })}
             <Button onClick={() => setVisible(true)}>编辑文章标签</Button>
-            {/* <IconButton onClick={() => setVisible(true)}>
-              <Edit />
-            </IconButton> */}
           </div>
+
+          {/* 编辑标签弹出框 */}
           <Dialog open={visible} onClose={() => setVisible(false)}>
             <DialogTitle>编辑标签</DialogTitle>
             <DialogContent>
@@ -194,6 +194,8 @@ function Editor() {
             </DialogActions>
           </Dialog>
         </div>
+
+        {/* 文章内容编辑器 */}
         <Paper>
           <CommonEditor
             {...editorProps}

@@ -7,7 +7,6 @@ import {
 import {
   Avatar,
   IconButton,
-  ListItemIcon,
   ListItemText,
   Menu,
   MenuItem,
@@ -81,9 +80,6 @@ export const EssayItem = ({
               setEditorRecord(record);
             }}
           >
-            <ListItemIcon>
-              <EditOutlined />
-            </ListItemIcon>
             <ListItemText>编辑</ListItemText>
           </MenuItem>
 
@@ -94,9 +90,6 @@ export const EssayItem = ({
               handleDelete();
             }}
           >
-            <ListItemIcon>
-              <DeleteOutline />
-            </ListItemIcon>
             <ListItemText>删除</ListItemText>
           </MenuItem>
         </Menu>

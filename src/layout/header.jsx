@@ -164,7 +164,9 @@ const AppHeader = () => {
             )}
           </span>
         ) : (
-          <Button onClick={handleLogin}>登录</Button>
+          <button className="hover:underline" onClick={handleLogin}>
+            登录
+          </button>
         )}
       </div>
       <Menu
@@ -172,8 +174,20 @@ const AppHeader = () => {
         anchorEl={anchorEl}
         onClose={() => setAnchorEl(null)}
       >
-        <MenuItem onClick={() => history.push(routers.EDITOR)}>写文章</MenuItem>
-        <MenuItem onClick={() => history.push(routers.USER_SPACE)}>
+        <MenuItem
+          onClick={() => {
+            setAnchorEl(null);
+            history.push(routers.EDITOR);
+          }}
+        >
+          写文章
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setAnchorEl(null);
+            history.push(routers.USER_SPACE);
+          }}
+        >
           设置
         </MenuItem>
         <MenuItem

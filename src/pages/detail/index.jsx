@@ -1,10 +1,8 @@
 import React from "react";
-import { useIntl } from "react-intl";
-import { Anchor, Empty, Modal, Spin, Tag, Typography } from "@douyinfe/semi-ui";
+import { Anchor, Empty, Spin, Typography } from "@douyinfe/semi-ui";
 
 import { useHistory, useParams } from "react-router";
 import routers from "routers";
-// import { IconDelete, IconEdit } from "@douyinfe/semi-icons";
 import { useMutation, useRequest } from "hooks";
 import {
   DELETE_ARTICLE,
@@ -32,7 +30,6 @@ function Detail() {
   const { userInfo } = useSelector(state => state.app);
   const { id: userId } = userInfo; // 用户信息
 
-  const intl = useIntl();
   const history = useHistory();
 
   // 请求文章详情
@@ -49,6 +46,7 @@ function Detail() {
 
   // 生成文章导航
   const { outline, html } = getHtmlAndOutline(data.html);
+
   // 渲染文章导航
   const renderLink = list => {
     return list.map(item => {
@@ -69,7 +67,8 @@ function Detail() {
 
   // 删除文章操作
   const [deleteArticle] = useMutation(DELETE_ARTICLE, null, {
-    autoHandleError: true
+    autoHandleError: true,
+    successMessage: "文章删除成功"
   });
 
   const handleDelete = () => {
@@ -85,7 +84,7 @@ function Detail() {
     });
   };
 
-  // 同步到动态
+  // 同步到随笔
   const [syncToMoment] = useMutation(SYNC_TO_MOMENT, null, {
     autoHandleError: true,
     successMessage: "同步成功"
@@ -154,7 +153,7 @@ function Detail() {
                 <SpeedDialAction
                   onClick={handleSyncToMoment}
                   icon={<SyncAlt />}
-                  tooltipTitle="同步到动态"
+                  tooltipTitle="同步到随笔"
                   // tooltipOpen
                 />
                 <SpeedDialAction
