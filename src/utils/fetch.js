@@ -37,13 +37,13 @@ const xFetch = async function (url, data, options = {}) {
 
 // 文件上传
 export const upload = file => {
-  const url = FILE_UPLOAD;
-  const token = localStorage.getItem("acc");
+  const acc = localStorage.getItem("acc");
+  const token = `Bearer ${acc}`;
 
   const formData = new FormData();
   formData.append("file", file);
 
-  return fetch(url, {
+  return fetch(FILE_UPLOAD, {
     method: "POST",
     headers: {
       Authorization: token
