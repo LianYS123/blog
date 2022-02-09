@@ -1,10 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import BraftEditor from "braft-editor";
 
-import { controls, simpleControls } from "./config";
+import { allTags, controls, simpleControls } from "./config";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useRequest } from "hooks";
-import { Button, Form, Spin, Tag } from "@douyinfe/semi-ui";
+import { Spin } from "@douyinfe/semi-ui";
 import { parse } from "marked";
 import routers from "routers";
 import $ from "jquery";
@@ -18,16 +18,28 @@ import {
 import { CommonEditor } from "components/editor/CommonEditor";
 import { useEditorState } from "components/editor/CommonEditor";
 import { getSummary } from "utils";
-import { Paper } from "@mui/material";
-import { cloneDeep, pick } from "lodash";
-import { useEffect } from "react";
+import {
+  Autocomplete,
+  Button,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Paper,
+  TextField
+} from "@mui/material";
 import _ from "lodash";
-import { GET_ALL_TAGS } from "services/tag";
 
 function Editor() {
   const formApiRef = useRef();
   const history = useHistory();
   const { id } = useParams();
+
+  const [articleName, setArticleName] = useState("");
+  const [tags, setTags] = useState([]);
+  const [visible, setVisible] = useState(); // 是否显示编辑标签弹出框
 
   const isEdit = !!id;
 
@@ -38,17 +50,6 @@ function Editor() {
     ready: !!id
   });
 
-  // 请求可选标签
-  const { data: allTags = [] } = useRequest({
-    service: GET_ALL_TAGS,
-    initialData: []
-  });
-
-  const tagColorMap = allTags.reduce(
-    (res, cur) => ({ ...res, [cur.tagName]: cur.tagColor }),
-    {}
-  );
-
   // 编辑器状态操作
   const { reset, isEmpty, getParams, ...editorProps } = useEditorState({
     record: data
@@ -57,12 +58,13 @@ function Editor() {
   // 初始化表单
   useEffect(() => {
     if (!_.isEmpty(data)) {
-      const { tags } = data;
-      const initValues = pick(data, ["articleName"]);
-      if (!_.isEmpty(tags)) {
-        initValues.tags = tags.split("|");
+      const { tags, articleName } = data;
+      if (articleName) {
+        setArticleName(articleName);
       }
-      formApiRef.current.setValues(initValues);
+      if (tags) {
+        setTags(tags.split("|"));
+      }
     }
   }, [data]);
 
@@ -76,8 +78,7 @@ function Editor() {
   const isSM = useMedia(BREAKPOINT.sm);
 
   // 保存文章
-  const handleSubmit = async _values => {
-    const values = cloneDeep(_values);
+  const handleSubmit = async () => {
     if (isEmpty()) {
       return;
     }
@@ -92,12 +93,7 @@ function Editor() {
     }
     params.summary = getSummary($html.text());
 
-    // if (!isEmpty(values.tags)) {
-    //   // 为标签指定颜色
-    //   values.tags = values.tags.join("|");
-    // }
-
-    const { success, data } = await load({ ...values, ...params });
+    const { success, data } = await load({ ...params, articleName, tags });
     if (success) {
       history.push(routers.ARTICLE_LIST);
     }
@@ -110,7 +106,6 @@ function Editor() {
       return;
     }
     const text = editorState.toText();
-    // console.log(text);
     const html = parse(text);
     const editor = BraftEditor.createEditorState(html);
     formApiRef.current.setValue("editorState", editor);
@@ -134,40 +129,77 @@ function Editor() {
   return (
     <div className="container h-full">
       <Spin className="h-full" spinning={loading}>
-        <Form
-          className="md:flex"
-          getFormApi={formApi => (formApiRef.current = formApi)}
-          onSubmit={handleSubmit}
-        >
-          {/* 文章标题 */}
-          <div className="flex-auto md:mr-2">
-            <Form.Input
-              size="large"
-              field="articleName"
-              noLabel
-              placeholder="请输入标题"
-              rules={[{ required: true }]}
+        <div className="space-y-2 my-2">
+          <div>
+            <TextField
+              variant="standard"
+              size="small"
+              value={articleName}
+              onChange={setArticleName}
+              name="articleName"
+              fullWidth
+              label="文章标题"
+              placeholder="请输入文章标题"
             />
           </div>
-          {/* 标签 */}
-          <div className="w-full md:w-64">
-            <Form.TagInput
-              className="w-full"
-              field="tags"
-              multiple
-              noLabel
-              size={"large"}
-              placeholder="请选择标签"
-            />
+          <div className="space-x-1 space-y-1">
+            {(tags || []).map(tag => {
+              return (
+                <Chip
+                  onDelete={() => setTags(tags.filter(t => t !== tag))}
+                  label={tag}
+                  key={tag}
+                />
+              );
+            })}
+            <Button onClick={() => setVisible(true)}>编辑文章标签</Button>
+            {/* <IconButton onClick={() => setVisible(true)}>
+              <Edit />
+            </IconButton> */}
           </div>
-        </Form>
+          <Dialog open={visible} onClose={() => setVisible(false)}>
+            <DialogTitle>编辑标签</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                选择常用标签或输入自定义标签，输入自定义标签后按回车添加
+              </DialogContentText>
+              <Autocomplete
+                size="small"
+                value={tags}
+                onChange={(ev, value) => {
+                  setTags(value);
+                }}
+                multiple
+                freeSolo
+                fullWidth
+                options={allTags}
+                renderTags={(value, getTagProps) =>
+                  value.map((option, index) => (
+                    <Chip label={option} {...getTagProps({ index })} />
+                  ))
+                }
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    margin="dense"
+                    variant="standard"
+                    label="标签"
+                    placeholder="选择或输入标签"
+                  />
+                )}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setVisible(false)}>确认</Button>
+            </DialogActions>
+          </Dialog>
+        </div>
         <Paper>
           <CommonEditor
             {...editorProps}
-            // contentStyle={{ height: 160 }}
             isEdit={isEdit}
             showCancelButton={isEdit}
-            onSubmit={() => formApiRef.current.submitForm()}
+            onSubmit={handleSubmit}
             controls={cs}
             extendControls={extendControls}
             onCancel={() => {
