@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { GET_LOGIN_USER } from "services/auth";
 import { noop } from "lodash";
 import { useRequest } from "./useRequest";
+import { useLoginDialog } from "providers/LoginDialogProvider";
 
 // 主题操作
 export const useTheme = () => {
@@ -87,4 +88,20 @@ export const useInitApp = () => {
       dispatch(appSlice.actions.setIsAppLoaded(true));
     }
   });
+};
+
+/**
+ * 登录断言
+ * @returns {{assertLogged: Function, logged: boolean}}
+ */
+export const useAssertLogged = () => {
+  const { logged } = useSelector(state => state.app);
+  const { open: openLoginDialog } = useLoginDialog();
+  const assertLogged = () => {
+    if (!logged) {
+      openLoginDialog({ tip: "请先登录" });
+      throw new Error("用户未登录");
+    }
+  };
+  return { assertLogged, logged };
 };

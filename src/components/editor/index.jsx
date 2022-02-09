@@ -1,20 +1,21 @@
 import React from "react";
 import BraftEditor from "braft-editor";
 
-import { fontFamilies, simpleControls } from "./config";
+import { simpleControls } from "./config";
 import { withField } from "@douyinfe/semi-ui";
 import { upload } from "utils/fetch";
+import { FILE_PREVIEW } from "services/app";
 
 export function Editor({ ...props }) {
   return (
     <BraftEditor
       controls={simpleControls}
-      fontFamilies={fontFamilies}
       media={{
         accepts: { audio: true, video: true },
         async uploadFn({ success, error, file }) {
           const res = await upload(file);
-          const { data: url } = res;
+          const { data: fileId } = res;
+          const url = `${FILE_PREVIEW}?id=${fileId}`;
           if (res.success && url) {
             success({
               url,

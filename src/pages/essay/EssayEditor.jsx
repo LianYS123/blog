@@ -5,6 +5,7 @@ import { CommonEditor } from "components/editor/CommonEditor";
 import { ADD_MOMENT, EDIT_MOMENT } from "services/essay";
 import { useEditorState } from "components/editor/CommonEditor";
 import { useMutation } from "hooks";
+import { useAssertLogged } from "hooks/app";
 
 export const EssayEditor = ({
   reload = noop,
@@ -19,11 +20,13 @@ export const EssayEditor = ({
   const { reset, isEmpty, getParams, ...editorProps } = useEditorState({
     record
   });
+  const { assertLogged } = useAssertLogged();
   const onSubmit = async () => {
-    const params = getParams();
     if (isEmpty()) {
       return;
     }
+    assertLogged();
+    const params = getParams();
     const { success } = await request(params);
     if (success) {
       if (!isEdit) {
