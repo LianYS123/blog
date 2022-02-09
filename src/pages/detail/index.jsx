@@ -74,8 +74,8 @@ function Detail() {
 
   const handleDelete = () => {
     openDialog({
-      title: "你确定要删除该文章吗？",
-      content: "删除后不可恢复，请谨慎操作",
+      title: "提示",
+      content: "你确定要删除该文章吗？",
       onOk: async () => {
         const { success } = await deleteArticle({ id });
         if (success) {
@@ -93,8 +93,8 @@ function Detail() {
 
   const handleSyncToMoment = () => {
     openDialog({
-      title: "你确定要将文章同步到动态？",
-      content: "",
+      title: "提示",
+      content: "你确定要将这篇文章同步到动态吗？",
       onOk: async () => {
         await syncToMoment({ id });
       }

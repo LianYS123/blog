@@ -51,8 +51,8 @@ export const EssayItem = ({
 
   const handleDelete = () => {
     openDialog({
-      title: "你确定要删除吗？",
-      content: "删除后不可恢复，请谨慎操作",
+      title: "提示",
+      content: "你确定要删除这条动态吗？",
       onOk: async () => {
         const { success } = await deleteEssay({ id: record.id });
         if (success) {
