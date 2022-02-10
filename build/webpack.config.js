@@ -8,6 +8,8 @@ const isEnvDevelopment = process.env.NODE_ENV === "development";
 const isEnvProduction = process.env.NODE_ENV === "production";
 
 const src = path.join(__dirname, "../src");
+
+// webpack别名配置，src下面的的一级目录全部起了别名，可以直接用improt xxx from "目录名" 访问
 const getAligns = () => {
   return fs
     .readdirSync(src)
@@ -19,6 +21,7 @@ const getAligns = () => {
     .reduce((res, cur) => ({ ...res, [cur.filename]: cur.filepath }), {});
 };
 
+// 所有css/less公用loader
 const getExtraLoaders = ({ modules = false } = {}) => {
   return [
     isEnvDevelopment ? "style-loader" : MiniCssExtractPlugin.loader,
@@ -35,6 +38,7 @@ const getExtraLoaders = ({ modules = false } = {}) => {
 module.exports = {
   entry: path.join(src, "index.jsx"),
   // stats: "errors-only",
+  stats: "minimal",
   output: {
     filename: `js/[name].bundle.[chunkhash:7].js`,
     chunkFilename: `js/[name].bundle.[chunkhash:7].js`,
@@ -73,6 +77,7 @@ module.exports = {
         include: [src],
         use: [...getExtraLoaders({ modules: true }), "less-loader"]
       },
+      // 除src文件夹以外的css文件
       {
         test: /\.css$/,
         exclude: [src],
@@ -81,6 +86,7 @@ module.exports = {
           "css-loader"
         ]
       },
+      // js文件，详细配合参考babel.config.json
       {
         test: /\.jsx?$/,
         include: [src],
@@ -90,6 +96,7 @@ module.exports = {
           }
         ]
       },
+      // 图片等静态资源
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         include: [src],
