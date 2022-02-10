@@ -1,9 +1,7 @@
-import { useMutation } from "hooks";
 import { appSlice } from "models/app";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { GET_LOGIN_USER } from "services/auth";
-import { noop } from "lodash";
 import { useRequest } from "./useRequest";
 import { useLoginDialog } from "providers/LoginDialogProvider";
 
@@ -29,32 +27,6 @@ export const useTheme = () => {
   };
   const isDark = theme === "dark";
   return { theme, isDark, switchToDark, switchToLight, toggleTheme, switchTo };
-};
-
-// 请求数据并存储到redux
-export const useRemoteData = ({
-  service,
-  action,
-  ready = true,
-  deps = [],
-  onSuccess = noop,
-  getData = res => res?.data
-}) => {
-  const dispatch = useDispatch();
-  const [load, { data }] = useMutation(service);
-  const request = async () => {
-    if (ready) {
-      const res = await load();
-      if (res.success) {
-        dispatch(action(getData(res)));
-        onSuccess(res);
-      }
-    }
-  };
-  useEffect(() => {
-    request();
-  }, [ready, ...deps]);
-  return data;
 };
 
 // 数据初始化

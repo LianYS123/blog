@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { LOGIN_STATUS } from "constants/index";
 
 export const appSlice = createSlice({
   name: "app",
@@ -14,8 +13,7 @@ export const appSlice = createSlice({
     dictMap: {},
     theme: localStorage.getItem("theme") || "light", // 默认暗色主题
     isAppLoaded: false, // 应用初始化完成，可以加载子页面
-    logged: false, // 是否已登录
-    loginStatus: LOGIN_STATUS.NOT_LOGIN // 未登录：NOT_LOGIN, 已登录：LOGGED, 登录过期：LOGIN_EXPIRED, LOGGING: 正在登录
+    logged: false // 是否已登录
   },
   reducers: {
     // 将token保存在全局
@@ -63,9 +61,6 @@ export const appSlice = createSlice({
     },
     setIsAppLoaded: (state, action) => {
       state.isAppLoaded = action.payload;
-    },
-    setLoginStatus: (state, action) => {
-      state.loginStatus = action.payload;
     },
     setLogged: (state, action) => {
       state.logged = action.payload;
