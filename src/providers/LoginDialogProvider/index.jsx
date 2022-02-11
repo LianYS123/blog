@@ -109,7 +109,9 @@ export default function LoginDialogProvider({ children }) {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => close()}>取消</Button>
+            <Button disabled={loading} onClick={() => close()}>
+              取消
+            </Button>
             <LoadingButton color="primary" loading={loading} type="submit">
               登录
             </LoadingButton>

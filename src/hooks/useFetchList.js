@@ -22,8 +22,8 @@ export const useFetchList = ({ service, necessaryParams = {} }) => {
     setList(newList);
   };
 
-  // 搜索功能
-  const search = values => {
+  // 每次请求带上必要参数
+  const request = values => {
     return loadData({ ...necessaryParams, ...values });
   };
 
@@ -33,7 +33,7 @@ export const useFetchList = ({ service, necessaryParams = {} }) => {
     const hasNextPage = pageNo < totalPage; // 是否存在下一页数据
     if (hasNextPage) {
       setLoadingMore(true);
-      const result = await search({
+      const result = await request({
         pageNo: pageNo + 1
       });
       const { rows } = result?.data || {};
@@ -54,13 +54,19 @@ export const useFetchList = ({ service, necessaryParams = {} }) => {
     setList(newList);
   };
 
-  // 重新加载数据
-  const reload = async () => {
-    const result = await search({
-      pageNo: 1
+  // 搜索
+  const search = async (values = {}) => {
+    const result = await request({
+      pageNo: 1,
+      ...values
     });
     const { rows = [] } = result?.data || {};
     setList(rows);
+  };
+
+  // 重新加载数据
+  const reload = async () => {
+    search();
   };
 
   // 滚动到底部时加载更多数据
@@ -78,6 +84,7 @@ export const useFetchList = ({ service, necessaryParams = {} }) => {
   return {
     list,
     fetchMore,
+    search,
     isBottom,
     reload,
     loading,

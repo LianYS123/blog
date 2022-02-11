@@ -38,6 +38,7 @@ const xFetch = async function (url, data, options = {}) {
 // 文件上传
 export const upload = file => {
   const acc = localStorage.getItem("acc");
+
   const token = `Bearer ${acc}`;
 
   const formData = new FormData();

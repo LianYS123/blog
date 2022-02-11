@@ -64,7 +64,7 @@ export default function AlertDialogProvider({ children }) {
   };
   return (
     <Context.Provider value={{ open, close, visible }}>
-      <Dialog open={visible} onClose={() => close()}>
+      <Dialog open={visible} onClose={handleCancel}>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
           <DialogContentText>{content}</DialogContentText>

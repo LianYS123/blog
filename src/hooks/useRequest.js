@@ -22,7 +22,7 @@ export const useRequest = ({
   deps = [],
   ...config
 }) => {
-  const [_service, requestState] = useMutation(service, initialData, config);
+  const [request, requestState] = useMutation(service, initialData, config);
   const paramRef = useRef(defaultParams);
   const necessaryParamsRef = useRef(necessaryParams);
   necessaryParamsRef.current = necessaryParams;
@@ -31,7 +31,7 @@ export const useRequest = ({
     paramRef.current = _params;
     if (!requestState.loading) {
       const realParams = { ...necessaryParamsRef.current, ..._params }; //每次请求都带上necessaryParams
-      return _service(realParams);
+      return request(realParams);
     }
   };
 
