@@ -11,9 +11,7 @@ const AppLayout = ({ children }) => {
     <>
       {isAppLoaded ? (
         <div className="dark:bg-black dark:text-white">
-          <div className="absolute h-14 w-full left-0 right-0 top-0 app-header">
-            <AppHeader />
-          </div>
+          <AppHeader />
           <main id="container" className="h-full pt-14">
             {children}
           </main>

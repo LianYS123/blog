@@ -2,35 +2,39 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import { Divider, IconButton, ListItemButton } from "@mui/material";
+import { Divider, IconButton, ListItemButton, SvgIcon } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import routers from "routers";
 import { useHistory, useLocation } from "react-router-dom";
+import { Article, Home, Info } from "@mui/icons-material";
+import MomentIcon from "./icons/MomentIcon";
 
 const menus = [
   {
     to: routers.HOME,
     text: "首页",
-    icon: <InboxIcon />
+    icon: <Home />
   },
   {
     to: routers.ARTICLE_LIST,
     text: "文章",
-    icon: <InboxIcon />
+    icon: <Article />
   },
   {
     to: routers.ESSAY,
     text: "动态",
-    icon: <InboxIcon />
+    icon: (
+      <SvgIcon>
+        <MomentIcon />
+      </SvgIcon>
+    )
   },
   {
     to: routers.ABOUT,
     text: "关于",
-    icon: <InboxIcon />
+    icon: <Info />
   }
 ];
 
