@@ -141,7 +141,11 @@ function Detail() {
             {isCurrentUser && (
               <SpeedDial
                 ariaLabel="操作"
-                sx={{ position: "absolute", bottom: 16, right: 16 }}
+                sx={{
+                  position: "absolute",
+                  bottom: { xs: 64, sm: 16 },
+                  right: 16
+                }}
                 icon={<SpeedDialIcon />}
               >
                 <SpeedDialAction
