@@ -3,13 +3,11 @@ import { useFetchList } from "hooks";
 import { Article } from "./Article";
 import { ARTICLE_LIST } from "services/article";
 import { SkeletonList } from "components/skeleton";
-import { Input, Tag } from "@douyinfe/semi-ui";
 import { useLocation } from "react-router-dom";
 import { parse, stringify } from "query-string";
 import routers from "routers";
 import { useHistory } from "react-router-dom";
-import { IconSearch } from "@douyinfe/semi-icons";
-import { Chip } from "@mui/material";
+import { Chip, TextField } from "@mui/material";
 
 const ArticleList = () => {
   const { search: searchStr } = useLocation();
@@ -49,16 +47,23 @@ const ArticleList = () => {
       <div className="mb-2 flex justify-between">
         <div>
           {keyword ? (
-            <Tag className="mr-1" closable onClose={() => handleSearch("")}>
-              {keyword}
-            </Tag>
+            <React.Fragment>
+              <span className="text-sm font-light mr-2">搜索:</span>
+              <span className="text-sm">{keyword}</span>
+            </React.Fragment>
           ) : null}
         </div>
         <div>
-          <Input
-            prefix={<IconSearch />}
+          <TextField
+            label="搜索"
+            variant="standard"
+            size="small"
             placeholder="输入关键词搜索"
-            onEnterPress={ev => handleSearch(ev.target.value)}
+            onKeyPress={ev => {
+              if (ev.key.toUpperCase() === "ENTER") {
+                handleSearch(ev.target.value);
+              }
+            }}
           />
         </div>
       </div>
