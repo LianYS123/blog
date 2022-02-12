@@ -1,6 +1,8 @@
+import { Box } from "@mui/system";
 import Loading from "components/loading";
 import React from "react";
 import { useSelector } from "react-redux";
+import AppFooter from "./footer";
 import AppHeader from "./header";
 import "./styles.less";
 
@@ -10,12 +12,13 @@ const AppLayout = ({ children }) => {
   return (
     <>
       {isAppLoaded ? (
-        <div className="dark:bg-black dark:text-white">
+        <Box sx={{ pb: 7 }}>
           <AppHeader />
           <main id="container" className="h-full pt-14">
             {children}
           </main>
-        </div>
+          <AppFooter />
+        </Box>
       ) : (
         <Loading />
       )}

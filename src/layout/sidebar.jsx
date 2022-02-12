@@ -4,39 +4,10 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import List from "@mui/material/List";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { Divider, IconButton, ListItemButton, SvgIcon } from "@mui/material";
+import { Divider, IconButton, ListItemButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import routers from "routers";
 import { useHistory, useLocation } from "react-router-dom";
-import { Article, Home, Info } from "@mui/icons-material";
-import MomentIcon from "./icons/MomentIcon";
-
-const menus = [
-  {
-    to: routers.HOME,
-    text: "首页",
-    icon: <Home />
-  },
-  {
-    to: routers.ARTICLE_LIST,
-    text: "文章",
-    icon: <Article />
-  },
-  {
-    to: routers.ESSAY,
-    text: "动态",
-    icon: (
-      <SvgIcon>
-        <MomentIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    to: routers.ABOUT,
-    text: "关于",
-    icon: <Info />
-  }
-];
+import { APP_MENUS } from "./config";
 
 export const SideBarMenuButton = () => {
   const [visible, setVisible] = React.useState(false);
@@ -79,7 +50,7 @@ export const SideBarMenuButton = () => {
           // onKeyDown={toggleDrawer(anchor, false)}
         >
           <List>
-            {menus.map(({ text, to, icon }) => (
+            {APP_MENUS.map(({ text, to, icon }) => (
               <ListItemButton
                 selected={pathname === to}
                 onClick={() => history.push(to)}

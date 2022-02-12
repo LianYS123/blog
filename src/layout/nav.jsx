@@ -3,7 +3,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-use";
 import routers from "routers";
-// 备份
+
+// 备份, 已弃用
 export const Nav = () => {
   const { pathname } = useLocation();
   const navs = [
