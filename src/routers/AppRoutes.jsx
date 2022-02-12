@@ -18,6 +18,18 @@ import Login from "pages/login";
 
 const APP_ROUTES = [
   {
+    path: routers.DETAIL,
+    component: Detail
+  },
+  {
+    path: routers.EDITOR, // 新增文章
+    component: Editor
+  },
+  {
+    path: routers.EDITOR_EDIT, // 编辑文章
+    component: Editor
+  },
+  {
     path: "/pages",
     component: AppLayout,
     children: [
@@ -34,10 +46,6 @@ const APP_ROUTES = [
         component: ArticleList
       },
       {
-        path: routers.DETAIL,
-        component: Detail
-      },
-      {
         path: routers.USER_SPACE,
         component: Space
       },
@@ -48,14 +56,6 @@ const APP_ROUTES = [
       {
         path: routers.NOT_FOUND,
         component: NotFound
-      },
-      {
-        path: routers.EDITOR, // 新增文章
-        component: Editor
-      },
-      {
-        path: routers.EDITOR_EDIT, // 编辑文章
-        component: Editor
       },
       {
         key: "redirect",

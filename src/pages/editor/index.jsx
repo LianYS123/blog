@@ -31,6 +31,7 @@ import {
   TextField
 } from "@mui/material";
 import _ from "lodash";
+import { AppTitle } from "components/appTitle";
 
 function Editor() {
   const history = useHistory();
@@ -125,91 +126,99 @@ function Editor() {
   const cs = isSM ? controls : simpleControls;
 
   return (
-    <div className="container h-full">
-      <Spin className="h-full" spinning={loading}>
-        <div className="space-y-2 my-2">
-          {/* 文章标题 */}
-          <div>
-            <TextField
-              variant="standard"
-              size="small"
-              value={articleName}
-              onChange={ev => setArticleName(ev.target.value)}
-              name="articleName"
-              fullWidth
-              label="文章标题"
-              placeholder="请输入文章标题"
-            />
-          </div>
-
-          {/* 标签 */}
-          <div className="space-x-1 space-y-1">
-            {(tags || []).map(tag => {
-              return (
-                <Chip
-                  onDelete={() => setTags(tags.filter(t => t !== tag))}
-                  label={tag}
-                  key={tag}
-                />
-              );
-            })}
-            <Button onClick={() => setVisible(true)}>编辑文章标签</Button>
-          </div>
-
-          {/* 编辑标签弹出框 */}
-          <Dialog open={visible} onClose={() => setVisible(false)}>
-            <DialogTitle>编辑标签</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                选择常用标签或输入自定义标签，输入自定义标签后按回车添加
-              </DialogContentText>
-              <Autocomplete
+    <div>
+      <AppTitle title={isEdit ? "编辑文章" : "写文章"} back={true} />
+      <div className="container h-full pt-14">
+        <Spin className="h-full" spinning={loading}>
+          <div className="space-y-2 my-2">
+            {/* 文章标题 */}
+            <div>
+              <TextField
+                variant="standard"
                 size="small"
-                value={tags}
-                onChange={(ev, value) => {
-                  setTags(value);
-                }}
-                multiple
-                freeSolo
+                value={articleName}
+                onChange={ev => setArticleName(ev.target.value)}
+                name="articleName"
                 fullWidth
-                options={allTags}
-                renderTags={(value, getTagProps) =>
-                  value.map((option, index) => (
-                    <Chip label={option} {...getTagProps({ index })} />
-                  ))
-                }
-                renderInput={params => (
-                  <TextField
-                    {...params}
-                    margin="dense"
-                    variant="standard"
-                    label="标签"
-                    placeholder="选择或输入标签"
-                  />
-                )}
+                label="文章标题"
+                placeholder="请输入文章标题"
               />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setVisible(false)}>确认</Button>
-            </DialogActions>
-          </Dialog>
-        </div>
+            </div>
 
-        {/* 文章内容编辑器 */}
-        <Paper>
-          <CommonEditor
-            {...editorProps}
-            isEdit={isEdit}
-            showCancelButton={isEdit}
-            onSubmit={handleSubmit}
-            controls={cs}
-            extendControls={extendControls}
-            onCancel={() => {
-              history.goBack();
-            }}
-          />
-        </Paper>
-      </Spin>
+            {/* 标签 */}
+            <div className="space-x-1 space-y-1">
+              {(tags || []).map(tag => {
+                return (
+                  <Chip
+                    size="small"
+                    onDelete={() => setTags(tags.filter(t => t !== tag))}
+                    label={tag}
+                    key={tag}
+                  />
+                );
+              })}
+              <Button onClick={() => setVisible(true)}>编辑文章标签</Button>
+            </div>
+
+            {/* 编辑标签弹出框 */}
+            <Dialog open={visible} onClose={() => setVisible(false)}>
+              <DialogTitle>编辑标签</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  选择常用标签或输入自定义标签，输入自定义标签后按回车添加
+                </DialogContentText>
+                <Autocomplete
+                  size="small"
+                  value={tags}
+                  onChange={(ev, value) => {
+                    setTags(value);
+                  }}
+                  multiple
+                  freeSolo
+                  fullWidth
+                  options={allTags}
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                      <Chip
+                        size="small"
+                        label={option}
+                        {...getTagProps({ index })}
+                      />
+                    ))
+                  }
+                  renderInput={params => (
+                    <TextField
+                      {...params}
+                      margin="dense"
+                      variant="standard"
+                      label="标签"
+                      placeholder="选择或输入标签"
+                    />
+                  )}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setVisible(false)}>确认</Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+
+          {/* 文章内容编辑器 */}
+          <Paper>
+            <CommonEditor
+              {...editorProps}
+              isEdit={isEdit}
+              showCancelButton={isEdit}
+              onSubmit={handleSubmit}
+              controls={cs}
+              extendControls={extendControls}
+              onCancel={() => {
+                history.goBack();
+              }}
+            />
+          </Paper>
+        </Spin>
+      </div>
     </div>
   );
 }

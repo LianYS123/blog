@@ -11,13 +11,15 @@ import {
 } from "services/article";
 import { getHtmlAndOutline } from "./utils";
 import { useSelector } from "react-redux";
-import { Chip } from "@mui/material";
+import { Box, Chip } from "@mui/material";
 
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { Edit, Delete, SyncAlt } from "@mui/icons-material";
 import { useAlertDialog } from "providers/AlertDialogProvider";
+import { AppTitle } from "components/appTitle";
+import { useWindowScroll } from "react-use";
 
 const { Link } = Anchor;
 
@@ -31,6 +33,7 @@ function Detail() {
   const { id: userId } = userInfo; // 用户信息
 
   const history = useHistory();
+  const { y } = useWindowScroll();
 
   // 请求文章详情
   const { data, loading } = useRequest({
@@ -101,82 +104,85 @@ function Detail() {
   };
 
   return (
-    <div className="container py-4">
-      <Spin className="w-full" spinning={loading}>
-        <div className="relative mb-8">
-          {/* 标题 */}
-          <div className="mb-2">
-            <Typography.Title>{articleName}</Typography.Title>
-          </div>
-          {/* 标签 */}
-          <div>
-            <span className="flex space-x-1">
-              {tagArr.map(tag => (
-                <Chip size="small" key={tag} label={tag} />
-              ))}
-            </span>
-          </div>
-          {/* 正文 */}
-          <div className="mr-0 sm:mr-52 mt-4">
-            {html ? (
-              <article
-                id="htmlTemplate"
-                dangerouslySetInnerHTML={{ __html: html }}
-              ></article>
-            ) : (
-              <Empty className="my-12" />
-            )}
-          </div>
-          {/* 右侧内容 */}
-          <div className="absolute hidden sm:block right-0 top-4">
-            <div className="fixed right-0 w-64 pl-2">
-              {/* 文章快速跳转导航栏 */}
-              {outline && outline.length ? (
-                <Anchor>{renderLink(outline)}</Anchor>
-              ) : null}
+    <div>
+      <AppTitle title={y < 36 ? "" : articleName || "文章详情"} back={true} />
+      <div className="container py-4 pt-14">
+        <Spin className="w-full" spinning={loading}>
+          <div className="relative mb-8">
+            {/* 标题 */}
+            <div className="mb-2">
+              <Typography.Title>{articleName}</Typography.Title>
+            </div>
+            {/* 标签 */}
+            <div>
+              <span className="flex space-x-1">
+                {tagArr.map(tag => (
+                  <Chip size="small" key={tag} label={tag} />
+                ))}
+              </span>
+            </div>
+            {/* 正文 */}
+            <div className="mr-0 sm:mr-52 mt-4">
+              {html ? (
+                <article
+                  id="htmlTemplate"
+                  dangerouslySetInnerHTML={{ __html: html }}
+                ></article>
+              ) : (
+                <Empty className="my-12" />
+              )}
+            </div>
+            {/* 右侧内容 */}
+            <div className="absolute hidden sm:block right-0 top-4">
+              <div className="fixed right-0 w-64 pl-2">
+                {/* 文章快速跳转导航栏 */}
+                {outline && outline.length ? (
+                  <Anchor>{renderLink(outline)}</Anchor>
+                ) : null}
+              </div>
+            </div>
+            <div className="fixed right-0 bottom-0">
+              {/* 操作栏，对作者显示 */}
+              {isCurrentUser && (
+                <SpeedDial
+                  ariaLabel="操作"
+                  sx={{
+                    position: "absolute",
+                    bottom: { xs: 64, sm: 16 },
+                    right: 16
+                  }}
+                  icon={<SpeedDialIcon />}
+                >
+                  <SpeedDialAction
+                    onClick={handleDelete}
+                    icon={<Delete color="error" />}
+                    tooltipTitle="删除文章"
+                    // tooltipOpen
+                  />
+                  <SpeedDialAction
+                    onClick={handleSyncToMoment}
+                    icon={<SyncAlt />}
+                    tooltipTitle="同步到随笔"
+                    // tooltipOpen
+                  />
+                  <SpeedDialAction
+                    onClick={() => {
+                      const pathname = routers.EDITOR_EDIT.replace(
+                        ":id",
+                        resourceId
+                      );
+                      history.push(pathname);
+                    }}
+                    icon={<Edit />}
+                    tooltipTitle="编辑文章"
+                    // tooltipOpen
+                  />
+                </SpeedDial>
+              )}
             </div>
           </div>
-          <div className="fixed right-0 bottom-0">
-            {/* 操作栏，对作者显示 */}
-            {isCurrentUser && (
-              <SpeedDial
-                ariaLabel="操作"
-                sx={{
-                  position: "absolute",
-                  bottom: { xs: 64, sm: 16 },
-                  right: 16
-                }}
-                icon={<SpeedDialIcon />}
-              >
-                <SpeedDialAction
-                  onClick={handleDelete}
-                  icon={<Delete color="error" />}
-                  tooltipTitle="删除文章"
-                  // tooltipOpen
-                />
-                <SpeedDialAction
-                  onClick={handleSyncToMoment}
-                  icon={<SyncAlt />}
-                  tooltipTitle="同步到随笔"
-                  // tooltipOpen
-                />
-                <SpeedDialAction
-                  onClick={() => {
-                    const pathname = routers.EDITOR_EDIT.replace(
-                      ":id",
-                      resourceId
-                    );
-                    history.push(pathname);
-                  }}
-                  icon={<Edit />}
-                  tooltipTitle="编辑文章"
-                  // tooltipOpen
-                />
-              </SpeedDial>
-            )}
-          </div>
-        </div>
-      </Spin>
+        </Spin>
+      </div>
     </div>
   );
 }
