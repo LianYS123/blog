@@ -3,6 +3,8 @@ const fs = require("fs");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
+const { join } = require("path");
 
 const isEnvDevelopment = process.env.NODE_ENV === "development";
 const isEnvProduction = process.env.NODE_ENV === "production";
@@ -131,6 +133,9 @@ module.exports = {
       filename: "index.html",
       inject: "body",
       publicPath: "/"
+    }),
+    new CopyPlugin({
+      patterns: [{ from: path.resolve(__dirname, "../public") }]
     })
   ].filter(Boolean),
 

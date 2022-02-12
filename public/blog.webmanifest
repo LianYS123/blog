@@ -1,0 +1,12 @@
+{
+  "name": "Lian's Blog",
+  "description": "博客/社区，记录技术和生活",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "32x32",
+      "type": "image/svg"
+    }
+  ],
+  "display": "fullscreen"
+}

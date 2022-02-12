@@ -13,7 +13,7 @@ module.exports = merge(baseConfig, {
     new MiniCssExtractPlugin({
       ignoreOrder: true,
       // publicPath: "/pages/",
-      filename: `styles.[chunkhash].css`
+      filename: `css/styles.[chunkhash].css`
     }),
     new ZipPlugin({
       filename: `blog.zip`
