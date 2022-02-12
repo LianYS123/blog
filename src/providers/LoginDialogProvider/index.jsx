@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { encrypt } from "utils";
 import { appSlice } from "models/app";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { useSnackbar } from "notistack";
 
 const Context = createContext({
   visible: false,
@@ -40,15 +41,14 @@ export default function LoginDialogProvider({ children }) {
     setProps({});
     setVisible(false);
   };
+  const { enqueueSnackbar } = useSnackbar();
 
   // 登录
-  const [submit, { loading }] = useMutation(USER_LOGIN, null, {
-    successMessage: "登陆成功"
-  });
+  const [submit, { loading }] = useMutation(USER_LOGIN);
   const dispatch = useDispatch();
 
   const validationSchema = yup.object({
-    account: yup.string("请输入用户名").required("请输入用户名"),
+    account: yup.string("请输入账号").required("请输入账号"),
     password: yup
       .string("请输入密码")
       .min(6, "密码长度必须大于6位")
@@ -65,12 +65,17 @@ export default function LoginDialogProvider({ children }) {
       const values = { ..._values };
       values.password = encrypt(values.password); // 加密
       const result = await submit(values);
-      const { data: token, success } = result;
+      const { data: token, success, code, message } = result;
 
       if (success) {
+        enqueueSnackbar("登陆成功");
         localStorage.setItem("acc", token);
         dispatch(appSlice.actions.setToken(token));
         close();
+      } else if (code === 1011002) {
+        enqueueSnackbar("账号或密码错误");
+      } else {
+        enqueueSnackbar(message);
       }
     }
   });
@@ -87,7 +92,7 @@ export default function LoginDialogProvider({ children }) {
               name="account"
               fullWidth
               variant="standard"
-              label="用户名"
+              label="账号"
               value={formik.values.account}
               onChange={formik.handleChange}
               error={formik.touched.account && !!formik.errors.account}
