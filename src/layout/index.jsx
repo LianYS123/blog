@@ -4,7 +4,6 @@ import React from "react";
 import { useSelector } from "react-redux";
 import AppFooter from "./footer";
 import AppHeader from "./header";
-import "./styles.less";
 
 // 页面布局
 const AppLayout = ({ children }) => {

@@ -2,6 +2,7 @@ import { Paper } from "@mui/material";
 import { SkeletonList } from "components/skeleton";
 import { useFetchList } from "hooks";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { MOMENT_LIST } from "services/essay";
 import { EssayEditor } from "./EssayEditor";
 import { EssayItem } from "./EssayItem";
@@ -22,6 +23,7 @@ const Essay = () => {
     service: MOMENT_LIST,
     necessaryParams: { pageSize: 10, ...params }
   });
+  const { logged } = useSelector(state => state.app);
   return (
     <div className="container py-8 md:pb-16">
       <div className="mb-8">
@@ -29,9 +31,12 @@ const Essay = () => {
           <EssayEditor reload={reload} />
         </Paper>
       </div>
-      <div className="flex justify-end">
-        <Filter onChange={params => setParams(params)} />
-      </div>
+      {logged ? (
+        <div className="flex justify-end">
+          <Filter onChange={params => setParams(params)} />
+        </div>
+      ) : null}
+
       <div className="space-y-3 mb-4">
         <SkeletonList
           showButton={false}

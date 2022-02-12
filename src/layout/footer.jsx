@@ -17,6 +17,7 @@ export default function AppFooter() {
         bottom: 0,
         left: 0,
         right: 0,
+        pb: 2,
         display: { xs: "block", sm: "none" }
       }}
       elevation={3}
