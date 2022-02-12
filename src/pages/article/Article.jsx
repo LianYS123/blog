@@ -1,5 +1,6 @@
 import { Tag, Typography } from "@douyinfe/semi-ui";
 import { Chip } from "@mui/material";
+import { noop } from "lodash";
 import React from "react";
 import { useHistory } from "react-router";
 import routers from "routers";
@@ -13,7 +14,7 @@ export const Article = ({
   authorName,
   id,
   tags,
-  handleTagClick
+  handleTagClick = noop
 }) => {
   const history = useHistory();
   const tagArr = tags ? tags.split("|") : [];

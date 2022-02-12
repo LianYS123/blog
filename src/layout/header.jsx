@@ -7,9 +7,12 @@ import { ThemeSwitch } from "./themeSwitch";
 import { UserAvatar } from "./userAvatar";
 import { SideBarMenuButton } from "./sidebar";
 import { useWindowScroll } from "react-use";
+import { useHistory } from "react-router-dom";
+import routers from "routers";
 
 export default function AppHeader() {
   const { y } = useWindowScroll();
+  const history = useHistory();
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -19,7 +22,13 @@ export default function AppHeader() {
       >
         <Toolbar>
           <SideBarMenuButton />
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography
+            className="cursor-pointer"
+            variant="h6"
+            component="div"
+            onClick={() => history.push(routers.HOME)}
+            sx={{ flexGrow: 1 }}
+          >
             Lian's Blog
           </Typography>
           <div className="flex items-center">

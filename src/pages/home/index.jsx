@@ -1,70 +1,57 @@
-/* eslint no-undef: 0 */
-/* eslint arrow-parens: 0 */
+import { Paper, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box } from "@mui/system";
+import { SkeletonList } from "components/skeleton";
+import { useFetchList } from "hooks";
+import { Article } from "pages/article/Article";
 import React from "react";
-import { enquireScreen } from "enquire-js";
+import { ARTICLE_LIST } from "services/article";
 
-import Nav2 from "./Nav2";
-import Banner0 from "./Banner0";
-import Feature1 from "./Feature1";
-import Footer2 from "./Footer2";
+const Home = () => {
+  const {
+    list = [],
+    loadingFirstPage,
+    loadingMore
+  } = useFetchList({
+    service: ARTICLE_LIST
+  });
+  const theme = useTheme();
+  const upSM = useMediaQuery(theme.breakpoints.up("sm"));
 
-import {
-  Nav20DataSource,
-  Banner00DataSource,
-  Feature10DataSource,
-  Footer20DataSource
-} from "./data.source";
-import "./less/antMotionStyle.less";
-
-let isMobile;
-enquireScreen(b => {
-  isMobile = b;
-});
-
-export default class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isMobile
-    };
-  }
-
-  componentDidMount() {
-    // 适配手机屏幕;
-    enquireScreen(b => {
-      this.setState({ isMobile: !!b });
-    });
-  }
-
-  render() {
-    return (
-      <div
-        className="templates-wrapper"
-        ref={d => {
-          this.dom = d;
-        }}
-      >
-        <Nav2
-          id="Nav2_0"
-          dataSource={Nav20DataSource}
-          isMobile={this.state.isMobile}
-        />
-        <Banner0
-          id="Banner0_0"
-          dataSource={Banner00DataSource}
-          isMobile={this.state.isMobile}
-        />
-        <Feature1
-          id="Feature1_0"
-          dataSource={Feature10DataSource}
-          isMobile={this.state.isMobile}
-        />
-        <Footer2
-          id="Footer2_0"
-          dataSource={Footer20DataSource}
-          isMobile={this.state.isMobile}
-        />
+  return (
+    <div className="py-4 md:pb-16 container">
+      <div className="mb-8 rounded-md overflow-hidden">
+        <Box sx={{ height: { xs: 160, sm: 300 }, position: "relative" }}>
+          <img
+            className="w-full h-full object-cover object-center"
+            src="https://liuli-1259462774.cos.ap-shanghai.myqcloud.com/c39d7a8e-90fb-4ec3-9db4-6eb4d728ff92cat-6747298_1280.jpeg"
+          />
+          <div className="absolute left-3 bottom-2 sm:left-6 sm:bottom-4 text-white">
+            {upSM ? (
+              <>
+                <Typography variant="body1" gutterBottom component="div">
+                  Lian's Blog
+                </Typography>
+                <Typography variant="body2" component="div">
+                  记录生活、技术和有趣的事
+                </Typography>
+              </>
+            ) : (
+              <Typography variant="body1" component="div">
+                记录生活、技术和有趣的事
+              </Typography>
+            )}
+          </div>
+        </Box>
       </div>
-    );
-  }
-}
+      <div className="space-y-3 mb-4">
+        <SkeletonList loading={loadingFirstPage} />
+        {list.map(it => (
+          <Article key={it.id} {...it} />
+        ))}
+        <SkeletonList loading={loadingMore} />
+      </div>
+    </div>
+  );
+};
+
+export default Home;

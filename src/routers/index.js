@@ -1,6 +1,6 @@
 const routers = {
   LOGIN: "/pages/login",
-  HOME: "/home",
+  HOME: "/pages/home",
   ARTICLE_LIST: "/pages/list",
   ESSAY: "/pages/essay",
   NOT_FOUND: "/pages/404",

@@ -18,16 +18,16 @@ import Login from "pages/login";
 
 const APP_ROUTES = [
   {
-    path: routers.HOME,
-    component: Home
-  },
-  {
     path: "/pages",
     component: AppLayout,
     children: [
       {
         path: routers.LOGIN,
         component: Login
+      },
+      {
+        path: routers.HOME,
+        component: Home
       },
       {
         path: routers.ARTICLE_LIST,
