@@ -1,62 +1,93 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { Nav, SideSheet } from "@douyinfe/semi-ui";
-import { FormattedMessage } from "react-intl";
-import { IconHome, IconSetting, IconUser } from "@douyinfe/semi-icons";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import { Divider, IconButton, ListItemButton } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import routers from "routers";
-import { useHistory, useLocation } from "react-router";
-import "./styles.less";
+import { useHistory, useLocation } from "react-router-dom";
 
-// 侧边栏
-const Sidebar = ({ visible, close }) => {
-  const menus = useSelector(state => state.app.menuList);
-  const { pathname } = useLocation();
+const menus = [
+  {
+    to: routers.HOME,
+    text: "首页",
+    icon: <InboxIcon />
+  },
+  {
+    to: routers.ARTICLE_LIST,
+    text: "文章",
+    icon: <InboxIcon />
+  },
+  {
+    to: routers.ESSAY,
+    text: "动态",
+    icon: <InboxIcon />
+  },
+  {
+    to: routers.ABOUT,
+    text: "关于",
+    icon: <InboxIcon />
+  }
+];
+
+export const SideBarMenuButton = () => {
+  const [visible, setVisible] = React.useState(false);
   const history = useHistory();
+  const { pathname } = useLocation();
 
   return (
-    <SideSheet
-      className="sidebar"
-      width={300}
-      bodyStyle={{ paddingRight: 0, paddingLeft: 16 }}
-      headerStyle={{ borderBottom: "1px solid #dadce0", padding: "12px 16px" }}
-      title={
-        <div className="text-lg font-bold">
-          <svg
-            onClick={close}
-            width="1.5em"
-            height="1.5em"
-            viewBox="0 0 48 48"
-            className="cursor-pointer mr-6"
-            style={{ transform: "translateY(-1px)", display: "inline" }}
+    <React.Fragment>
+      <IconButton
+        size="large"
+        edge="start"
+        color="inherit"
+        aria-label="menu"
+        onClick={() => setVisible(true)}
+        sx={{ mr: 2 }}
+      >
+        <MenuIcon />
+      </IconButton>
+      <SwipeableDrawer
+        anchor="left"
+        open={visible}
+        onClose={() => setVisible(false)}
+        onOpen={() => setVisible(true)}
+      >
+        <Box className="ml-1 py-1">
+          <IconButton
+            size="large"
+            color="inherit"
+            onClick={() => setVisible(false)}
+            sx={{ mr: 8 }}
           >
-            <path d="M6 36h36v-4H6v4zm0-10h36v-4H6v4zm0-14v4h36v-4H6z"></path>
-          </svg>
-          <FormattedMessage id="WEBSITE_NAME" />
-        </div>
-      }
-      onCancel={close}
-      placement="left"
-      visible={visible}
-    >
-      <Nav
-        className="w-full border-0"
-        selectedKeys={[pathname]}
-        items={[
-          { itemKey: routers.HOME, text: "主页", icon: <IconHome /> },
-          { itemKey: routers.USER_SPACE, text: "个人资料", icon: <IconUser /> },
-          {
-            text: "系统设置",
-            icon: <IconSetting />,
-            itemKey: routers.SETTING
-          }
-        ]}
-        onSelect={data => {
-          history.push({ pathname: data.itemKey });
-          close();
-        }}
-      />
-    </SideSheet>
+            <MenuIcon />
+          </IconButton>
+        </Box>
+        <Divider />
+        <Box
+          sx={{ width: 250 }}
+          role="presentation"
+          onClick={() => setVisible(false)}
+          // onKeyDown={toggleDrawer(anchor, false)}
+        >
+          <List>
+            {menus.map(({ text, to, icon }) => (
+              <ListItemButton
+                selected={pathname === to}
+                onClick={() => history.push(to)}
+                key={text}
+              >
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            ))}
+          </List>
+        </Box>
+      </SwipeableDrawer>
+    </React.Fragment>
   );
 };
-
-export default Sidebar;

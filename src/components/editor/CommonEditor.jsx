@@ -13,7 +13,7 @@ export const useEditorState = ({ record }) => {
   const [editorState, setState] = useState();
   const [visibleStatus, setVisibleStatus] = useState(
     record?.visibleStatus || 0
-  ); // 是否仅自己可见 0: 是，1：否
+  ); // 是否仅自己可见 0: 否，1：是
 
   // 编辑时初始化内容
   useEffect(() => {
