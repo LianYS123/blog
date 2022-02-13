@@ -68,7 +68,6 @@ export default function LoginDialogProvider({ children }) {
       const { data: token, success, code, message } = result;
 
       if (success) {
-        enqueueSnackbar("登陆成功");
         localStorage.setItem("acc", token);
         dispatch(appSlice.actions.setToken(token));
         close();

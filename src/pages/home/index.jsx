@@ -20,21 +20,16 @@ const Home = () => {
   return (
     <div className="py-4 md:pb-16 container">
       <div className="mb-8 rounded-md overflow-hidden">
-        <Box sx={{ height: { xs: 160, sm: 300 }, position: "relative" }}>
+        <Box sx={{ height: { xs: "40vw", sm: "30vw" }, position: "relative" }}>
           <img
             className="w-full h-full object-cover object-center"
             src="https://liuli-1259462774.cos.ap-shanghai.myqcloud.com/c39d7a8e-90fb-4ec3-9db4-6eb4d728ff92cat-6747298_1280.jpeg"
           />
           <div className="absolute left-3 bottom-2 sm:left-6 sm:bottom-4 text-white">
             {upSM ? (
-              <>
-                <Typography variant="body1" gutterBottom component="div">
-                  Lian's Blog
-                </Typography>
-                <Typography variant="body2" component="div">
-                  记录生活、技术和有趣的事
-                </Typography>
-              </>
+              <Typography variant="body2" component="div">
+                记录生活、技术和有趣的事
+              </Typography>
             ) : (
               <Typography variant="body1" component="div">
                 记录生活、技术和有趣的事

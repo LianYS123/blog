@@ -29,7 +29,7 @@ const { Link } = Anchor;
 function Detail() {
   const { id: resourceId } = useParams(); // 文章id
 
-  const { userInfo } = useSelector(state => state.app);
+  const { userInfo, logged } = useSelector(state => state.app);
   const { id: userId } = userInfo; // 用户信息
 
   const history = useHistory();
@@ -45,7 +45,7 @@ function Detail() {
   const { id, tags, articleName, authorId } = data;
   const tagArr = tags ? tags.split("|") : [];
 
-  const isCurrentUser = userId === authorId; // 是否是当前用户
+  const isCurrentUser = logged && userId === authorId; // 是否是当前用户
 
   // 生成文章导航
   const { outline, html } = getHtmlAndOutline(data.html);

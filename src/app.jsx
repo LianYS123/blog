@@ -38,7 +38,10 @@ const App = () => {
           }
         })}
       >
-        <SnackbarProvider maxSnack={3}>
+        <SnackbarProvider
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          maxSnack={3}
+        >
           <AlertDialogProvider>
             <LoginDialogProvider>
               <AppRoutes />

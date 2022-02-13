@@ -1,4 +1,4 @@
-import { Avatar, Menu, MenuItem } from "@mui/material";
+import { Avatar, ButtonBase, Menu, MenuItem } from "@mui/material";
 import { appSlice } from "models/app";
 import { useSnackbar } from "notistack";
 import { useLoginDialog } from "providers/LoginDialogProvider";
@@ -24,7 +24,8 @@ export const UserAvatar = () => {
     dispatch(appSlice.actions.setUserInfo({}));
     dispatch(appSlice.actions.clearToken()); // 清除token
     dispatch(appSlice.actions.setLogged(false)); // 修改登录状态
-    enqueueSnackbar("已登出");
+    openLoginDialog({ tip: "已登出，请重新登录" });
+    // enqueueSnackbar("已登出");
   };
   return (
     <React.Fragment>
@@ -47,9 +48,7 @@ export const UserAvatar = () => {
           )}
         </span>
       ) : (
-        <button className="hover:underline" onClick={() => openLoginDialog()}>
-          登录
-        </button>
+        <ButtonBase onClick={() => openLoginDialog()}>登录</ButtonBase>
       )}
       <Menu
         open={!!anchorEl}
