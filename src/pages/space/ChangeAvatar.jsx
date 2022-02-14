@@ -53,6 +53,7 @@ export const ChangeAvatar = () => {
     >
       <Avatar
         src={`${FILE_PREVIEW}?id=${avatar}`}
+        size="large"
         style={{ margin: 4 }}
         hoverMask={hoverMask}
       />

@@ -1,107 +1,137 @@
-import { Button, Form } from "@douyinfe/semi-ui";
-import React from "react";
-import { useSelector } from "react-redux";
-import { useModalAction, useMutation } from "hooks";
-import { COMMON_FORM_ITEM_LAYOUT } from "constants";
-import { CHANGE_USER_INFO } from "services/user";
-import { cloneDeep, pick } from "lodash";
+import React, { useState } from "react";
+import { useModalAction } from "hooks";
 import { ChangePasswordModal } from "./ChangePasswordModal";
 import { ChangeAvatar } from "./ChangeAvatar";
-import { Paper } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Paper,
+  Radio,
+  RadioGroup,
+  Stack,
+  TextField,
+  Typography
+} from "@mui/material";
+import { useUserFormik } from "./hooks";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DatePicker from "@mui/lab/DatePicker";
+import { useSelector } from "react-redux";
 import dayjs from "dayjs";
-import { useReloadUserInfo } from "./hooks";
-
-const fields = ["birthday", "email", "nickName", "phone", "sex", "tel"];
 
 const Space = () => {
-  const { userInfo } = useSelector(state => state.app);
-  const [changeUserInfo, { loading }] = useMutation(
-    CHANGE_USER_INFO,
-    {},
-    { showActionMessage: true, autoHandleError: true }
-  );
   const { open: openChangePasswordModal, ...passwordModalProps } =
     useModalAction();
-  const reloadUserInfo = useReloadUserInfo();
+  const { userInfo } = useSelector(state => state.app);
+  const [birthday, setBirthday] = useState(dayjs(userInfo.birthday).valueOf());
+  const formik = useUserFormik({ birthday });
 
-  const onSubmit = async _values => {
-    const values = cloneDeep(_values);
-    const { birthday } = values;
-    if (birthday) {
-      values.birthday = dayjs(birthday).format("YYYY-MM-DD");
-    }
-    values.id = userInfo.id;
-    const { success } = await changeUserInfo(values);
-    if (success) {
-      reloadUserInfo();
-    }
-  };
   return (
-    <div
-      className="mx-auto flex justify-between py-8 w-full"
-      style={{ maxWidth: 800 }}
-    >
-      <div>
-        <ChangeAvatar />
+    <div className="mx-auto py-8 px-2 w-full" style={{ maxWidth: 800 }}>
+      <div className="text-center">
+        <div className="flex justify-center">
+          <ChangeAvatar />
+        </div>
+        <div>
+          <Typography variant="h6" component="div">
+            {userInfo.nickName}
+          </Typography>
+        </div>
       </div>
-      <Form
-        className="h-full mx-4 flex-auto"
-        {...COMMON_FORM_ITEM_LAYOUT}
-        onSubmit={onSubmit}
-        initValues={pick(userInfo, fields)}
-      >
-        {({ formApi, values }) => {
-          return (
-            <Paper className="p-8 flex h-full flex-col justify-between">
-              <Form.Input
-                label="昵称"
-                field="nickName"
-                placeholder="请输入用户名"
-              />
-              <Form.DatePicker
-                label="生日"
-                field="birthday"
-                placeholder="请选择生日"
-              />
-              <Form.RadioGroup
-                field="sex"
-                label="性别"
-                rules={[{ required: true, message: "请选择性别" }]}
+      <Paper className="p-8 flex-auto">
+        <form onSubmit={formik.handleSubmit}>
+          <Stack spacing={2}>
+            <TextField
+              name="nickName"
+              fullWidth
+              variant="standard"
+              label="昵称"
+              value={formik.values.nickName}
+              onChange={formik.handleChange}
+              error={formik.touched && !!formik.errors.nickName}
+              helperText={formik.touched.nickName && formik.errors.nickName}
+              placeholder="请输入昵称"
+            />
+
+            <TextField
+              name="email"
+              fullWidth
+              variant="standard"
+              label="邮箱"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched && !!formik.errors.email}
+              helperText={formik.touched.email && formik.errors.email}
+              placeholder="请输入邮箱"
+            />
+
+            <TextField
+              name="phone"
+              fullWidth
+              variant="standard"
+              label="手机"
+              value={formik.values.phone}
+              onChange={formik.handleChange}
+              error={formik.touched && !!formik.errors.phone}
+              helperText={formik.touched.phone && formik.errors.phone}
+              placeholder="请输入手机号"
+            />
+
+            <TextField
+              name="tel"
+              fullWidth
+              variant="standard"
+              label="电话"
+              value={formik.values.tel}
+              onChange={formik.handleChange}
+              error={formik.touched && !!formik.errors.tel}
+              helperText={formik.touched.tel && formik.errors.tel}
+              placeholder="请输入电话号码"
+            />
+            <div>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label="生日"
+                  value={birthday}
+                  onChange={setBirthday}
+                  renderInput={params => (
+                    <TextField variant="standard" {...params} />
+                  )}
+                />
+              </LocalizationProvider>
+            </div>
+
+            <FormControl fullWidth size="small">
+              <FormLabel>性别</FormLabel>
+              <RadioGroup
+                row
+                defaultValue={1}
+                value={formik.values.sex}
+                onChange={formik.handleChange}
+                name="sex"
               >
-                <Form.Radio value={1}>男</Form.Radio>
-                <Form.Radio value={2}>女</Form.Radio>
-              </Form.RadioGroup>
-              <Form.Input
-                label="手机"
-                field="phone"
-                placeholder="请输入手机号"
-                rules={[
-                  { required: true, message: "请输入手机号" },
-                  { pattern: /1\d{10}/, message: "手机号格式不正确" }
-                ]}
-              />
-              <Form.Input
-                label="电话"
-                field="tel"
-                placeholder="请输入电话号码"
-              />
-              <Form.Input
-                label="邮箱"
-                field="email"
-                placeholder="请输入邮箱地址"
-              />
-              <div className="space-x-4 text-center">
-                <Button onClick={() => openChangePasswordModal()}>
-                  修改密码
-                </Button>
-                <Button theme="solid" loading={loading} htmlType="submit">
-                  保存
-                </Button>
-              </div>
-            </Paper>
-          );
-        }}
-      </Form>
+                <FormControlLabel
+                  value={1}
+                  control={<Radio size="small" />}
+                  label="男"
+                />
+                <FormControlLabel
+                  value={2}
+                  control={<Radio size="small" />}
+                  label="女"
+                />
+              </RadioGroup>
+            </FormControl>
+            <div className="text-center space-x-2">
+              <Button>修改密码</Button>
+              <Button type="submit">保存</Button>
+            </div>
+          </Stack>
+        </form>
+      </Paper>
+
       <ChangePasswordModal {...passwordModalProps} />
     </div>
   );
