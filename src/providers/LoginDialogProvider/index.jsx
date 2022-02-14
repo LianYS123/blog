@@ -94,6 +94,7 @@ export default function LoginDialogProvider({ children }) {
               label="账号"
               value={formik.values.account}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               error={formik.touched.account && !!formik.errors.account}
               helperText={formik.touched.account && formik.errors.account}
               placeholder="请输入账号"
@@ -107,6 +108,7 @@ export default function LoginDialogProvider({ children }) {
               label="密码"
               value={formik.values.password}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               error={formik.touched.password && !!formik.errors.password}
               helperText={formik.touched.password && formik.errors.password}
               placeholder="请输入密码"

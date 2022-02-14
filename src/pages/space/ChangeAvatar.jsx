@@ -1,11 +1,12 @@
 import React from "react";
-import { Upload, Avatar, Toast } from "@douyinfe/semi-ui";
+import { Upload, Avatar } from "@douyinfe/semi-ui";
 import { IconCamera } from "@douyinfe/semi-icons";
 import { FILE_PREVIEW, FILE_UPLOAD } from "services/app";
 import { useSelector } from "react-redux";
 import { useMutation } from "hooks";
 import { CHANGE_AVATAR } from "services/user";
 import { useReloadUserInfo } from "./hooks";
+import { useSnackbar } from "notistack";
 
 export const ChangeAvatar = () => {
   const { userInfo } = useSelector(state => state.app);
@@ -16,6 +17,7 @@ export const ChangeAvatar = () => {
     { showActionMessage: true, autoHandleError: true }
   );
   const reloadUserInfo = useReloadUserInfo();
+  const { enqueueSnackbar } = useSnackbar();
 
   const onSuccess = async (response, file) => {
     const { data } = response;
@@ -49,7 +51,7 @@ export const ChangeAvatar = () => {
       accept="image/*"
       headers={{ Authorization: `Bearer ${localStorage.getItem("acc")}` }}
       showUploadList={false}
-      onError={() => Toast.error("上传失败")}
+      onError={() => enqueueSnackbar("上传失败", { variant: "error" })}
     >
       <Avatar
         src={`${FILE_PREVIEW}?id=${avatar}`}

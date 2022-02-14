@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useModalAction } from "hooks";
 import { ChangePasswordModal } from "./ChangePasswordModal";
 import { ChangeAvatar } from "./ChangeAvatar";
 import {
@@ -22,8 +21,7 @@ import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 
 const Space = () => {
-  const { open: openChangePasswordModal, ...passwordModalProps } =
-    useModalAction();
+  const [visible, setVisible] = useState(false); // 修改密码的弹出框状态
   const { userInfo } = useSelector(state => state.app);
   const [birthday, setBirthday] = useState(dayjs(userInfo.birthday).valueOf());
   const formik = useUserFormik({ birthday });
@@ -50,9 +48,9 @@ const Space = () => {
               label="昵称"
               value={formik.values.nickName}
               onChange={formik.handleChange}
-              error={formik.touched && !!formik.errors.nickName}
+              onBlur={formik.handleBlur}
+              error={formik.touched.nickName && !!formik.errors.nickName}
               helperText={formik.touched.nickName && formik.errors.nickName}
-              placeholder="请输入昵称"
             />
 
             <TextField
@@ -62,9 +60,9 @@ const Space = () => {
               label="邮箱"
               value={formik.values.email}
               onChange={formik.handleChange}
-              error={formik.touched && !!formik.errors.email}
+              onBlur={formik.handleBlur}
+              error={formik.touched.email && !!formik.errors.email}
               helperText={formik.touched.email && formik.errors.email}
-              placeholder="请输入邮箱"
             />
 
             <TextField
@@ -74,9 +72,9 @@ const Space = () => {
               label="手机"
               value={formik.values.phone}
               onChange={formik.handleChange}
-              error={formik.touched && !!formik.errors.phone}
+              onBlur={formik.handleBlur}
+              error={formik.touched.phone && !!formik.errors.phone}
               helperText={formik.touched.phone && formik.errors.phone}
-              placeholder="请输入手机号"
             />
 
             <TextField
@@ -86,9 +84,9 @@ const Space = () => {
               label="电话"
               value={formik.values.tel}
               onChange={formik.handleChange}
-              error={formik.touched && !!formik.errors.tel}
+              onBlur={formik.handleBlur}
+              error={formik.touched.tel && !!formik.errors.tel}
               helperText={formik.touched.tel && formik.errors.tel}
-              placeholder="请输入电话号码"
             />
             <div>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -110,6 +108,7 @@ const Space = () => {
                 defaultValue={1}
                 value={formik.values.sex}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 name="sex"
               >
                 <FormControlLabel
@@ -125,14 +124,14 @@ const Space = () => {
               </RadioGroup>
             </FormControl>
             <div className="text-center space-x-2">
-              <Button>修改密码</Button>
+              <Button onClick={() => setVisible(true)}>修改密码</Button>
               <Button type="submit">保存</Button>
             </div>
           </Stack>
         </form>
       </Paper>
 
-      <ChangePasswordModal {...passwordModalProps} />
+      <ChangePasswordModal visible={visible} close={() => setVisible(false)} />
     </div>
   );
 };

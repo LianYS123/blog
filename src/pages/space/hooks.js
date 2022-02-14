@@ -9,8 +9,6 @@ import * as yup from "yup";
 import { useSelector } from "react-redux";
 import { useFormik } from "formik";
 
-const fields = ["birthday", "email", "nickName", "phone", "sex", "tel"];
-
 export const useReloadUserInfo = () => {
   const [getUserInfo] = useMutation(GET_LOGIN_USER);
   const dispatch = useDispatch();
