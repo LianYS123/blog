@@ -31,7 +31,9 @@ const ArticleList = () => {
   };
 
   const handleTagClick = tag => {
-    setTags([...tags, tag]);
+    if (!tags.includes(tag)) {
+      setTags([...tags, tag]);
+    }
   };
 
   // 搜索

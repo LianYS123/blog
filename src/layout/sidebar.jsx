@@ -13,6 +13,9 @@ export const SideBarMenuButton = () => {
   const [visible, setVisible] = React.useState(false);
   const history = useHistory();
   const { pathname } = useLocation();
+  const iOS =
+    typeof navigator !== "undefined" &&
+    /iPad|iPhone|iPod/.test(navigator.userAgent);
 
   return (
     <React.Fragment>
@@ -27,6 +30,8 @@ export const SideBarMenuButton = () => {
         <MenuIcon />
       </IconButton>
       <SwipeableDrawer
+        disableBackdropTransition={!iOS}
+        disableDiscovery={iOS}
         anchor="left"
         open={visible}
         onClose={() => setVisible(false)}

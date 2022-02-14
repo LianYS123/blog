@@ -39,7 +39,7 @@ const App = () => {
         })}
       >
         <SnackbarProvider
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          // anchorOrigin={{ vertical: "top", horizontal: "right" }}
           maxSnack={3}
         >
           <AlertDialogProvider>
