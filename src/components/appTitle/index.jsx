@@ -4,6 +4,9 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { useWindowScroll } from "react-use";
 
+/**
+ * 带返回图标的页头
+ */
 export const AppTitle = ({ back, title, extra }) => {
   const history = useHistory();
   const { y } = useWindowScroll();

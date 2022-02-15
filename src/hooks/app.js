@@ -18,6 +18,7 @@ export const useTheme = () => {
   const switchToDark = () => {
     switchTo("dark");
   };
+  // 切换主题
   const toggleTheme = () => {
     if (theme === "dark") {
       switchToLight();

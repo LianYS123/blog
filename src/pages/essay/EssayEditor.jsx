@@ -1,11 +1,11 @@
 import React from "react";
 
 import { noop } from "lodash";
-import { CommonEditor } from "components/editor/CommonEditor";
 import { ADD_MOMENT, EDIT_MOMENT } from "services/essay";
-import { useEditorState } from "components/editor/CommonEditor";
+import { useEditorState, CommonEditor } from "components/editor";
 import { useMutation } from "hooks";
 import { useAssertLogged } from "hooks/app";
+import { Button, Checkbox, FormControlLabel } from "@mui/material";
 
 export const EssayEditor = ({
   reload = noop,
@@ -17,7 +17,14 @@ export const EssayEditor = ({
   const successMessage = isEdit ? "修改成功" : "发布成功";
   const service = isEdit ? EDIT_MOMENT : ADD_MOMENT;
   const [request] = useMutation(service, null, { successMessage });
-  const { reset, isEmpty, getParams, ...editorProps } = useEditorState({
+  const {
+    reset,
+    isEmpty,
+    getParams,
+    visibleStatus,
+    onVisibleStatusChange,
+    ...editorProps
+  } = useEditorState({
     record
   });
   const { assertLogged } = useAssertLogged();
@@ -40,13 +47,53 @@ export const EssayEditor = ({
     }
   };
   return (
-    <CommonEditor
-      {...editorProps}
-      contentStyle={{ height: 160 }}
-      isEdit={isEdit}
-      showCancelButton={isEdit}
-      onSubmit={onSubmit}
-      onCancel={onCancel}
-    />
+    <div>
+      <CommonEditor
+        controls={[
+          "bold",
+          "italic",
+          "emoji",
+          "underline",
+          "text-indent",
+          "media"
+        ]}
+        placeholder={
+          isEdit
+            ? "按 Ctrl + S / Command + S 保存"
+            : "按 Ctrl + S / Command + S 发布"
+        }
+        contentStyle={{ height: 160 }}
+        onSave={onSubmit}
+        {...editorProps}
+      />
+      <div className="flex justify-between">
+        <div className="ml-4">
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={visibleStatus === 1 ? true : false}
+                size="small"
+                color="primary"
+                onChange={(ev, checked) => {
+                  onVisibleStatusChange(checked ? 1 : 0);
+                }}
+              />
+            }
+            label={<span className="text-sm">仅自己可见</span>}
+          />
+        </div>
+        <div className="text-right">
+          {isEdit && (
+            <Button size="large" onClick={onCancel}>
+              取消
+            </Button>
+          )}
+
+          <Button size="large" onClick={onSubmit}>
+            {isEdit ? "保存" : "发布"}
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 };
