@@ -3,7 +3,7 @@
   "description": "博客/社区，记录技术和生活",
   "icons": [
     {
-      "src": "favicon.svg",
+      "src": "/favicon.svg",
       "sizes": "32x32",
       "type": "image/svg"
     }

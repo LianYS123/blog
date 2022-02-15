@@ -32,7 +32,7 @@ export default function AppHeader() {
             onClick={() => history.push(routers.HOME)}
             sx={{ flexGrow: 1 }}
           >
-            Lian's Blog
+            Lian's Space
           </Typography>
           <div className="space-x-4 mr-2 hidden sm:block">
             {APP_MENUS.map(({ to, text, icon }) => {
