@@ -32,7 +32,7 @@ export const ChangePasswordModal = ({ close, visible }) => {
       .min(6, "密码长度必须大于6位")
       .max(20, "密码最长为20位")
       .required("请输入新密码"),
-    newPassword2: yup
+    confirm: yup
       .string("请确认新密码")
       .min(6, "密码长度必须大于6位")
       .max(20, "密码最长为20位")
@@ -41,13 +41,13 @@ export const ChangePasswordModal = ({ close, visible }) => {
 
   const formik = useFormik({
     validationSchema,
-    initialValues: { password: "", newPassword: "", newPassword2: "" },
+    initialValues: { password: "", newPassword: "", confirm: "" },
     onSubmit: async values => {
-      if (values.newPassword !== values.newPassword2) {
+      if (values.newPassword !== values.confirm) {
         enqueueSnackbar("两次输入的密码不一致", { variant: "error" });
         return;
       }
-      const { success } = await request(values);
+      const { success } = await request({ ...values, id: 0 }); // 后端复用之前的校验，id随便填，都会修改当前用户信息
       if (success) {
         enqueueSnackbar("密码已更新");
         close();
@@ -88,18 +88,16 @@ export const ChangePasswordModal = ({ close, visible }) => {
           />
           <TextField
             type="password"
-            name="newPassword2"
+            name="confirm"
             fullWidth
             margin="dense"
             variant="standard"
             label="确认密码"
-            value={formik.values.newPassword2}
+            value={formik.values.confirm}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={formik.touched.newPassword2 && !!formik.errors.newPassword2}
-            helperText={
-              formik.touched.newPassword2 && formik.errors.newPassword2
-            }
+            error={formik.touched.confirm && !!formik.errors.confirm}
+            helperText={formik.touched.confirm && formik.errors.confirm}
           />
         </DialogContent>
         <DialogActions>
