@@ -18,7 +18,7 @@ export const useEditorState = ({ record }) => {
       const state = BraftEditor.createEditorState(data);
       setState(state);
     }
-  }, [record]);
+  }, [record?.id]);
 
   // 获取请求参数
   const getParams = () => {
