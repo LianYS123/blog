@@ -2,13 +2,15 @@ import * as React from "react";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import { Paper } from "@mui/material";
-import { APP_MENUS } from "./config";
+import { BOTTOM_MENUS } from "./config";
 import { useHistory } from "react-router-dom";
 import { useLocation } from "react-use";
+import { useAssertLogged } from "hooks/app";
 
 export default function AppFooter() {
   const history = useHistory();
   const { pathname } = useLocation();
+  const { assertLogged } = useAssertLogged();
 
   return (
     <Paper
@@ -26,10 +28,13 @@ export default function AppFooter() {
         showLabels
         value={pathname}
         onChange={(event, newValue) => {
+          if (BOTTOM_MENUS.find(it => it.to === newValue)?.requireLogin) {
+            assertLogged();
+          }
           history.push(newValue);
         }}
       >
-        {APP_MENUS.map(({ text, to, icon }) => (
+        {BOTTOM_MENUS.map(({ text, to, icon }) => (
           <BottomNavigationAction
             key={text}
             value={to}

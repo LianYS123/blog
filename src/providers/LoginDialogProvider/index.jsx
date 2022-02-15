@@ -17,6 +17,7 @@ import { encrypt } from "utils";
 import { appSlice } from "models/app";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "notistack";
+import { useHistory } from "react-router-dom";
 
 const Context = createContext({
   visible: false,
@@ -31,6 +32,7 @@ export const useLoginDialog = () => {
 
 export default function LoginDialogProvider({ children }) {
   const [visible, setVisible] = useState(false);
+  const history = useHistory();
   const [props, setProps] = useState({});
   const { tip = "" } = props;
   const open = (props = {}) => {
@@ -68,9 +70,10 @@ export default function LoginDialogProvider({ children }) {
       const { data: token, success, code, message } = result;
 
       if (success) {
-        localStorage.setItem("acc", token);
+        // localStorage.setItem("acc", token);
         dispatch(appSlice.actions.setToken(token));
         close();
+        history.go(0); // 重新加载页面
       } else if (code === 1011002) {
         enqueueSnackbar("账号或密码错误");
       } else {
