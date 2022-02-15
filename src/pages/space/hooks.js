@@ -34,7 +34,7 @@ export const useUserFormik = (extra = {}) => {
     email: yup.string("请输入邮箱").email(),
     sex: yup.number().required("请选择性别"),
     phone: yup
-      .string()
+      .string("请输入手机号")
       .matches(/1\d{10}/, "手机号格式不正确")
       .required("请输入手机号"),
     birthday: yup.date()

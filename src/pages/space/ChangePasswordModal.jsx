@@ -13,6 +13,7 @@ import { useMutation } from "hooks";
 import * as yup from "yup";
 import { useSnackbar } from "notistack";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { getCommonFieldProps } from "utils";
 
 // 修改密码弹出框
 export const ChangePasswordModal = ({ close, visible }) => {
@@ -62,42 +63,27 @@ export const ChangePasswordModal = ({ close, visible }) => {
         <DialogContent>
           <TextField
             type="password"
-            name="password"
             fullWidth
             margin="dense"
             variant="standard"
             label="密码"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.password && !!formik.errors.password}
-            helperText={formik.touched.password && formik.errors.password}
+            {...getCommonFieldProps("password", formik)}
           />
           <TextField
             type="password"
-            name="newPassword"
             fullWidth
             margin="dense"
             variant="standard"
             label="新密码"
-            value={formik.values.newPassword}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.newPassword && !!formik.errors.newPassword}
-            helperText={formik.touched.newPassword && formik.errors.newPassword}
+            {...getCommonFieldProps("newPassword", formik)}
           />
           <TextField
             type="password"
-            name="confirm"
             fullWidth
             margin="dense"
             variant="standard"
             label="确认密码"
-            value={formik.values.confirm}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.confirm && !!formik.errors.confirm}
-            helperText={formik.touched.confirm && formik.errors.confirm}
+            {...getCommonFieldProps("confirm", formik)}
           />
         </DialogContent>
         <DialogActions>

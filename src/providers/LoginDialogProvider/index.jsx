@@ -13,7 +13,7 @@ import * as yup from "yup";
 import { USER_LOGIN } from "services/auth";
 import { useMutation } from "hooks";
 import { useDispatch } from "react-redux";
-import { encrypt } from "utils";
+import { encrypt, getCommonFieldProps } from "utils";
 import { appSlice } from "models/app";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "notistack";
@@ -73,7 +73,7 @@ export default function LoginDialogProvider({ children }) {
         // localStorage.setItem("acc", token);
         dispatch(appSlice.actions.setToken(token));
         close();
-        history.go(0); // 重新加载页面
+        // history.go(0); // 重新加载页面
       } else if (code === 1011002) {
         enqueueSnackbar("账号或密码错误");
       } else {
@@ -91,30 +91,18 @@ export default function LoginDialogProvider({ children }) {
             {tip && <DialogContentText>{tip}</DialogContentText>}
             <TextField
               margin="dense"
-              name="account"
               fullWidth
               variant="standard"
               label="账号"
-              value={formik.values.account}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.account && !!formik.errors.account}
-              helperText={formik.touched.account && formik.errors.account}
-              placeholder="请输入账号"
+              {...getCommonFieldProps("account", formik)}
             />
             <TextField
               margin="dense"
-              name="password"
               type="password"
               fullWidth
               variant="standard"
               label="密码"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.password && !!formik.errors.password}
-              helperText={formik.touched.password && formik.errors.password}
-              placeholder="请输入密码"
+              {...getCommonFieldProps("password", formik)}
             />
           </DialogContent>
           <DialogActions>

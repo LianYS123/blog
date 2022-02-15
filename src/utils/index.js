@@ -102,3 +102,15 @@ export const getSummary = (text, count = 200) => {
   }
   return resultStr;
 };
+
+// 获取表单组件通用属性
+export const getCommonFieldProps = (name, formik) => {
+  return {
+    name,
+    value: formik.values[name],
+    onChange: formik.handleChange,
+    onBlur: formik.handleBlur,
+    error: formik.touched[name] && !!formik.errors[name],
+    helperText: formik.touched[name] && formik.errors[name]
+  };
+};

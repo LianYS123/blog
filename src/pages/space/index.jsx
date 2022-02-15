@@ -19,6 +19,7 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
+import { getCommonFieldProps } from "utils";
 
 const Space = () => {
   const [visible, setVisible] = useState(false); // 修改密码的弹出框状态
@@ -42,27 +43,17 @@ const Space = () => {
         <form onSubmit={formik.handleSubmit}>
           <Stack spacing={2}>
             <TextField
-              name="nickName"
               fullWidth
               variant="standard"
               label="昵称"
-              value={formik.values.nickName}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.nickName && !!formik.errors.nickName}
-              helperText={formik.touched.nickName && formik.errors.nickName}
+              {...getCommonFieldProps("nickName", formik)}
             />
 
             <TextField
-              name="email"
               fullWidth
               variant="standard"
               label="邮箱"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.email && !!formik.errors.email}
-              helperText={formik.touched.email && formik.errors.email}
+              {...getCommonFieldProps("email", formik)}
             />
 
             <TextField
@@ -70,23 +61,14 @@ const Space = () => {
               fullWidth
               variant="standard"
               label="手机"
-              value={formik.values.phone}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.phone && !!formik.errors.phone}
-              helperText={formik.touched.phone && formik.errors.phone}
+              {...getCommonFieldProps("phone", formik)}
             />
 
             <TextField
-              name="tel"
               fullWidth
               variant="standard"
               label="电话"
-              value={formik.values.tel}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.tel && !!formik.errors.tel}
-              helperText={formik.touched.tel && formik.errors.tel}
+              {...getCommonFieldProps("tel", formik)}
             />
             <div>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
