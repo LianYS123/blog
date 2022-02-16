@@ -98,7 +98,7 @@ const ArticleList = () => {
       {list.length ? (
         <Masonry
           style={{ margin: upSM ? undefined : 0 }}
-          columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
+          columns={{ xs: 1, sm: 2 }}
           spacing={2}
         >
           {list.map(it => (

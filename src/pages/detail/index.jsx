@@ -11,7 +11,7 @@ import {
 } from "services/article";
 import { getHtmlAndOutline } from "./utils";
 import { useSelector } from "react-redux";
-import { Box, Chip } from "@mui/material";
+import { Box, Chip, Container } from "@mui/material";
 
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
@@ -106,7 +106,7 @@ function Detail() {
   return (
     <div>
       <AppTitle title={y < 36 ? "" : articleName || "文章详情"} back={true} />
-      <div className="container py-4 pt-14">
+      <Container className="pt-14 px-4">
         <Spin className="w-full" spinning={loading}>
           <div className="relative mb-8">
             {/* 标题 */}
@@ -148,8 +148,8 @@ function Detail() {
                   ariaLabel="操作"
                   sx={{
                     position: "absolute",
-                    bottom: { xs: 64, sm: 16 },
-                    right: 16
+                    bottom: 64,
+                    right: { xs: 16, sm: 64 }
                   }}
                   icon={<SpeedDialIcon />}
                 >
@@ -182,7 +182,7 @@ function Detail() {
             </div>
           </div>
         </Spin>
-      </div>
+      </Container>
     </div>
   );
 }

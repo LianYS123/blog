@@ -25,7 +25,10 @@ export default function CardArticle({
   const history = useHistory();
 
   return (
-    <Card onClick={() => history.push(routers.DETAIL.replace(":id", id))}>
+    <Card
+      className="cursor-pointer"
+      onClick={() => history.push(routers.DETAIL.replace(":id", id))}
+    >
       <CardHeader
         title={articleName}
         avatar={

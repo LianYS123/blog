@@ -3,6 +3,7 @@ import { ChangePasswordModal } from "./ChangePasswordModal";
 import { ChangeAvatar } from "./ChangeAvatar";
 import {
   Button,
+  Container,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -28,7 +29,7 @@ const Space = () => {
   const formik = useUserFormik({ birthday });
 
   return (
-    <div className="mx-auto py-8 px-2 w-full" style={{ maxWidth: 800 }}>
+    <Container className="mx-auto max-w-3xl">
       <div className="text-center">
         <div className="flex justify-center">
           <ChangeAvatar />
@@ -112,9 +113,8 @@ const Space = () => {
           </Stack>
         </form>
       </Paper>
-
       <ChangePasswordModal visible={visible} close={() => setVisible(false)} />
-    </div>
+    </Container>
   );
 };
 

@@ -43,7 +43,7 @@ export const PROJECT_ITEMS = [
     title: "React 项目脚手架",
     description:
       "个人维护的React最佳实践脚手架, 技术栈：webpack + react + antd + dva + tailwind + eslint",
-    img: "https://blog-1259462774.cos.ap-shanghai.myqcloud.com/illustrations/%E7%AA%97.svg",
+    img: "https://blog-1259462774.cos.ap-shanghai.myqcloud.com/illustrations/%E7%A8%8B%E5%BA%8F.svg",
     // web: "https://lianys.fun",
     github: "https://github.com/LianYS123/project-template"
     // article: "https://lianys.fun/pages/detail/5"
