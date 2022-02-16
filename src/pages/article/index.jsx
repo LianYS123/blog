@@ -8,6 +8,7 @@ import { parse, stringify } from "query-string";
 import routers from "routers";
 import { useHistory } from "react-router-dom";
 import { Chip, TextField } from "@mui/material";
+import CardArticle from "./CardArticle";
 
 const ArticleList = () => {
   const { search: searchStr } = useLocation();
@@ -91,11 +92,16 @@ const ArticleList = () => {
       <div className="space-y-3 mb-4">
         <SkeletonList loading={loadingFirstPage} />
         {list.map(it => (
-          <Article
+          <CardArticle
             handleTagClick={tag => handleTagClick(tag)}
             key={it.id}
             {...it}
           />
+          // <Article
+          //   handleTagClick={tag => handleTagClick(tag)}
+          //   key={it.id}
+          //   {...it}
+          // />
         ))}
         <SkeletonList loading={loadingMore} />
       </div>
