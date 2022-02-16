@@ -1,14 +1,20 @@
 import React, { useState } from "react";
 import { useFetchList } from "hooks";
-import { Article } from "./Article";
 import { ARTICLE_LIST } from "services/article";
 import { SkeletonList } from "components/skeleton";
 import { useLocation } from "react-router-dom";
 import { parse, stringify } from "query-string";
 import routers from "routers";
 import { useHistory } from "react-router-dom";
-import { Chip, TextField } from "@mui/material";
+import {
+  Chip,
+  Container,
+  TextField,
+  useMediaQuery,
+  useTheme
+} from "@mui/material";
 import CardArticle from "./CardArticle";
+import Masonry from "@mui/lab/Masonry";
 
 const ArticleList = () => {
   const { search: searchStr } = useLocation();
@@ -16,6 +22,8 @@ const ArticleList = () => {
   // const [keyword, setKeyword] = useState(initialKeyword);
   const [tags, setTags] = useState([]);
   const history = useHistory();
+  const theme = useTheme();
+  const upSM = useMediaQuery(theme.breakpoints.up("sm"));
 
   const {
     list = [],
@@ -46,7 +54,7 @@ const ArticleList = () => {
   };
 
   return (
-    <div className="py-4 md:pb-16 container">
+    <Container>
       <div className="mb-2 flex justify-between">
         <div>
           {keyword ? (
@@ -71,41 +79,40 @@ const ArticleList = () => {
         </div>
       </div>
       {tags?.length ? (
-        <div className="mb-2 flex items-center">
-          <span className="text-sm font-light mr-2">标签:</span>
-          <div className="flex">
-            {tags.map(tag => (
-              <Chip
-                size="small"
-                className="mr-1"
-                onDelete={() => handleTagClose(tag)}
-                key={tag}
-                label={tag}
-              />
-            ))}
-          </div>
+        <div className="flex">
+          {tags.map(tag => (
+            <Chip
+              size="small"
+              className="mr-1"
+              onDelete={() => handleTagClose(tag)}
+              key={tag}
+              label={tag}
+            />
+          ))}
         </div>
       ) : (
         []
       )}
 
-      <div className="space-y-3 mb-4">
-        <SkeletonList loading={loadingFirstPage} />
-        {list.map(it => (
-          <CardArticle
-            handleTagClick={tag => handleTagClick(tag)}
-            key={it.id}
-            {...it}
-          />
-          // <Article
-          //   handleTagClick={tag => handleTagClick(tag)}
-          //   key={it.id}
-          //   {...it}
-          // />
-        ))}
-        <SkeletonList loading={loadingMore} />
-      </div>
-    </div>
+      <SkeletonList loading={loadingFirstPage} />
+      {list.length ? (
+        <Masonry
+          style={{ margin: upSM ? undefined : 0 }}
+          columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
+          spacing={2}
+        >
+          {list.map(it => (
+            <CardArticle
+              handleTagClick={tag => handleTagClick(tag)}
+              key={it.id}
+              {...it}
+            />
+          ))}
+        </Masonry>
+      ) : null}
+
+      <SkeletonList loading={loadingMore} />
+    </Container>
   );
 };
 export default ArticleList;
