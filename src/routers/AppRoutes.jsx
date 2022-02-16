@@ -15,6 +15,7 @@ import Space from "pages/space";
 import Essay from "pages/essay";
 import NotFound from "pages/404";
 import Login from "pages/login";
+import About from "pages/about";
 
 const APP_ROUTES = [
   {
@@ -52,6 +53,10 @@ const APP_ROUTES = [
       {
         path: routers.ESSAY,
         component: Essay
+      },
+      {
+        path: routers.ABOUT,
+        component: About
       },
       {
         path: routers.NOT_FOUND,
