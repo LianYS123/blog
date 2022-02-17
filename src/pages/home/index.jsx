@@ -1,5 +1,6 @@
 import {
   Card,
+  CardActionArea,
   CardActions,
   CardContent,
   CardHeader,
@@ -15,31 +16,42 @@ import React from "react";
 import Masonry from "@mui/lab/Masonry";
 import { Article as ArticleIcon, GitHub, Web } from "@mui/icons-material";
 import { PROJECT_ITEMS } from "./config";
+import { useHistory } from "react-router-dom";
+import routers from "routers";
 
 const Home = () => {
   const theme = useTheme();
   const upSM = useMediaQuery(theme.breakpoints.up("sm"));
+  const history = useHistory();
 
   return (
     <Container>
       {/* 项目列表 */}
       <Masonry
         style={{ margin: upSM ? undefined : 0 }}
-        columns={{ xs: 1, sm: 2, md: 4 }}
+        columns={{ xs: 1, sm: 2, md: 3 }}
         spacing={2}
       >
         {PROJECT_ITEMS.map((item, index) => (
           <Card key={index}>
-            <CardHeader title={item.title} subheader={item.subTitle} />
-            <CardMedia
-              component="img"
-              alt={item.title}
-              height="164"
-              src={item.img}
-            />
-            <CardContent>
-              <Typography variant="body2">{item.description}</Typography>
-            </CardContent>
+            <CardActionArea
+              onClick={() => {
+                if (item.articleId) {
+                  history.push(routers.DETAIL.replace(":id", item.articleId));
+                }
+              }}
+            >
+              <CardHeader title={item.title} subheader={item.subTitle} />
+              <CardMedia
+                component="img"
+                alt={item.title}
+                height="164"
+                src={item.img}
+              />
+              <CardContent>
+                <Typography variant="body2">{item.description}</Typography>
+              </CardContent>
+            </CardActionArea>
             <CardActions>
               {item.github && (
                 <Tooltip title="Github">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Anchor, Empty, Spin, Typography } from "@douyinfe/semi-ui";
 
 import { useHistory, useParams } from "react-router";
@@ -11,7 +11,7 @@ import {
 } from "services/article";
 import { getHtmlAndOutline } from "./utils";
 import { useSelector } from "react-redux";
-import { Box, Chip, Container } from "@mui/material";
+import { Box, Chip, Collapse, Container } from "@mui/material";
 
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
@@ -19,7 +19,8 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { Edit, Delete, SyncAlt } from "@mui/icons-material";
 import { useAlertDialog } from "providers/AlertDialogProvider";
 import { AppTitle } from "components/appTitle";
-import { useWindowScroll } from "react-use";
+import { usePrevious, useWindowScroll } from "react-use";
+import { useScrollDistance } from "hooks";
 
 const { Link } = Anchor;
 
@@ -34,6 +35,7 @@ function Detail() {
 
   const history = useHistory();
   const { y } = useWindowScroll();
+  // const { downDis } = useScrollDistance();
 
   // 请求文章详情
   const { data, loading } = useRequest({
@@ -105,8 +107,11 @@ function Detail() {
 
   return (
     <div>
-      <AppTitle title={y < 36 ? "" : articleName || "文章详情"} back={true} />
-      <Container className="pt-14 px-4">
+      <AppTitle
+        title={y < 36 ? "" : articleName || "文章详情"}
+        back={routers.ARTICLE_LIST}
+      />
+      <Container className="px-4 pt-14">
         <Spin className="w-full" spinning={loading}>
           <div className="relative mb-8">
             {/* 标题 */}

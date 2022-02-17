@@ -8,7 +8,7 @@ import {
 } from "react";
 import isEqual from "fast-deep-equal";
 
-import { useWindowScroll, useWindowSize } from "react-use";
+import { usePrevious, useWindowScroll, useWindowSize } from "react-use";
 import { getDocHeight } from "utils";
 
 /**
@@ -145,4 +145,48 @@ export const useIsBottom = (dis = 0) => {
   const { y } = useWindowScroll();
   const { height } = useWindowSize();
   return y + height + dis >= getDocHeight();
+};
+
+/**
+ * 监听屏幕指定方向的滚动距离（方向改变时重置为0）
+ */
+export const useScrollDistance = () => {
+  const { y } = useWindowScroll();
+  const startUpPos = useRef(y); // 向上滚动开始位置
+  const startDownPos = useRef(y); // 向下滚动开始位置
+  const preY = usePrevious(y);
+  const upDis = startUpPos.current - y; // 向上滚动了多远
+  const downDis = y - startDownPos.current; // 向下滚动了多远
+
+  const realIsUp = y < preY; // 实时的是否向上滚动
+  if (realIsUp) {
+    // 正在向上滚动，实时更新向下滚动的开始位置
+    startDownPos.current = y;
+  } else {
+    startUpPos.current = y;
+  }
+
+  // 以上是实时数据
+  // 根据实时数据计算延迟数据
+  const DISTANCE = 50; // 触发方向改变的距离
+  const startUpPosDelay = useRef(y);
+  const startDownPosDelay = useRef(y);
+
+  if (upDis > DISTANCE) {
+    // 向上滚动了一定距离后
+    startUpPosDelay.current = startUpPos.current;
+  }
+
+  if (downDis > DISTANCE) {
+    startDownPosDelay.current = startDownPos.current;
+  }
+
+  const upDisDelay = startUpPosDelay.current - y; // 向上滚动了多远
+  const downDisDelay = y - startDownPosDelay.current; // 向下滚动了多远
+  // console.log(downDisDelay);
+
+  return {
+    upDis: upDisDelay,
+    downDis: downDisDelay
+  };
 };

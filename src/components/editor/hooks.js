@@ -36,8 +36,8 @@ export const useEditorState = ({ record }) => {
     if (!editorState) {
       return true;
     }
-    const params = getParams();
-    return !params.html || params.html === "<p></p>";
+    const html = editorState.toHTML();
+    return !html || html === "<p></p>";
   };
 
   // 重置输入

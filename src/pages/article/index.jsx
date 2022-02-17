@@ -79,11 +79,10 @@ const ArticleList = () => {
         </div>
       </div>
       {tags?.length ? (
-        <div className="flex">
+        <div className="flex space-x-1">
           {tags.map(tag => (
             <Chip
-              size="small"
-              className="mr-1"
+              className="m-1"
               onDelete={() => handleTagClose(tag)}
               key={tag}
               label={tag}

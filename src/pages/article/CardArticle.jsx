@@ -4,7 +4,13 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { noop } from "lodash";
-import { Avatar, CardHeader, Chip, Tooltip } from "@mui/material";
+import {
+  Avatar,
+  CardActionArea,
+  CardHeader,
+  Chip,
+  Tooltip
+} from "@mui/material";
 import { timestampFormat } from "utils";
 import { FILE_PREVIEW } from "services/app";
 import routers from "routers";
@@ -25,34 +31,32 @@ export default function CardArticle({
   const history = useHistory();
 
   return (
-    <Card
-      className="cursor-pointer"
-      onClick={() => history.push(routers.DETAIL.replace(":id", id))}
-    >
-      <CardHeader
-        title={articleName}
-        avatar={
-          <Tooltip title={authorName}>
-            <Avatar src={`${FILE_PREVIEW}?id=${authorAvatar}`} />
-          </Tooltip>
-        }
-        subheader={timestampFormat(createTime)}
-      />
-
-      {cover ? (
-        <CardMedia component="img" image={cover} alt={articleName} />
-      ) : null}
-
-      <CardContent>
-        <Typography variant="body1" component="div">
-          {summary}
-        </Typography>
-      </CardContent>
-
-      <CardContent
-        onClick={ev => ev.stopPropagation()}
-        className="space-x-1 space-y-1"
+    <Card>
+      <CardActionArea
+        onClick={() => history.push(routers.DETAIL.replace(":id", id))}
       >
+        <CardHeader
+          title={articleName}
+          avatar={
+            <Tooltip title={authorName}>
+              <Avatar src={`${FILE_PREVIEW}?id=${authorAvatar}`} />
+            </Tooltip>
+          }
+          subheader={timestampFormat(createTime)}
+        />
+
+        {cover ? (
+          <CardMedia component="img" image={cover} alt={articleName} />
+        ) : null}
+
+        <CardContent>
+          <Typography variant="body1" component="div">
+            {summary}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+
+      <CardContent className="space-x-1 space-y-1">
         {tagArr.map(tag => (
           <Chip
             // size="small"

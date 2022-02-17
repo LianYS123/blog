@@ -8,7 +8,8 @@ export const PROJECT_ITEMS = [
     img: "https://blog-1259462774.cos.ap-shanghai.myqcloud.com/%E8%B4%A8%E9%87%8F%E5%B7%A5%E7%A8%8B%E5%B9%B3%E5%8F%B0.svg",
     web: "https://lianys123.github.io/lian-hooks/",
     github: "https://github.com/LianYS123/lian-hooks/",
-    article: "https://lianys.fun/pages/detail/5"
+    article: "https://lianys.fun/pages/detail/5",
+    articleId: 5
   },
   {
     title: "Lian's Space",
@@ -18,7 +19,8 @@ export const PROJECT_ITEMS = [
     img: "https://blog-1259462774.cos.ap-shanghai.myqcloud.com/illustrations/%E6%98%9F%E8%BD%A8.svg",
     web: "https://lianys.fun",
     github: "https://github.com/LianYS123/blog/tree/blog-snowy",
-    article: "https://lianys.fun/pages/detail/5"
+    article: "https://lianys.fun/pages/detail/5",
+    articleId: 5
   },
   {
     title: "Video Recommend",

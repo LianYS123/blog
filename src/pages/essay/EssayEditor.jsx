@@ -89,7 +89,7 @@ export const EssayEditor = ({
             </Button>
           )}
 
-          <Button size="large" onClick={onSubmit}>
+          <Button disabled={isEmpty()} size="large" onClick={onSubmit}>
             {isEdit ? "保存" : "发布"}
           </Button>
         </div>
