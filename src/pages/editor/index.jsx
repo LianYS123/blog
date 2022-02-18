@@ -82,8 +82,8 @@ function Editor() {
 
   // 新增/修改文章
   const [load] = useMutation(id ? EDIT_ARTICLE : ADD_ARTICLE, null, {
-    autoHandleError: true,
-    successMessage: isEdit ? "文章修改成功" : "文章发布成功"
+    autoHandleError: true
+    // successMessage: isEdit ? "文章修改成功" : "文章发布成功"
   });
 
   // 是否是电脑端
