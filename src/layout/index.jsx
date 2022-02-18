@@ -36,7 +36,7 @@ const AppLayout = ({ children }) => {
               copyBody="该网站具有应用程序功能。将其添加到您的主屏幕，以便在全屏和离线时使用它。"
               copyShareButtonLabel="1) 点击 “分享” 按钮"
               copyAddHomeButtonLabel="2) 点击 “添加到主屏幕”"
-              permanentlyHideOnDismiss={false}
+              permanentlyHideOnDismiss={true}
             />
           )}
         </>
