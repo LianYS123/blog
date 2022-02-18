@@ -114,3 +114,11 @@ export const getCommonFieldProps = (name, formik) => {
     helperText: formik.touched[name] && formik.errors[name]
   };
 };
+
+// 是否是iOS设配
+export const isiosDevice = () => {
+  const iOS =
+    typeof navigator !== "undefined" &&
+    /iPad|iPhone|iPod/.test(navigator.userAgent);
+  return iOS;
+};

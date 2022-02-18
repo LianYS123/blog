@@ -8,14 +8,13 @@ import { Divider, IconButton, ListItemButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useHistory, useLocation } from "react-router-dom";
 import { APP_MENUS } from "./config";
+import { isiosDevice } from "utils";
 
 export const SideBarMenuButton = () => {
   const [visible, setVisible] = React.useState(false);
   const history = useHistory();
   const { pathname } = useLocation();
-  const iOS =
-    typeof navigator !== "undefined" &&
-    /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const iOS = isiosDevice();
 
   return (
     <React.Fragment>
