@@ -111,9 +111,9 @@ function Detail() {
         title={y < 36 ? "" : articleName || "文章详情"}
         back={routers.ARTICLE_LIST}
       />
-      <Container className="px-4 pt-14">
+      <Container className="pt-14">
         <Spin className="w-full" spinning={loading}>
-          <div className="relative mb-8">
+          <div className="relative px-8 mb-8">
             {/* 标题 */}
             <div className="mb-2">
               <Typography.Title>{articleName}</Typography.Title>
