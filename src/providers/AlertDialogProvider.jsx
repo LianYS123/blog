@@ -25,7 +25,7 @@ export default function AlertDialogProvider({ children }) {
   const [props, setProps] = useState({});
   const [loading, setLoading] = useState(false);
   const {
-    title = "",
+    title = "提示",
     content = "",
     okText = "确认",
     cancleText = "取消",

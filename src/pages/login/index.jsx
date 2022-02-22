@@ -112,7 +112,8 @@ export default function Login() {
             fullWidth
             sx={{ py: 1, fontSize: 15 }}
             disabled={loading}
-            // onClick={formik.handleSubmit}
+            loading={loading}
+            onClick={formik.handleSubmit}
           >
             登录
           </LoadingButton>
