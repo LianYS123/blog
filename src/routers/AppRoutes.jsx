@@ -31,13 +31,13 @@ const APP_ROUTES = [
     component: Editor
   },
   {
+    path: routers.LOGIN,
+    component: Login
+  },
+  {
     path: "/pages",
     component: AppLayout,
     children: [
-      {
-        path: routers.LOGIN,
-        component: Login
-      },
       {
         path: routers.HOME,
         component: Home

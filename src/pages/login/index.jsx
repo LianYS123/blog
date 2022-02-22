@@ -1,78 +1,123 @@
 import React from "react";
-import { useMutation } from "hooks";
-import routers from "routers";
-import { useHistory } from "react-router";
-import { FormattedMessage } from "react-intl";
-import { Button, Form } from "@douyinfe/semi-ui";
-import { useDispatch } from "react-redux";
-import { appSlice } from "models/app";
-import { encrypt } from "utils";
-import { USER_LOGIN } from "services/auth";
-import { useLocation } from "react-use";
-import { parse } from "query-string";
+import TextField from "@mui/material/TextField";
 
-const Login = () => {
-  const [submit, { loading }] = useMutation(USER_LOGIN);
-  const dispatch = useDispatch();
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { USER_LOGIN } from "services/auth";
+import { useMutation } from "hooks";
+import { useDispatch } from "react-redux";
+import { encrypt, getCommonFieldProps } from "utils";
+import { appSlice } from "models/app";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { useSnackbar } from "notistack";
+import { useHistory } from "react-router-dom";
+import {
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Container,
+  Typography
+} from "@mui/material";
+import { useLocation } from "react-router-dom";
+import routers from "routers";
+import LogoWithText from "./LogoWithText";
+import Logo from "./Logo";
+
+/**
+ * 登录页
+ */
+export default function Login() {
   const history = useHistory();
   const { search } = useLocation();
+  const redirect = new URLSearchParams(search).get("redirect");
+  const { enqueueSnackbar } = useSnackbar();
 
-  const handleLogin = async values => {
-    // history.push(routers.HOME);
-    values.password = encrypt(values.password); // 加密
-    const result = await submit(values);
-    const { data: token, userInfos, success } = result;
+  // 登录
+  const [submit, { loading }] = useMutation(USER_LOGIN);
+  const dispatch = useDispatch();
 
-    if (success) {
-      localStorage.setItem("acc", token);
-      dispatch(appSlice.actions.setToken(token));
-      const { redirect } = parse(search);
-      if (redirect) {
-        history.push(redirect);
+  const validationSchema = yup.object({
+    account: yup.string("请输入账号").required("请输入账号"),
+    password: yup
+      .string("请输入密码")
+      .min(6, "密码长度必须大于6位")
+      .max(20, "密码长度必须小于20位")
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      account: "",
+      password: ""
+    },
+    validationSchema,
+    onSubmit: async _values => {
+      const values = { ..._values };
+      values.password = encrypt(values.password); // 加密
+      const result = await submit(values);
+      const { data: token, success, code, message } = result;
+
+      if (success) {
+        dispatch(appSlice.actions.setToken(token));
+        if (redirect) {
+          history.push(redirect);
+        } else {
+          history.push(routers.HOME);
+        }
+      } else if (code === 1011002) {
+        enqueueSnackbar("账号或密码错误");
       } else {
-        history.push(routers.HOME);
+        enqueueSnackbar(message);
       }
     }
-  };
+  });
 
   return (
-    <Form
-      labelAlign="right"
-      labelCol={{ span: 6 }}
-      labelPosition="left"
-      className="w-96 px-4 mt-48 mx-auto"
-      onSubmit={handleLogin}
-    >
-      <div className="text-center text-lg">
-        <FormattedMessage id="WEBSITE_NAME" />
-      </div>
-      <Form.Input
-        field="account"
-        label="用户名"
-        rules={[{ required: true }]}
-        size="large"
-        placeholder="请输入用户名"
-      />
-      <Form.Input
-        type="password"
-        field="password"
-        label="密码"
-        rules={[{ required: true }]}
-        size="large"
-        placeholder="请输入密码"
-      />
+    <Container sx={{ overflow: "auto", py: 2 }}>
+      <Box className="flex items-center cursor-pointer">
+        <Logo onClick={() => history.push(routers.HOME)} width="80" />
+        <Typography
+          onClick={() => history.push(routers.HOME)}
+          variant="h6"
+          className="font-extrabold"
+          style={{ transform: "translateY(-2px)" }}
+        >
+          Lian's Space
+        </Typography>
+      </Box>
 
-      <Button
-        loading={loading}
-        block
-        size="large"
-        htmlType="submit"
-        type="primary"
-      >
-        登录
-      </Button>
-    </Form>
+      <Box className="flex justify-center">
+        <LogoWithText style={{ width: 200 }} />
+      </Box>
+      <Card className="mt-5 mx-auto" sx={{ maxWidth: 512 }}>
+        <CardHeader title="登录"></CardHeader>
+        <CardContent>
+          <TextField
+            fullWidth
+            variant="standard"
+            label="账号"
+            {...getCommonFieldProps("account", formik)}
+          />
+          <TextField
+            type="password"
+            fullWidth
+            variant="standard"
+            label="密码"
+            {...getCommonFieldProps("password", formik)}
+          />
+        </CardContent>
+        <CardActions>
+          <LoadingButton
+            fullWidth
+            sx={{ py: 1, fontSize: 15 }}
+            disabled={loading}
+            // onClick={formik.handleSubmit}
+          >
+            登录
+          </LoadingButton>
+        </CardActions>
+      </Card>
+    </Container>
   );
-};
-
-export default Login;
+}
