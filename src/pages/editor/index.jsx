@@ -107,7 +107,7 @@ function Editor() {
 
     const { success, data } = await load({ ...params, articleName, tags });
     if (success) {
-      history.push(routers.ARTICLE_LIST);
+      history.replace(routers.DETAIL.replace(":id", data));
     }
   };
 

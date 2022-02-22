@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { Anchor, Empty, Spin, Typography } from "@douyinfe/semi-ui";
 
 import { useHistory, useParams } from "react-router";
@@ -11,7 +11,7 @@ import {
 } from "services/article";
 import { getHtmlAndOutline } from "./utils";
 import { useSelector } from "react-redux";
-import { Box, Chip, Collapse, Container } from "@mui/material";
+import { Chip, Container } from "@mui/material";
 
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
@@ -19,8 +19,7 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { Edit, Delete, SyncAlt } from "@mui/icons-material";
 import { useAlertDialog } from "providers/AlertDialogProvider";
 import { AppTitle } from "components/appTitle";
-import { usePrevious, useWindowScroll } from "react-use";
-import { useScrollDistance } from "hooks";
+import { useWindowScroll } from "react-use";
 
 const { Link } = Anchor;
 
@@ -112,7 +111,7 @@ function Detail() {
         back={routers.ARTICLE_LIST}
       />
       <Spin className="w-full" spinning={loading}>
-        <div className="relative px-4 mb-8">
+        <div className="relative px-4 pb-8">
           {/* 标题 */}
           <div className="mb-2">
             <Typography.Title>{articleName}</Typography.Title>
