@@ -73,7 +73,7 @@ export const UserAvatar = () => {
           )}
         </span>
       ) : (
-        <ButtonBase onClick={() => openLoginDialog()}>登录</ButtonBase>
+        <ButtonBase onClick={handleJumpToLogin}>登录</ButtonBase>
       )}
       <Menu
         open={!!anchorEl}

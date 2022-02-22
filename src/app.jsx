@@ -35,6 +35,9 @@ const App = () => {
         theme={createTheme({
           palette: {
             mode: theme // Switching the dark mode on is a single property value change.
+            // primary: {
+            //   main: "#3c53ca"
+            // }
           }
         })}
       >

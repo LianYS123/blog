@@ -18,12 +18,14 @@ import {
   CardContent,
   CardHeader,
   Container,
+  Stack,
   Typography
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import routers from "routers";
 import LogoWithText from "./LogoWithText";
 import Logo from "./Logo";
+import LoginDraw from "./LoginDraw";
 
 /**
  * 登录页
@@ -75,6 +77,7 @@ export default function Login() {
 
   return (
     <Container sx={{ overflow: "auto", py: 2 }}>
+      {/* header */}
       <Box className="flex items-center cursor-pointer">
         <Logo onClick={() => history.push(routers.HOME)} width="80" />
         <Typography
@@ -87,38 +90,66 @@ export default function Login() {
         </Typography>
       </Box>
 
-      <Box className="flex justify-center">
-        <LogoWithText style={{ width: 200 }} />
-      </Box>
-      <Card className="mt-5 mx-auto" sx={{ maxWidth: 512 }}>
-        <CardHeader title="登录"></CardHeader>
-        <CardContent>
-          <TextField
-            fullWidth
-            variant="standard"
-            label="账号"
-            {...getCommonFieldProps("account", formik)}
-          />
-          <TextField
-            type="password"
-            fullWidth
-            variant="standard"
-            label="密码"
-            {...getCommonFieldProps("password", formik)}
-          />
-        </CardContent>
-        <CardActions>
+      {/* 登录卡片 */}
+      <Box
+        className="flex justify-center rounded-xl shadow overflow-hidden mx-auto mt-16 md:mt-8"
+        sx={{
+          width: { sx: "auto", md: 720 },
+          height: { sx: "auto", md: 510 }
+        }}
+      >
+        {/* 左边的插画 */}
+        <Box
+          sx={{
+            flex: 1,
+            backgroundColor: "primary.main",
+            p: 4,
+            display: { xs: "none", md: "flex" },
+            alignItems: "center"
+          }}
+        >
+          <LoginDraw className="w-full" />
+        </Box>
+        {/* right */}
+        <Box
+          sx={{
+            flex: 1,
+            p: 4,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center"
+          }}
+        >
+          <Box className="flex justify-center">
+            <LogoWithText style={{ width: 160 }} />
+          </Box>
+          <Stack spacing={2}>
+            <TextField
+              fullWidth
+              variant="standard"
+              label="账号"
+              {...getCommonFieldProps("account", formik)}
+            />
+            <TextField
+              type="password"
+              fullWidth
+              variant="standard"
+              label="密码"
+              {...getCommonFieldProps("password", formik)}
+            />
+          </Stack>
           <LoadingButton
+            variant="contained"
             fullWidth
-            sx={{ py: 1, fontSize: 15 }}
+            sx={{ py: 1, fontSize: 15, mt: 2 }}
             disabled={loading}
             loading={loading}
             onClick={formik.handleSubmit}
           >
             登录
           </LoadingButton>
-        </CardActions>
-      </Card>
+        </Box>
+      </Box>
     </Container>
   );
 }
