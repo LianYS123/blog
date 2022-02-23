@@ -15,14 +15,19 @@ import {
 import React from "react";
 import Masonry from "@mui/lab/Masonry";
 import { Article as ArticleIcon, GitHub, Web } from "@mui/icons-material";
-import { PROJECT_ITEMS } from "./config";
 import { useHistory } from "react-router-dom";
 import routers from "routers";
+import { useRequest } from "hooks";
+import { PROJECT_LIST } from "services/project";
 
 const Home = () => {
   const theme = useTheme();
   const upSM = useMediaQuery(theme.breakpoints.up("sm"));
   const history = useHistory();
+  const { data: projectItems = [] } = useRequest({
+    service: PROJECT_LIST,
+    initialData: []
+  });
 
   return (
     <Container className="pt-2 md:pt-6">
@@ -32,7 +37,7 @@ const Home = () => {
         columns={{ xs: 1, sm: 2, md: 3 }}
         spacing={2}
       >
-        {PROJECT_ITEMS.map((item, index) => (
+        {projectItems.map((item, index) => (
           <Card key={index}>
             <CardActionArea
               onClick={() => {
@@ -52,6 +57,7 @@ const Home = () => {
                 <Typography variant="body2">{item.description}</Typography>
               </CardContent>
             </CardActionArea>
+            {/* 操作栏 */}
             <CardActions>
               {item.github && (
                 <Tooltip title="Github">
@@ -67,9 +73,12 @@ const Home = () => {
                   </IconButton>
                 </Tooltip>
               )}
-              {item.article && (
+              {item.articleId && (
                 <Tooltip title="文章">
-                  <IconButton target="_blank" href={item.article}>
+                  <IconButton
+                    target="_blank"
+                    href={routers.DETAIL.replace(":id", item.articleId)}
+                  >
                     <ArticleIcon />
                   </IconButton>
                 </Tooltip>
