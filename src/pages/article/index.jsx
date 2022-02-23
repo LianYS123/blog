@@ -7,6 +7,7 @@ import { parse, stringify } from "query-string";
 import routers from "routers";
 import { useHistory } from "react-router-dom";
 import {
+  Box,
   Chip,
   Container,
   TextField,
@@ -78,20 +79,22 @@ const ArticleList = () => {
           />
         </div>
       </div>
-      {tags?.length ? (
-        <div className="flex space-x-1">
-          {tags.map(tag => (
-            <Chip
-              className="m-1"
-              onDelete={() => handleTagClose(tag)}
-              key={tag}
-              label={tag}
-            />
-          ))}
-        </div>
-      ) : (
-        []
-      )}
+      <Box sx={{ mb: 1 }}>
+        {tags?.length ? (
+          <div className="flex space-x-1">
+            {tags.map(tag => (
+              <Chip
+                className="m-1"
+                onDelete={() => handleTagClose(tag)}
+                key={tag}
+                label={tag}
+              />
+            ))}
+          </div>
+        ) : (
+          []
+        )}
+      </Box>
 
       <SkeletonList loading={loadingFirstPage} />
       {list.length ? (

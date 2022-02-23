@@ -54,19 +54,22 @@ export default function CardArticle({
             {summary}
           </Typography>
         </CardContent>
+        <CardContent className="space-x-1">
+          {tagArr.map(tag => (
+            <Chip
+              // size="small"
+              className="cursor-pointer"
+              onClick={ev => {
+                // ev.preventDefault();
+                ev.stopPropagation();
+                handleTagClick(tag);
+              }}
+              key={tag}
+              label={tag}
+            />
+          ))}
+        </CardContent>
       </CardActionArea>
-
-      <CardContent className="space-x-1 space-y-1">
-        {tagArr.map(tag => (
-          <Chip
-            // size="small"
-            className="cursor-pointer"
-            onClick={() => handleTagClick(tag)}
-            key={tag}
-            label={tag}
-          />
-        ))}
-      </CardContent>
     </Card>
   );
 }
