@@ -72,7 +72,7 @@ function Detail() {
   // 删除文章操作
   const [deleteArticle] = useMutation(DELETE_ARTICLE, null, {
     autoHandleError: true,
-    successMessage: "文章删除成功"
+    successMessage: "文章已删除"
   });
 
   const handleDelete = () => {
@@ -108,7 +108,8 @@ function Detail() {
     <Container className="pt-14">
       <AppTitle
         title={y < 36 ? "" : articleName || "文章详情"}
-        back={routers.ARTICLE_LIST}
+        back={true}
+        // back={routers.ARTICLE_LIST}
       />
       <Spin className="w-full" spinning={loading}>
         <div className="relative px-4 pb-8">

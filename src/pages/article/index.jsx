@@ -54,7 +54,7 @@ const ArticleList = () => {
   };
 
   return (
-    <Container>
+    <Container className="pt-2 md:pt-6">
       <div className="mb-2 flex justify-between">
         <div>
           {keyword ? (

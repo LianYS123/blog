@@ -25,7 +25,7 @@ const Home = () => {
   const history = useHistory();
 
   return (
-    <Container>
+    <Container className="pt-2 md:pt-6">
       {/* 项目列表 */}
       <Masonry
         style={{ margin: upSM ? undefined : 0 }}
