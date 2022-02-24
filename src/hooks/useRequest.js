@@ -1,6 +1,6 @@
 import { useRef } from "react";
+import { useDeepCompareEffect } from "react-use";
 import { useMutation } from "./useMutation";
-import { useDeepCompareEffect } from "./useUtils";
 
 /**
  * @description: 请求方法的简单封装，处理请求的loading状态

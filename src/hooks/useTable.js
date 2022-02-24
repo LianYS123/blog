@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useDeepCompareEffect } from "./useUtils";
+import { useDeepCompareEffect } from "react-use";
 import { useRequest } from "./useRequest";
 
 const defaultFormatter = ({ list = [], total = 1 } = {}) => {
