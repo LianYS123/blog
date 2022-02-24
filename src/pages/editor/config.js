@@ -22,17 +22,19 @@ export const controls = [
   "code",
   "hr",
   "separator",
-  // "link",
+  "link",
   // "clear",
   "media"
 ];
 
 export const simpleControls = [
+  "headings",
   "bold",
   "italic",
   "emoji",
   "underline",
-  "text-indent"
+  "text-indent",
+  "remove-styles"
 ];
 
 export const allTags = [

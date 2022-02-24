@@ -55,7 +55,7 @@ export const EssayEditor = ({
           "emoji",
           "underline",
           "text-indent",
-          "media"
+          "remove-styles"
         ]}
         placeholder={
           isEdit
