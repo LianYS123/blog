@@ -26,10 +26,11 @@ export const UserAvatar = () => {
 
   // 进入登录页,登录成功的重定向地址为当前页
   const handleJumpToLogin = () => {
-    history.push({
-      pathname: routers.LOGIN,
-      search: qs.stringify({ redirect: pathname })
-    });
+    openLoginDialog();
+    // history.push({
+    //   pathname: routers.LOGIN,
+    //   search: qs.stringify({ redirect: pathname })
+    // });
   };
 
   // 登出

@@ -1,6 +1,5 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { BrowserRouter as Router } from "react-router-dom";
 
 import AppLayout from "layout";
 import routers from "./index";
@@ -96,8 +95,7 @@ const AppRoutes = () => {
       </Switch>
     );
   };
-  const routes = renderAppRoutes(APP_ROUTES);
-  return <Router>{routes}</Router>;
+  return renderAppRoutes(APP_ROUTES);
 };
 
 export default AppRoutes;

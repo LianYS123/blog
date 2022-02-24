@@ -70,11 +70,10 @@ export default function LoginDialogProvider({ children }) {
       const { data: token, success, code, message } = result;
 
       if (success) {
-        // localStorage.setItem("acc", token);
         dispatch(appSlice.actions.setToken(token));
         close();
-        // history.go(0); // 重新加载页面
-        location.reload();
+        history.go(0); // 重新加载页面
+        // location.reload();
       } else if (code === 1011002) {
         enqueueSnackbar("账号或密码错误");
       } else {

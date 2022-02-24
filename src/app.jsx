@@ -5,6 +5,7 @@ import store from "models";
 
 import { localMap } from "constants";
 import { Provider, useSelector } from "react-redux";
+import { BrowserRouter as Router } from "react-router-dom";
 
 // 国际化
 import en_US from "locales/en_US";
@@ -26,33 +27,35 @@ const locales = {
 const App = () => {
   const { local, theme } = useSelector(({ app }) => app);
   return (
-    <IntlProvider
-      messages={locales[local]}
-      locale={localMap[local]}
-      defaultLocale="en"
-    >
-      <ThemeProvider
-        theme={createTheme({
-          palette: {
-            mode: theme // Switching the dark mode on is a single property value change.
-            // primary: {
-            //   main: "#3c53ca"
-            // }
-          }
-        })}
+    <Router>
+      <IntlProvider
+        messages={locales[local]}
+        locale={localMap[local]}
+        defaultLocale="en"
       >
-        <SnackbarProvider
-          // anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          maxSnack={3}
+        <ThemeProvider
+          theme={createTheme({
+            palette: {
+              mode: theme // Switching the dark mode on is a single property value change.
+              // primary: {
+              //   main: "#3c53ca"
+              // }
+            }
+          })}
         >
-          <AlertDialogProvider>
-            <LoginDialogProvider>
-              <AppRoutes />
-            </LoginDialogProvider>
-          </AlertDialogProvider>
-        </SnackbarProvider>
-      </ThemeProvider>
-    </IntlProvider>
+          <SnackbarProvider
+            // anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            maxSnack={3}
+          >
+            <AlertDialogProvider>
+              <LoginDialogProvider>
+                <AppRoutes />
+              </LoginDialogProvider>
+            </AlertDialogProvider>
+          </SnackbarProvider>
+        </ThemeProvider>
+      </IntlProvider>
+    </Router>
   );
 };
 
