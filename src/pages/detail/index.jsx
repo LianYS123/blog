@@ -108,7 +108,7 @@ function Detail() {
     <Container className="pt-14">
       <AppTitle
         title={y < 36 ? "" : articleName || "文章详情"}
-        back={true}
+        back={routers.ARTICLE_LIST}
         // back={routers.ARTICLE_LIST}
       />
       <Spin className="w-full" spinning={loading}>
