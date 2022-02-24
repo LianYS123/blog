@@ -10,7 +10,9 @@ const routers = {
 
   USER_SPACE: "/pages/space",
   SETTING: "/pages/setting",
-  ABOUT: "/pages/about"
+  ABOUT: "/pages/about",
+
+  TMP_REDIRECT: "/tmp-redirect"
 };
 
 export default routers;

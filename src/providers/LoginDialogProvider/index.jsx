@@ -11,7 +11,7 @@ import { noop } from "lodash";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { USER_LOGIN } from "services/auth";
-import { useMutation } from "hooks";
+import { useMutation, useRefresh } from "hooks";
 import { useDispatch } from "react-redux";
 import { encrypt, getCommonFieldProps } from "utils";
 import { appSlice } from "models/app";
@@ -33,6 +33,7 @@ export const useLoginDialog = () => {
 export default function LoginDialogProvider({ children }) {
   const [visible, setVisible] = useState(false);
   const history = useHistory();
+  const refresh = useRefresh();
   const [props, setProps] = useState({});
   const { tip = "" } = props;
   const open = (props = {}) => {
@@ -72,7 +73,8 @@ export default function LoginDialogProvider({ children }) {
       if (success) {
         dispatch(appSlice.actions.setToken(token));
         close();
-        history.go(0); // 重新加载页面
+        refresh();
+        // history.go(0); // 重新加载页面
         // location.reload();
       } else if (code === 1011002) {
         enqueueSnackbar("账号或密码错误");

@@ -1,7 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 import { useEffect, useState, useRef, useCallback } from "react";
+import { useHistory } from "react-router-dom";
 
 import { usePrevious, useWindowScroll, useWindowSize } from "react-use";
+import routers from "routers";
 import { getDocHeight } from "utils";
 
 /**
@@ -91,6 +93,7 @@ export const useIsBottom = (dis = 0) => {
 
 /**
  * 监听屏幕指定方向的滚动距离（方向改变时重置为0）
+ * 尚未完成，不要使用
  */
 export const useScrollDistance = () => {
   const { y } = useWindowScroll();
@@ -131,4 +134,24 @@ export const useScrollDistance = () => {
     upDis: upDisDelay,
     downDis: downDisDelay
   };
+};
+
+/**
+ * React Router 刷新当前页
+ * @param {*} redirectPath 临时跳转路由
+ */
+export const useRefresh = (redirectPath = routers.TMP_REDIRECT) => {
+  const history = useHistory();
+  const { pathname } = history.location;
+  let handler;
+  const refresh = () => {
+    history.replace(redirectPath);
+    handler = setTimeout(() => {
+      history.replace(pathname); // 使用闭包的特性，返回旧路由
+    }, 10);
+  };
+  useEffect(() => {
+    return () => handler && clearTimeout(handler);
+  }, [handler]);
+  return refresh;
 };

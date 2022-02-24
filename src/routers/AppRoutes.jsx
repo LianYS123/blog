@@ -68,6 +68,10 @@ const APP_ROUTES = [
     ]
   },
   {
+    path: routers.TMP_REDIRECT, // 临时重定向，用于react-router刷新界面时跳转到该路由再跳回来
+    component: "div"
+  },
+  {
     key: "redirect",
     redirect: routers.HOME
   }
