@@ -2,7 +2,8 @@ import { noop } from "lodash";
 import { appSlice } from "models/app";
 import { useSnackbar } from "notistack";
 import { useLoginDialog } from "providers/LoginDialogProvider";
-import { useState } from "react";
+import { useGlobalProgress } from "providers/ProgressProvider";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getAPIMethod } from "utils/apiUtils";
 import xFetch from "utils/fetch";
@@ -28,6 +29,15 @@ export const useMutation = (service, initialData = {}, config = {}) => {
   const dispatch = useDispatch();
   const { open: openLoginDialog } = useLoginDialog();
 
+  // 全局加载状态
+  const { setProgressVisible } = useGlobalProgress();
+  useEffect(() => {
+    const method = getAPIMethod(service) || config.method;
+    if (method === "GET") {
+      setProgressVisible(loading);
+    }
+  }, [loading]);
+
   const loadData = async (params, config) => {
     try {
       setLoading(true);
@@ -35,10 +45,10 @@ export const useMutation = (service, initialData = {}, config = {}) => {
         typeof service === "function" ? service : xFetch.bind(null, service);
       const res = await request(params, config);
       const { success, code, message } = res;
+      const method = getAPIMethod(service) || config.method;
 
       // 处理操作成功和失败的提示
       if (success) {
-        const method = getAPIMethod(service) || config.method;
         const actionMessageMap = {
           POST: "操作成功",
           PUT: "修改成功",

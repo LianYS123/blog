@@ -16,7 +16,7 @@ import { useMutation } from "./useMutation";
 export const useRequest = ({
   service,
   defaultParams = {},
-  necessaryParams,
+  necessaryParams = {},
   ready = true,
   initialData,
   deps = [],

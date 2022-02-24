@@ -10,7 +10,7 @@ import { useWindowScroll } from "react-use";
 import { useHistory, useLocation } from "react-router-dom";
 import routers from "routers";
 import { APP_MENUS } from "./config";
-import { Button, ButtonBase } from "@mui/material";
+import { ButtonBase } from "@mui/material";
 
 export default function AppHeader() {
   const { y } = useWindowScroll();

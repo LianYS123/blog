@@ -18,6 +18,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import AlertDialogProvider from "providers/AlertDialogProvider";
 import LoginDialogProvider from "providers/LoginDialogProvider";
+import { ProgressProvider } from "providers/ProgressProvider";
 
 const locales = {
   en_US,
@@ -43,16 +44,18 @@ const App = () => {
             }
           })}
         >
-          <SnackbarProvider
-            // anchorOrigin={{ vertical: "top", horizontal: "right" }}
-            maxSnack={3}
-          >
-            <AlertDialogProvider>
-              <LoginDialogProvider>
-                <AppRoutes />
-              </LoginDialogProvider>
-            </AlertDialogProvider>
-          </SnackbarProvider>
+          <ProgressProvider>
+            <SnackbarProvider
+              // anchorOrigin={{ vertical: "top", horizontal: "right" }}
+              maxSnack={3}
+            >
+              <AlertDialogProvider>
+                <LoginDialogProvider>
+                  <AppRoutes />
+                </LoginDialogProvider>
+              </AlertDialogProvider>
+            </SnackbarProvider>
+          </ProgressProvider>
         </ThemeProvider>
       </IntlProvider>
     </Router>
