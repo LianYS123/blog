@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getAPIMethod } from "utils/apiUtils";
 import xFetch from "utils/fetch";
+import useSpinDelay from "./useUtils";
 
 /**
  * @description: 异步方法的简单封装，处理请求的loading状态
@@ -31,12 +32,13 @@ export const useMutation = (service, initialData = {}, config = {}) => {
 
   // 全局加载状态
   const { setProgressVisible } = useGlobalProgress();
+  const loadingDelay = useSpinDelay(loading); // 延迟loading，即在请求未响应0.5s后开始loading
   useEffect(() => {
     const method = getAPIMethod(service) || config.method;
     if (method === "GET") {
-      setProgressVisible(loading);
+      setProgressVisible(loadingDelay);
     }
-  }, [loading]);
+  }, [loadingDelay]);
 
   const loadData = async (params, config) => {
     try {

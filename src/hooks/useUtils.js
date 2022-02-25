@@ -155,3 +155,52 @@ export const useRefresh = (redirectPath = routers.TMP_REDIRECT) => {
   }, [handler]);
   return refresh;
 };
+
+/**
+ * 延迟loading, 参考: https://github.com/smeijer/spin-delay
+ */
+export function useSpinDelay(loading, options) {
+  options = Object.assign(
+    {
+      delay: 500,
+      minDuration: 200
+    },
+    options
+  );
+
+  const [state, setState] = useState("IDLE");
+  const timeout = useRef(null);
+
+  useEffect(() => {
+    if (loading && state === "IDLE") {
+      clearTimeout(timeout.current);
+
+      timeout.current = setTimeout(() => {
+        if (!loading) {
+          return setState("IDLE");
+        }
+
+        timeout.current = setTimeout(() => {
+          setState("EXPIRE");
+        }, options.minDuration);
+
+        setState("DISPLAY");
+      }, options.delay);
+
+      setState("DELAY");
+    }
+
+    if (!loading && state !== "DISPLAY") {
+      clearTimeout(timeout.current);
+      setState("IDLE");
+    }
+  }, [loading, state, options.delay, options.minDuration]);
+
+  useEffect(() => {
+    return () => clearTimeout(timeout.current);
+  }, []);
+
+  return state === "DISPLAY" || state === "EXPIRE";
+}
+
+export default useSpinDelay;
