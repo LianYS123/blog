@@ -1,5 +1,5 @@
-import React from "react";
-import { Anchor, Empty, Spin, Typography } from "@douyinfe/semi-ui";
+import React, { useState } from "react";
+import { Anchor, Empty, Spin } from "@douyinfe/semi-ui";
 
 import { useHistory, useParams } from "react-router";
 import routers from "routers";
@@ -11,15 +11,16 @@ import {
 } from "services/article";
 import { getHtmlAndOutline } from "./utils";
 import { useSelector } from "react-redux";
-import { Chip, Container } from "@mui/material";
+import { Chip, Container, Typography } from "@mui/material";
 
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import { Edit, Delete, SyncAlt } from "@mui/icons-material";
+import { Edit, Delete, SyncAlt, Info, InfoOutlined } from "@mui/icons-material";
 import { useAlertDialog } from "providers/AlertDialogProvider";
 import { AppTitle } from "components/appTitle";
 import { useWindowScroll } from "react-use";
+import { DetailDialog } from "./DetailDialog";
 
 const { Link } = Anchor;
 
@@ -32,6 +33,8 @@ function Detail() {
   const { userInfo, logged } = useSelector(state => state.app);
   const { id: userId } = userInfo; // 用户信息
 
+  const [infoVisible, setVisible] = useState(false); // 文章详情Dialog
+
   const history = useHistory();
   const { y } = useWindowScroll();
   // const { downDis } = useScrollDistance();
@@ -43,7 +46,7 @@ function Detail() {
     ready: !!resourceId && resourceId !== "undefined",
     initialData: { html: "" }
   });
-  const { id, tags, articleName, authorId } = data;
+  const { articleName, authorId, id, tags } = data;
   const tagArr = tags ? tags.split("|") : [];
 
   const isCurrentUser = logged && userId === authorId; // 是否是当前用户
@@ -115,7 +118,7 @@ function Detail() {
         <div className="relative px-4 pb-8">
           {/* 标题 */}
           <div className="mb-2">
-            <Typography.Title>{articleName}</Typography.Title>
+            <Typography variant="h4">{articleName}</Typography>
           </div>
           {/* 标签 */}
           <div>
@@ -164,6 +167,12 @@ function Detail() {
                   // tooltipOpen
                 />
                 <SpeedDialAction
+                  onClick={() => setVisible(true)}
+                  icon={<InfoOutlined />}
+                  tooltipTitle="详细信息"
+                  // tooltipOpen
+                />
+                <SpeedDialAction
                   onClick={handleSyncToMoment}
                   icon={<SyncAlt />}
                   tooltipTitle="同步到随笔"
@@ -186,6 +195,7 @@ function Detail() {
           </div>
         </div>
       </Spin>
+      <DetailDialog visible={infoVisible} setVisible={setVisible} {...data} />
     </Container>
   );
 }

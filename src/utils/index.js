@@ -5,7 +5,7 @@ export const delay = (t = 500) =>
   new Promise(resolve => setTimeout(resolve, t));
 
 export const renderDateTime = time =>
-  time ? dayjs(time * 1000).format("YYYY-MM-DD HH:mm:ss") : null;
+  time ? dayjs(time).format("YYYY-MM-DD HH:mm:ss") : null;
 
 // 显示内容发表时间
 export function timestampFormat(time) {
