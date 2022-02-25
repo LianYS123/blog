@@ -20,6 +20,12 @@ import AlertDialogProvider from "providers/AlertDialogProvider";
 import LoginDialogProvider from "providers/LoginDialogProvider";
 import { ProgressProvider } from "providers/ProgressProvider";
 
+// 字体
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+
 const locales = {
   en_US,
   zh_CN
