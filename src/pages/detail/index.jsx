@@ -1,43 +1,36 @@
 import React, { useState } from "react";
 import { Anchor, Empty, Spin } from "@douyinfe/semi-ui";
 
-import { useHistory, useParams } from "react-router";
+import { useParams } from "react-router";
 import routers from "routers";
-import { useMutation, useRequest } from "hooks";
-import {
-  DELETE_ARTICLE,
-  GET_ARTICLE_DETAIL,
-  SYNC_TO_MOMENT
-} from "services/article";
+import { useRequest } from "hooks";
+import { GET_ARTICLE_DETAIL } from "services/article";
 import { getHtmlAndOutline } from "./utils";
-import { useSelector } from "react-redux";
 import { Chip, Container, Typography } from "@mui/material";
 
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import { Edit, Delete, SyncAlt, Info, InfoOutlined } from "@mui/icons-material";
-import { useAlertDialog } from "providers/AlertDialogProvider";
 import { AppTitle } from "components/appTitle";
 import { useWindowScroll } from "react-use";
 import { DetailDialog } from "./DetailDialog";
+import { DialActions } from "./DialActions";
+import { useSelector } from "react-redux";
 
 const { Link } = Anchor;
+
+// 指定用户是否是当前登录用户
+const useIsCurrentUser = authorId => {
+  const { userInfo, logged } = useSelector(state => state.app);
+  const { id: userId } = userInfo; // 用户信息
+  const isCurrentUser = logged && userId === authorId; // 是否是当前用户
+  return isCurrentUser;
+};
 
 /**
  * 文章详情
  */
 function Detail() {
   const { id: resourceId } = useParams(); // 文章id
-
-  const { userInfo, logged } = useSelector(state => state.app);
-  const { id: userId } = userInfo; // 用户信息
-
   const [infoVisible, setVisible] = useState(false); // 文章详情Dialog
-
-  const history = useHistory();
   const { y } = useWindowScroll();
-  // const { downDis } = useScrollDistance();
 
   // 请求文章详情
   const { data, loading } = useRequest({
@@ -49,7 +42,7 @@ function Detail() {
   const { articleName, authorId, id, tags } = data;
   const tagArr = tags ? tags.split("|") : [];
 
-  const isCurrentUser = logged && userId === authorId; // 是否是当前用户
+  const isCurrentUser = useIsCurrentUser(authorId);
 
   // 生成文章导航
   const { outline, html } = getHtmlAndOutline(data.html);
@@ -66,43 +59,6 @@ function Detail() {
         );
       } else {
         return <Link key={id} href={`#${id}`} title={title} />;
-      }
-    });
-  };
-
-  const { open: openDialog } = useAlertDialog();
-
-  // 删除文章操作
-  const [deleteArticle] = useMutation(DELETE_ARTICLE, null, {
-    autoHandleError: true,
-    successMessage: "文章已删除"
-  });
-
-  const handleDelete = () => {
-    openDialog({
-      title: "提示",
-      content: "你确定要删除该文章吗？",
-      onOk: async () => {
-        const { success } = await deleteArticle({ id });
-        if (success) {
-          history.push(routers.ARTICLE_LIST);
-        }
-      }
-    });
-  };
-
-  // 同步到随笔
-  const [syncToMoment] = useMutation(SYNC_TO_MOMENT, null, {
-    autoHandleError: true,
-    successMessage: "同步成功"
-  });
-
-  const handleSyncToMoment = () => {
-    openDialog({
-      title: "提示",
-      content: "你确定要将这篇文章同步到动态吗？",
-      onOk: async () => {
-        await syncToMoment({ id });
       }
     });
   };
@@ -148,51 +104,14 @@ function Detail() {
               ) : null}
             </div>
           </div>
-          <div className="fixed right-0 bottom-0">
-            {/* 操作栏，对作者显示 */}
-            {isCurrentUser && (
-              <SpeedDial
-                ariaLabel="操作"
-                sx={{
-                  position: "absolute",
-                  bottom: 64,
-                  right: { xs: 16, sm: 64 }
-                }}
-                icon={<SpeedDialIcon />}
-              >
-                <SpeedDialAction
-                  onClick={handleDelete}
-                  icon={<Delete color="error" />}
-                  tooltipTitle="删除文章"
-                  // tooltipOpen
-                />
-                <SpeedDialAction
-                  onClick={() => setVisible(true)}
-                  icon={<InfoOutlined />}
-                  tooltipTitle="详细信息"
-                  // tooltipOpen
-                />
-                <SpeedDialAction
-                  onClick={handleSyncToMoment}
-                  icon={<SyncAlt />}
-                  tooltipTitle="同步到随笔"
-                  // tooltipOpen
-                />
-                <SpeedDialAction
-                  onClick={() => {
-                    const pathname = routers.EDITOR_EDIT.replace(
-                      ":id",
-                      resourceId
-                    );
-                    history.push(pathname);
-                  }}
-                  icon={<Edit />}
-                  tooltipTitle="编辑文章"
-                  // tooltipOpen
-                />
-              </SpeedDial>
-            )}
-          </div>
+          {/* 操作栏，对作者显示 */}
+          {isCurrentUser ? (
+            <DialActions
+              visible={infoVisible}
+              setVisible={setVisible}
+              {...data}
+            />
+          ) : null}
         </div>
       </Spin>
       <DetailDialog visible={infoVisible} setVisible={setVisible} {...data} />

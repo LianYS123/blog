@@ -15,18 +15,7 @@ import { renderDateTime } from "utils";
  * 文章详情弹出框
  */
 export const DetailDialog = ({ visible, setVisible, ...data }) => {
-  const {
-    authorAvatar,
-    cover,
-    summary,
-    articleName,
-    createTime,
-    updateTime,
-    authorId,
-    authorName,
-    id,
-    tags
-  } = data;
+  const { cover, summary, createTime, updateTime, authorName, tags } = data;
   const tagArr = tags ? tags.split("|") : [];
   const renderCommonItem = (name, value) => {
     if (!value) return null;
