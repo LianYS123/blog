@@ -94,51 +94,58 @@ export default function Login() {
           sx={{
             flex: 1,
             backgroundColor: "primary.main",
-            p: 4,
+            // p: 4,
             display: { xs: "none", md: "flex" },
             alignItems: "center"
           }}
         >
-          <LoginDraw className="w-full" />
+          {/* <Box px={2} width="100%">
+            <LoginDraw className="w-full" />
+          </Box> */}
+          <img
+            className="w-full h-full object-cover object-center"
+            src="https://blog-1259462774.cos.ap-shanghai.myqcloud.com/gif/user_login_draw_zip.gif"
+          />
         </Box>
         {/* right */}
         <Box
           sx={{
             flex: 1,
-            p: 4,
             display: "flex",
             flexDirection: "column",
             justifyContent: "center"
           }}
         >
-          <Box className="flex justify-center">
-            <LogoWithText style={{ width: 160 }} />
+          <Box p={4}>
+            <Box className="flex justify-center" color="primary.main">
+              <LogoWithText style={{ width: 160 }} />
+            </Box>
+            <Stack spacing={2}>
+              <TextField
+                fullWidth
+                variant="standard"
+                label="账号"
+                {...getCommonFieldProps("account", formik)}
+              />
+              <TextField
+                type="password"
+                fullWidth
+                variant="standard"
+                label="密码"
+                {...getCommonFieldProps("password", formik)}
+              />
+            </Stack>
+            <LoadingButton
+              variant="contained"
+              fullWidth
+              sx={{ py: 1, fontSize: 15, mt: 2 }}
+              disabled={loading}
+              loading={loading}
+              onClick={formik.handleSubmit}
+            >
+              登录
+            </LoadingButton>
           </Box>
-          <Stack spacing={2}>
-            <TextField
-              fullWidth
-              variant="standard"
-              label="账号"
-              {...getCommonFieldProps("account", formik)}
-            />
-            <TextField
-              type="password"
-              fullWidth
-              variant="standard"
-              label="密码"
-              {...getCommonFieldProps("password", formik)}
-            />
-          </Stack>
-          <LoadingButton
-            variant="contained"
-            fullWidth
-            sx={{ py: 1, fontSize: 15, mt: 2 }}
-            disabled={loading}
-            loading={loading}
-            onClick={formik.handleSubmit}
-          >
-            登录
-          </LoadingButton>
         </Box>
       </Box>
     </Container>
