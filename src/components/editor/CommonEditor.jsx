@@ -13,8 +13,8 @@ export const CommonEditor = props => {
           accepts: { audio: true, video: true },
           async uploadFn({ success, error, file }) {
             const res = await upload(file);
-            const { data: fileId } = res;
-            const url = `${FILE_PREVIEW}?id=${fileId}`;
+            const { data: url } = res;
+            // const url = `${FILE_PREVIEW}?id=${fileId}`;
             if (res.success && url) {
               success({
                 url,

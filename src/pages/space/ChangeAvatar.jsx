@@ -1,7 +1,7 @@
 import React from "react";
 import { Upload, Avatar } from "@douyinfe/semi-ui";
 import { IconCamera } from "@douyinfe/semi-icons";
-import { FILE_PREVIEW, FILE_UPLOAD } from "services/app";
+import { FILE_UPLOAD } from "services/app";
 import { useSelector } from "react-redux";
 import { useMutation } from "hooks";
 import { CHANGE_AVATAR } from "services/user";
@@ -10,7 +10,7 @@ import { useSnackbar } from "notistack";
 
 export const ChangeAvatar = () => {
   const { userInfo } = useSelector(state => state.app);
-  const { avatar, id } = userInfo;
+  const { avatarUrl, id } = userInfo;
   const [changeAvatar] = useMutation(
     CHANGE_AVATAR,
     {},
@@ -21,7 +21,7 @@ export const ChangeAvatar = () => {
 
   const onSuccess = async (response, file) => {
     const { data } = response;
-    const { success } = await changeAvatar({ avatar: data, id });
+    const { success } = await changeAvatar({ avatarUrl: data, id });
     if (success) {
       reloadUserInfo();
     }
@@ -54,7 +54,7 @@ export const ChangeAvatar = () => {
       onError={() => enqueueSnackbar("上传失败", { variant: "error" })}
     >
       <Avatar
-        src={`${FILE_PREVIEW}?id=${avatar}`}
+        src={avatarUrl}
         size="large"
         style={{ margin: 4 }}
         hoverMask={hoverMask}

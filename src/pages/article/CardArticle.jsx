@@ -11,8 +11,7 @@ import {
   Chip,
   Tooltip
 } from "@mui/material";
-import { timestampFormat } from "utils";
-import { FILE_PREVIEW } from "services/app";
+import { getQualityImage, timestampFormat } from "utils";
 import routers from "routers";
 import { useHistory } from "react-router-dom";
 
@@ -39,7 +38,7 @@ export default function CardArticle({
           title={articleName}
           avatar={
             <Tooltip title={authorName}>
-              <Avatar src={`${FILE_PREVIEW}?id=${authorAvatar}`} />
+              <Avatar src={getQualityImage(authorAvatar)} />
             </Tooltip>
           }
           subheader={timestampFormat(createTime)}

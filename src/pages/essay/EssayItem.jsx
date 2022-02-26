@@ -1,9 +1,4 @@
-import {
-  DeleteOutline,
-  EditOutlined,
-  Lock,
-  MoreHoriz
-} from "@mui/icons-material";
+import { Lock, MoreHoriz } from "@mui/icons-material";
 import {
   Avatar,
   IconButton,
@@ -19,7 +14,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { FILE_PREVIEW } from "services/app";
 import { DELETE_MOMENT } from "services/essay";
-import { timestampFormat } from "utils";
+import { getQualityImage, timestampFormat } from "utils";
 import { EssayEditor } from "./EssayEditor";
 
 export const EssayItem = ({
@@ -104,15 +99,11 @@ export const EssayItem = ({
             {/* 发布者 */}
             <div className="space-x-2 flex items-center">
               <span>
-                {!authorAvatar ? (
-                  <Avatar sx={{ width: 24, height: 24 }}>U</Avatar>
-                ) : (
-                  <Avatar
-                    sx={{ width: 24, height: 24 }}
-                    alt="avatar"
-                    src={`${FILE_PREVIEW}?id=${authorAvatar}`}
-                  />
-                )}
+                <Avatar
+                  sx={{ width: 24, height: 24 }}
+                  alt="avatar"
+                  src={getQualityImage(authorAvatar)}
+                />
               </span>
               <span className="text-green-600 text-base sm:text-lg font-light hover:underline">
                 {authorName}

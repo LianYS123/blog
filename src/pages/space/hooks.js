@@ -36,14 +36,12 @@ export const useUserFormik = (extra = {}) => {
     phone: yup
       .string("请输入手机号")
       .matches(/1\d{10}/, "手机号格式不正确")
-      .required("请输入手机号"),
-    birthday: yup.date()
+      .required("请输入手机号")
   });
   const reloadUserInfo = useReloadUserInfo();
 
   const formik = useFormik({
     initialValues: {
-      birthday: userInfo["birthday"],
       email: userInfo["email"],
       nickName: userInfo["nickName"],
       phone: userInfo["phone"],

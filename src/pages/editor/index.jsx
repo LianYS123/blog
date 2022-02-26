@@ -16,7 +16,7 @@ import {
   GET_ARTICLE_DETAIL
 } from "services/article";
 import { useEditorState, CommonEditor } from "components/editor";
-import { getSummary } from "utils";
+import { getRQualityImage, getSummary } from "utils";
 import {
   Autocomplete,
   Button,
@@ -101,7 +101,7 @@ function Editor() {
     const $html = $(html);
     const src = $html.find("img").attr("src");
     if (src) {
-      params.cover = src;
+      params.cover = getRQualityImage(src);
     }
     params.summary = getSummary($html.text());
 

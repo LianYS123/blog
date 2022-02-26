@@ -11,12 +11,13 @@ import routers from "routers";
 import { FILE_PREVIEW } from "services/app";
 import { USER_LOGOUT } from "services/auth";
 import qs from "query-string";
+import { getQualityImage } from "utils";
 
 // 用户头像和下拉菜单, 以及登录与退出逻辑
 export const UserAvatar = () => {
   const history = useHistory();
   const { userInfo, logged } = useSelector(state => state.app);
-  const { id: userId, account = "", avatar } = userInfo;
+  const { id: userId, account = "", avatarUrl, avatar } = userInfo;
   const [anchorEl, setAnchorEl] = useState();
   const { open: openLoginDialog } = useLoginDialog();
   const { open: openAlertDialog } = useAlertDialog();
@@ -62,16 +63,10 @@ export const UserAvatar = () => {
             setAnchorEl(ev.currentTarget);
           }}
         >
-          {avatar ? (
-            <Avatar
-              sx={{ width: 32, height: 32 }}
-              src={`${FILE_PREVIEW}?id=${avatar}`}
-            />
-          ) : (
-            <Avatar sx={{ width: 32, height: 32 }}>
-              {(account[0] || "U").toUpperCase()}
-            </Avatar>
-          )}
+          <Avatar
+            sx={{ width: 32, height: 32 }}
+            src={getQualityImage(avatarUrl)}
+          />
         </span>
       ) : (
         <ButtonBase onClick={handleJumpToLogin}>登录</ButtonBase>

@@ -25,7 +25,8 @@ import { getCommonFieldProps } from "utils";
 const Space = () => {
   const [visible, setVisible] = useState(false); // 修改密码的弹出框状态
   const { userInfo } = useSelector(state => state.app);
-  const [birthday, setBirthday] = useState(dayjs(userInfo.birthday).valueOf());
+  const time = dayjs(userInfo.birthday || Date.now()).valueOf();
+  const [birthday, setBirthday] = useState(time);
   const formik = useUserFormik({ birthday });
 
   return (

@@ -122,3 +122,13 @@ export const isiosDevice = () => {
     /iPad|iPhone|iPod/.test(navigator.userAgent);
   return iOS;
 };
+
+// 获取指定质量的图片
+export const getQualityImage = (url, quality = 60) => {
+  return `${url}?imageMogr2/quality/${quality}`;
+};
+
+// 获取指定相对质量的图片
+export const getRQualityImage = (url, quality = 60) => {
+  return `${url}?imageMogr2/rquality/${quality}`;
+};
