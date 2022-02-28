@@ -1,4 +1,5 @@
 import { Paper } from "@mui/material";
+import { Empty } from "components/empty";
 import { SkeletonList } from "components/skeleton";
 import { useFetchList } from "hooks";
 import React, { useState } from "react";
@@ -17,6 +18,7 @@ const Essay = () => {
     search,
     loadingFirstPage,
     loadingMore,
+    loading,
     removeItemById,
     editItem
   } = useFetchList({
@@ -54,6 +56,7 @@ const Essay = () => {
             {...it}
           />
         ))}
+        {!list.length && !loading ? <Empty /> : null}
         <SkeletonList
           showButton={false}
           showImage={false}

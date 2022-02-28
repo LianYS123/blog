@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import CardArticle from "./CardArticle";
 import Masonry from "@mui/lab/Masonry";
+import { Empty } from "components/empty";
 
 const ArticleList = () => {
   const { search: searchStr } = useLocation();
@@ -30,6 +31,7 @@ const ArticleList = () => {
     list = [],
     loadingFirstPage,
     loadingMore,
+    loading,
     search
   } = useFetchList({
     service: ARTICLE_LIST,
@@ -111,7 +113,9 @@ const ArticleList = () => {
             />
           ))}
         </Masonry>
-      ) : null}
+      ) : loading ? null : (
+        <Empty />
+      )}
 
       <SkeletonList loading={loadingMore} />
     </Container>
