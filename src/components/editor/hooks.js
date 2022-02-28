@@ -18,6 +18,9 @@ export const useEditorState = ({ record }) => {
       const state = BraftEditor.createEditorState(data);
       setState(state);
     }
+    if (Number.isInteger(record?.visibleStatus)) {
+      setVisibleStatus(record.visibleStatus);
+    }
   }, [record?.id]);
 
   // 获取请求参数
