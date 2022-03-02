@@ -13,6 +13,7 @@ import { useWindowScroll } from "react-use";
 import { DetailDialog } from "./DetailDialog";
 import { DialActions } from "./DialActions";
 import { useSelector } from "react-redux";
+import { SkeletonList } from "components/skeleton";
 
 const { Link } = Anchor;
 
@@ -33,7 +34,7 @@ function Detail() {
   const { y } = useWindowScroll();
 
   // 请求文章详情
-  const { data, loading } = useRequest({
+  const { data, loadingDelay } = useRequest({
     service: GET_ARTICLE_DETAIL,
     necessaryParams: { id: resourceId },
     ready: !!resourceId && resourceId !== "undefined",
@@ -70,50 +71,49 @@ function Detail() {
         back={routers.ARTICLE_LIST}
         // back={routers.ARTICLE_LIST}
       />
-      <Spin className="w-full" spinning={loading}>
-        <div className="relative px-4 pb-8">
-          {/* 标题 */}
-          <div className="mb-2">
-            <Typography variant="h4">{articleName}</Typography>
-          </div>
-          {/* 标签 */}
-          <div>
-            <span className="flex space-x-1">
-              {tagArr.map(tag => (
-                <Chip size="small" key={tag} label={tag} />
-              ))}
-            </span>
-          </div>
-          {/* 正文 */}
-          <div className="mr-0 sm:mr-52 mt-4">
-            {html ? (
-              <article
-                id="htmlTemplate"
-                dangerouslySetInnerHTML={{ __html: html }}
-              ></article>
-            ) : (
-              <Empty className="my-12" />
-            )}
-          </div>
-          {/* 右侧内容 */}
-          <div className="absolute hidden sm:block right-0 top-4">
-            <div className="fixed right-0 w-64 pl-2">
-              {/* 文章快速跳转导航栏 */}
-              {outline && outline.length ? (
-                <Anchor>{renderLink(outline)}</Anchor>
-              ) : null}
-            </div>
-          </div>
-          {/* 操作栏，对作者显示 */}
-          {isCurrentUser ? (
-            <DialActions
-              visible={infoVisible}
-              setVisible={setVisible}
-              {...data}
-            />
-          ) : null}
+      <SkeletonList loading={loadingDelay} />
+      <div className="relative px-4 pb-8">
+        {/* 标题 */}
+        <div className="mb-2">
+          <Typography variant="h4">{articleName}</Typography>
         </div>
-      </Spin>
+        {/* 标签 */}
+        <div>
+          <span className="flex space-x-1">
+            {tagArr.map(tag => (
+              <Chip size="small" key={tag} label={tag} />
+            ))}
+          </span>
+        </div>
+        {/* 正文 */}
+        <div className="mr-0 sm:mr-52 mt-4">
+          {html ? (
+            <article
+              id="htmlTemplate"
+              dangerouslySetInnerHTML={{ __html: html }}
+            ></article>
+          ) : (
+            <Empty className="my-12" />
+          )}
+        </div>
+        {/* 右侧内容 */}
+        <div className="absolute hidden sm:block right-0 top-4">
+          <div className="fixed right-0 w-64 pl-2">
+            {/* 文章快速跳转导航栏 */}
+            {outline && outline.length ? (
+              <Anchor>{renderLink(outline)}</Anchor>
+            ) : null}
+          </div>
+        </div>
+        {/* 操作栏，对作者显示 */}
+        {isCurrentUser ? (
+          <DialActions
+            visible={infoVisible}
+            setVisible={setVisible}
+            {...data}
+          />
+        ) : null}
+      </div>
       <DetailDialog visible={infoVisible} setVisible={setVisible} {...data} />
     </Container>
   );

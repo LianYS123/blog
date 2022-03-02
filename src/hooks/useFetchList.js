@@ -2,17 +2,30 @@ import { isEmpty, uniqBy } from "lodash";
 import { useEffect, useState } from "react";
 import { useDeepCompareEffect } from "react-use";
 import { useMutation } from "./useMutation";
-import { useIsBottom } from "./useUtils";
+import useSpinDelay, { useIsBottom } from "./useUtils";
 
 /**
  * 无限滚动数据加载逻辑
  * @param {config.service} 请求方法
  * @param {config.necessaryParams} 必要参数
  */
-export const useFetchList = ({ service, necessaryParams = {} }) => {
+export const useFetchList = ({
+  service,
+  necessaryParams = {},
+  showGlobalProgress = false
+}) => {
   const [list, setList] = useState([]); // 数据列表，页面上显示的所有数据
   const [loadingMore, setLoadingMore] = useState(false); // 正在加载更多数据
-  const [loadData, { loading, data }] = useMutation(service);
+  const [loadData, { loading, loadingDelay, data }] = useMutation(
+    service,
+    null,
+    {
+      showGlobalProgress
+    }
+  );
+
+  // const loadingDelay = useSpinDelay(loading, { delay: 500 }); // loading 状态延迟显示
+  const loadingMoreDelay = useSpinDelay(loadingMore, { delay: 500 }); // loading 状态延迟显示
 
   const isBottom = useIsBottom(); // 是否已经滚动到底部
 
@@ -89,7 +102,8 @@ export const useFetchList = ({ service, necessaryParams = {} }) => {
     reload,
     loading,
     loadingMore,
-    loadingFirstPage: loading && !list.length,
+    loadingMoreDelay,
+    loadingFirstPage: loadingDelay && !list.length,
     removeItemById,
     editItem
   };

@@ -21,7 +21,8 @@ export const useMutation = (service, initialData = {}, config = {}) => {
     successMessage,
     onSuccess = noop,
     onError = noop,
-    onFinish = noop
+    onFinish = noop,
+    showGlobalProgress = true
   } = config;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
@@ -35,7 +36,7 @@ export const useMutation = (service, initialData = {}, config = {}) => {
   const loadingDelay = useSpinDelay(loading); // 延迟loading，即在请求未响应0.5s后开始loading
   useEffect(() => {
     const method = getAPIMethod(service) || config.method;
-    if (method === "GET") {
+    if (method === "GET" && showGlobalProgress) {
       setProgressVisible(loadingDelay);
     }
   }, [loadingDelay]);
@@ -100,5 +101,5 @@ export const useMutation = (service, initialData = {}, config = {}) => {
     }
   };
 
-  return [loadData, { loading, error, data }];
+  return [loadData, { loading, error, data, loadingDelay }];
 };
