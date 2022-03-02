@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import { noop } from "lodash";
 import {
   Avatar,
+  Box,
   CardActionArea,
   CardHeader,
   Chip,
@@ -34,40 +35,49 @@ export default function CardArticle({
       <CardActionArea
         onClick={() => history.push(routers.DETAIL.replace(":id", id))}
       >
-        <CardHeader
-          title={articleName}
-          avatar={
-            <Tooltip title={authorName}>
-              <Avatar src={getQualityImage(authorAvatar)} />
-            </Tooltip>
-          }
-          subheader={timestampFormat(createTime)}
-        />
-
-        {cover ? (
-          <CardMedia component="img" image={cover} alt={articleName} />
-        ) : null}
-
-        <CardContent>
-          <Typography variant="body1" component="div">
-            {summary}
-          </Typography>
-        </CardContent>
-        <CardContent className="space-x-1">
-          {tagArr.map(tag => (
-            <Chip
-              // size="small"
-              className="cursor-pointer"
-              onClick={ev => {
-                // ev.preventDefault();
-                ev.stopPropagation();
-                handleTagClick(tag);
-              }}
-              key={tag}
-              label={tag}
+        <Box display="flex" maxHeight={256}>
+          <Box flex="auto">
+            <CardHeader
+              title={articleName}
+              avatar={
+                <Tooltip title={authorName}>
+                  <Avatar src={getQualityImage(authorAvatar)} />
+                </Tooltip>
+              }
+              subheader={timestampFormat(createTime)}
             />
-          ))}
-        </CardContent>
+            <Box>
+              <CardContent>
+                <Typography variant="body1" component="div">
+                  {summary}
+                </Typography>
+              </CardContent>
+            </Box>
+            <CardContent className="space-x-1">
+              {tagArr.map(tag => (
+                <Chip
+                  // size="small"
+                  className="cursor-pointer"
+                  onClick={ev => {
+                    // ev.preventDefault();
+                    ev.stopPropagation();
+                    handleTagClick(tag);
+                  }}
+                  key={tag}
+                  label={tag}
+                />
+              ))}
+            </CardContent>
+          </Box>
+          {cover ? (
+            <CardMedia
+              sx={{ width: 256 }}
+              component="img"
+              image={cover}
+              alt={articleName}
+            />
+          ) : null}
+        </Box>
       </CardActionArea>
     </Card>
   );

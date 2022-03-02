@@ -10,6 +10,7 @@ import {
   Box,
   Chip,
   Container,
+  Stack,
   TextField,
   useMediaQuery,
   useTheme
@@ -17,6 +18,7 @@ import {
 import CardArticle from "./CardArticle";
 import Masonry from "@mui/lab/Masonry";
 import { Empty } from "components/empty";
+import MobileArticle from "./MobileArticle";
 
 const ArticleList = () => {
   const { search: searchStr } = useLocation();
@@ -58,7 +60,7 @@ const ArticleList = () => {
 
   return (
     <Container className="pt-2 md:pt-6">
-      <div className="mb-2 flex justify-between">
+      <div className="mb-4 flex justify-between">
         <div>
           {keyword ? (
             <React.Fragment>
@@ -100,19 +102,18 @@ const ArticleList = () => {
 
       <SkeletonList loading={loadingFirstPage} />
       {list.length ? (
-        <Masonry
-          style={{ margin: upSM ? undefined : 0 }}
-          columns={{ xs: 1, sm: 2 }}
-          spacing={2}
-        >
-          {list.map(it => (
-            <CardArticle
-              handleTagClick={tag => handleTagClick(tag)}
-              key={it.id}
-              {...it}
-            />
-          ))}
-        </Masonry>
+        <Stack spacing={2}>
+          {list.map(it => {
+            const Comp = upSM ? CardArticle : MobileArticle;
+            return (
+              <Comp
+                handleTagClick={tag => handleTagClick(tag)}
+                key={it.id}
+                {...it}
+              />
+            );
+          })}
+        </Stack>
       ) : loading ? null : (
         <Empty />
       )}
