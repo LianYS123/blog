@@ -1,122 +1,66 @@
-import React, { useState } from "react";
-import { ChangePasswordModal } from "./ChangePasswordModal";
-import { ChangeAvatar } from "./ChangeAvatar";
-import {
-  Button,
-  Container,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Paper,
-  Radio,
-  RadioGroup,
-  Stack,
-  TextField,
-  Typography
-} from "@mui/material";
-import { useUserFormik } from "./hooks";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DatePicker from "@mui/lab/DatePicker";
+import { Avatar, Box, Button, Container, Typography } from "@mui/material";
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import dayjs from "dayjs";
-import { getCommonFieldProps } from "utils";
+import SettingsDrawser from "./SettingsDrawer";
+import SpaceTabs from "./tabs";
 
-const Space = () => {
-  const [visible, setVisible] = useState(false); // 修改密码的弹出框状态
+/**
+ * 个人空间
+ */
+export default function Space() {
   const { userInfo } = useSelector(state => state.app);
-  const time = dayjs(userInfo.birthday || Date.now()).valueOf();
-  const [birthday, setBirthday] = useState(time);
-  const formik = useUserFormik({ birthday });
-
+  const [visible, setVisible] = useState(false); // 设置抽屉是否可视
+  const { avatarUrl, email, nickName } = userInfo;
   return (
-    <Container className="mx-auto max-w-3xl">
-      <div className="text-center">
-        <div className="flex justify-center">
-          <ChangeAvatar />
-        </div>
-        <div>
-          <Typography variant="h6" component="div">
-            {userInfo.nickName}
+    <Container sx={{ mt: 8 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          mb: 4
+        }}
+      >
+        {/* 头像 */}
+        <Box sx={{ mr: 2 }}>
+          <Avatar sx={{ width: 128, height: 128 }} src={avatarUrl} />
+          {/* <ChangeAvatar /> */}
+        </Box>
+        {/* 头像右边的用户基本信息 */}
+        <Box>
+          <Typography variant="h4" gutterBottom component="div">
+            {nickName}
           </Typography>
-        </div>
-      </div>
-      <Paper className="p-8 flex-auto">
-        <form onSubmit={formik.handleSubmit}>
-          <Stack spacing={2}>
-            <TextField
-              fullWidth
-              variant="standard"
-              label="昵称"
-              {...getCommonFieldProps("nickName", formik)}
-            />
+          <Typography
+            gutterBottom
+            variant="subtitle1"
+            fontSize={18}
+            color={theme => theme.palette.text.secondary}
+            component="div"
+          >
+            {email}
+          </Typography>
+          <Box>
+            <Button
+              variant="outlined"
+              size="medium"
+              onClick={() => setVisible(true)}
+            >
+              编辑个人信息
+            </Button>
+          </Box>
+        </Box>
+      </Box>
 
-            <TextField
-              fullWidth
-              variant="standard"
-              label="邮箱"
-              {...getCommonFieldProps("email", formik)}
-            />
+      {/* 个人创作选项卡 */}
+      <SpaceTabs />
 
-            <TextField
-              name="phone"
-              fullWidth
-              variant="standard"
-              label="手机"
-              {...getCommonFieldProps("phone", formik)}
-            />
-
-            <TextField
-              fullWidth
-              variant="standard"
-              label="电话"
-              {...getCommonFieldProps("tel", formik)}
-            />
-            <div>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  label="生日"
-                  value={birthday}
-                  onChange={setBirthday}
-                  renderInput={params => (
-                    <TextField variant="standard" {...params} />
-                  )}
-                />
-              </LocalizationProvider>
-            </div>
-
-            <FormControl fullWidth size="small">
-              <FormLabel>性别</FormLabel>
-              <RadioGroup
-                row
-                defaultValue={1}
-                value={formik.values.sex}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                name="sex"
-              >
-                <FormControlLabel
-                  value={1}
-                  control={<Radio size="small" />}
-                  label="男"
-                />
-                <FormControlLabel
-                  value={2}
-                  control={<Radio size="small" />}
-                  label="女"
-                />
-              </RadioGroup>
-            </FormControl>
-            <div className="text-center space-x-2">
-              <Button onClick={() => setVisible(true)}>修改密码</Button>
-              <Button type="submit">保存</Button>
-            </div>
-          </Stack>
-        </form>
-      </Paper>
-      <ChangePasswordModal visible={visible} close={() => setVisible(false)} />
+      {/* 个人信息设置弹出框 */}
+      <SettingsDrawser
+        open={visible}
+        onClose={() => setVisible(false)}
+        onOpen={() => setVisible(true)}
+      />
     </Container>
   );
-};
-
-export default Space;
+}

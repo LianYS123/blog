@@ -22,7 +22,7 @@ export const useReloadUserInfo = () => {
   return reloadUserInfo;
 };
 
-export const useUserFormik = (extra = {}) => {
+export const useUserFormik = ({ onClose, ...extra } = {}) => {
   const { userInfo } = useSelector(state => state.app);
   const [changeUserInfo, { loading }] = useMutation(
     CHANGE_USER_INFO,
@@ -31,7 +31,7 @@ export const useUserFormik = (extra = {}) => {
   );
   const validationSchema = yup.object({
     nickName: yup.string("请输入昵称").required("请输入昵称"),
-    email: yup.string("请输入邮箱").email(),
+    email: yup.string("请输入邮箱").email().required("请输入邮箱"),
     sex: yup.number().required("请选择性别"),
     phone: yup
       .string("请输入手机号")
@@ -59,6 +59,7 @@ export const useUserFormik = (extra = {}) => {
       const { success } = await changeUserInfo(values);
       if (success) {
         reloadUserInfo();
+        onClose();
       }
     }
   });

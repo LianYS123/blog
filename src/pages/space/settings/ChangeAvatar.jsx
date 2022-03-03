@@ -10,7 +10,7 @@ import { useSnackbar } from "notistack";
 
 export const ChangeAvatar = () => {
   const { userInfo } = useSelector(state => state.app);
-  const { avatarUrl, id } = userInfo;
+  const { avatarUrl, id, nickName } = userInfo;
   const [changeAvatar] = useMutation(
     CHANGE_AVATAR,
     {},
