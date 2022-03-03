@@ -32,7 +32,7 @@ const ArticleList = () => {
   const {
     list = [],
     loadingFirstPage,
-    loadingMoreDelay,
+    loadingMore,
     loading,
     search
   } = useFetchList({
@@ -118,7 +118,7 @@ const ArticleList = () => {
         <Empty />
       )}
 
-      <SkeletonList loading={loadingMoreDelay} />
+      <SkeletonList loading={loadingMore} />
     </Container>
   );
 };

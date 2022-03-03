@@ -9,22 +9,11 @@ import useSpinDelay, { useIsBottom } from "./useUtils";
  * @param {config.service} 请求方法
  * @param {config.necessaryParams} 必要参数
  */
-export const useFetchList = ({
-  service,
-  necessaryParams = {},
-  showGlobalProgress = false
-}) => {
+export const useFetchList = ({ service, necessaryParams = {} }) => {
   const [list, setList] = useState([]); // 数据列表，页面上显示的所有数据
   const [loadingMore, setLoadingMore] = useState(false); // 正在加载更多数据
-  const [loadData, { loading, loadingDelay, data }] = useMutation(
-    service,
-    null,
-    {
-      showGlobalProgress
-    }
-  );
+  const [loadData, { loading, loadingDelay, data }] = useMutation(service);
 
-  // const loadingDelay = useSpinDelay(loading, { delay: 500 }); // loading 状态延迟显示
   const loadingMoreDelay = useSpinDelay(loadingMore, { delay: 500 }); // loading 状态延迟显示
 
   const isBottom = useIsBottom(); // 是否已经滚动到底部
@@ -101,9 +90,10 @@ export const useFetchList = ({
     isBottom,
     reload,
     loading,
+    loadingDelay,
     loadingMore,
     loadingMoreDelay,
-    loadingFirstPage: loadingDelay && !list.length,
+    loadingFirstPage: loading && !list.length,
     removeItemById,
     editItem
   };

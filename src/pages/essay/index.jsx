@@ -17,7 +17,7 @@ const Essay = () => {
     reload,
     search,
     loadingFirstPage,
-    loadingMoreDelay,
+    loadingMore,
     loading,
     removeItemById,
     editItem
@@ -60,7 +60,7 @@ const Essay = () => {
         <SkeletonList
           showButton={false}
           showImage={false}
-          loading={loadingMoreDelay}
+          loading={loadingMore}
         />
       </div>
       {/* {essayModalProps.visible ? (
