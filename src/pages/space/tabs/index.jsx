@@ -4,6 +4,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { MyArticleList } from "./articleList";
+import { MyMomentList } from "./momentList";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -29,11 +30,7 @@ export default function SpaceTabs() {
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
+        <Tabs value={value} onChange={handleChange}>
           <Tab label="我的文章" />
           <Tab label="我的动态" />
           <Tab label="收藏" />
@@ -43,7 +40,7 @@ export default function SpaceTabs() {
         <MyArticleList />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        我的动态
+        <MyMomentList />
       </TabPanel>
       <TabPanel value={value} index={2}>
         收藏
