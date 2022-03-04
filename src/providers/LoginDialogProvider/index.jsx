@@ -41,7 +41,6 @@ export default function LoginDialogProvider({ children }) {
     setVisible(true);
   };
   const close = () => {
-    setProps({});
     setVisible(false);
   };
   const { enqueueSnackbar } = useSnackbar();

@@ -16,7 +16,6 @@ import { useLocation } from "react-router-dom";
 import routers from "routers";
 import LogoWithText from "./LogoWithText";
 import Logo from "./Logo";
-import LoginDraw from "./LoginDraw";
 
 /**
  * 登录页
@@ -37,6 +36,7 @@ export default function Login() {
       .string("请输入密码")
       .min(6, "密码长度必须大于6位")
       .max(20, "密码长度必须小于20位")
+      .required("请输入密码")
   });
 
   const formik = useFormik({
@@ -107,7 +107,7 @@ export default function Login() {
             src="https://blog-1259462774.cos.ap-shanghai.myqcloud.com/gif/user_login_draw_zip.gif"
           />
         </Box>
-        {/* right */}
+        {/* 右边的登录表单 */}
         <Box
           sx={{
             flex: 1,
@@ -116,10 +116,13 @@ export default function Login() {
             justifyContent: "center"
           }}
         >
-          <Box p={4}>
+          <Box p={4} component="form" onSubmit={formik.handleSubmit}>
+            {/* Logo */}
             <Box className="flex justify-center" color="primary.main">
               <LogoWithText style={{ width: 160 }} />
             </Box>
+
+            {/* 登录表单 */}
             <Stack spacing={2}>
               <TextField
                 fullWidth
@@ -137,11 +140,11 @@ export default function Login() {
             </Stack>
             <LoadingButton
               variant="contained"
+              type="submit"
               fullWidth
               sx={{ py: 1, fontSize: 15, mt: 2 }}
               disabled={loading}
               loading={loading}
-              onClick={formik.handleSubmit}
             >
               登录
             </LoadingButton>
