@@ -14,6 +14,7 @@ import { DetailDialog } from "./DetailDialog";
 import { DialActions } from "./DialActions";
 import { useSelector } from "react-redux";
 import { SkeletonList } from "components/skeleton";
+import { useLocation } from "react-router-dom";
 
 const { Link } = Anchor;
 
@@ -32,6 +33,7 @@ function Detail() {
   const { id: resourceId } = useParams(); // 文章id
   const [infoVisible, setVisible] = useState(false); // 文章详情Dialog
   const { y } = useWindowScroll();
+  const location = useLocation();
 
   // 请求文章详情
   const { data, loadingDelay } = useRequest({
@@ -68,8 +70,7 @@ function Detail() {
     <Container className="pt-14">
       <AppTitle
         title={y < 36 ? "" : articleName || "文章详情"}
-        back={routers.ARTICLE_LIST}
-        // back={routers.ARTICLE_LIST}
+        back={location?.state?.path || true}
       />
       <SkeletonList loading={loadingDelay} />
       <div className="relative px-4 pb-8">

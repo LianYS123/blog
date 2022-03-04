@@ -107,7 +107,9 @@ function Editor() {
 
     const { success, data } = await load({ ...params, articleName, tags });
     if (success) {
-      history.replace(routers.DETAIL.replace(":id", data));
+      history.push(routers.DETAIL.replace(":id", data), {
+        path: routers.ARTICLE_LIST
+      });
     }
   };
 
