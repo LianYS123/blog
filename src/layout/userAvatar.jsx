@@ -90,7 +90,7 @@ export const UserAvatar = () => {
             history.push(routers.USER_SPACE);
           }}
         >
-          设置
+          个人空间
         </MenuItem>
         <MenuItem
           onClick={() => {

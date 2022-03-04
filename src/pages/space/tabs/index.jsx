@@ -3,6 +3,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { MyArticleList } from "./MyArticleList";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -10,7 +11,7 @@ function TabPanel(props) {
   return (
     <div hidden={value !== index} {...other}>
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ pt: 2, pb: 8 }}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -39,7 +40,7 @@ export default function SpaceTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        我的文章
+        <MyArticleList />
       </TabPanel>
       <TabPanel value={value} index={1}>
         我的动态
