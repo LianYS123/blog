@@ -107,9 +107,14 @@ function Editor() {
 
     const { success, data } = await load({ ...params, articleName, tags });
     if (success) {
-      history.push(routers.DETAIL.replace(":id", data), {
-        path: routers.ARTICLE_LIST
-      });
+      if (isEdit) {
+        history.goBack();
+      } else {
+        // 如果是新增，跳转到文章详情页，并保证再次返回会回到文章列表页
+        history.push(routers.DETAIL.replace(":id", data), {
+          path: routers.ARTICLE_LIST
+        });
+      }
     }
   };
 

@@ -8,7 +8,9 @@ import {
   Chip,
   Container,
   Stack,
-  Typography
+  Typography,
+  useMediaQuery,
+  useTheme
 } from "@mui/material";
 import { Empty } from "components/empty";
 import { SkeletonList } from "components/skeleton";
@@ -22,34 +24,43 @@ const MyArticle = props => {
   const { cover, articleName, createTime, id, summary, tags } = props;
   const tagArr = tags ? tags.split("|") : [];
   const history = useHistory();
+  const theme = useTheme();
+  const upSM = useMediaQuery(theme.breakpoints.up("sm"));
   return (
     <Card>
       <CardActionArea
         onClick={() => history.push(routers.DETAIL.replace(":id", id))}
       >
-        <CardHeader
-          title={articleName}
-          subheader={timestampFormat(createTime)}
-        />
-
-        {cover ? (
-          <CardMedia component="img" image={cover} alt={articleName} />
-        ) : null}
-
-        <CardContent>
-          <Typography variant="body1" component="div">
-            {summary}
-          </Typography>
-        </CardContent>
-        <CardContent className="space-x-1">
-          {tagArr.map(tag => (
-            <Chip
-              // size="small"
-              key={tag}
-              label={tag}
+        <Box display="flex" maxHeight={{ xs: "auto", md: 256 }}>
+          <Box flex="auto">
+            <CardHeader
+              title={articleName}
+              subheader={timestampFormat(createTime)}
             />
-          ))}
-        </CardContent>
+            <Box>
+              <CardContent>
+                <Typography variant="body1" component="div">
+                  {summary}
+                </Typography>
+              </CardContent>
+            </Box>
+            {tagArr.length ? (
+              <CardContent className="space-x-1">
+                {tagArr.map(tag => (
+                  <Chip className="cursor-pointer" key={tag} label={tag} />
+                ))}
+              </CardContent>
+            ) : null}
+          </Box>
+          {cover && upSM ? (
+            <CardMedia
+              sx={{ width: 256 }}
+              component="img"
+              image={cover}
+              alt={articleName}
+            />
+          ) : null}
+        </Box>
       </CardActionArea>
     </Card>
   );
@@ -72,7 +83,7 @@ export const MyArticleList = () => {
       {list.length ? (
         <Stack spacing={2}>
           {list.map(it => (
-            <MyArticle {...it} />
+            <MyArticle key={it.id} {...it} />
           ))}
         </Stack>
       ) : loading ? null : (
