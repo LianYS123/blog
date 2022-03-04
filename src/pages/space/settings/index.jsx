@@ -7,7 +7,6 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  Paper,
   Radio,
   RadioGroup,
   Stack,
@@ -15,8 +14,6 @@ import {
   Typography
 } from "@mui/material";
 import { useUserFormik } from "./hooks";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
@@ -34,45 +31,57 @@ const Settings = ({ onClose }) => {
 
   return (
     <Container
-      sx={{ py: 6, height: "100%", display: "flex", flexDirection: "column" }}
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column"
+      }}
     >
-      <Box sx={{ display: "flex", mb: 2 }}>
-        {/* 头像 */}
-        <Box sx={{ mr: 2 }}>
-          <ChangeAvatar />
-        </Box>
-        {/* 头像右边的用户基本信息 */}
-        <Box>
-          <Typography variant="h6" gutterBottom component="div">
-            {nickName}
-          </Typography>
-          <Typography
-            gutterBottom
-            variant="subtitle1"
-            fontSize={14}
-            color={theme => theme.palette.text.secondary}
-            component="div"
-          >
-            {email}
-          </Typography>
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={() => setVisible(true)}
-          >
-            修改密码
-          </Button>
-        </Box>
-      </Box>
       <Box
         sx={{
-          position: "relative",
-          flex: "auto"
+          height: "100%",
+          px: 2,
+          py: 6,
+          display: "flex",
+          flexDirection: "column"
         }}
-        component="form"
-        onSubmit={formik.handleSubmit}
       >
-        <Paper sx={{ px: 3, py: 4 }}>
+        <Box sx={{ display: "flex", mb: 2 }}>
+          {/* 头像 */}
+          <Box sx={{ mr: 2 }}>
+            <ChangeAvatar />
+          </Box>
+          {/* 头像右边的用户基本信息 */}
+          <Box>
+            <Typography variant="h6" gutterBottom component="div">
+              {nickName}
+            </Typography>
+            <Typography
+              gutterBottom
+              variant="subtitle1"
+              fontSize={14}
+              color={theme => theme.palette.text.secondary}
+              component="div"
+            >
+              {email}
+            </Typography>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => setVisible(true)}
+            >
+              修改密码
+            </Button>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            position: "relative",
+            flex: "auto"
+          }}
+          component="form"
+          onSubmit={formik.handleSubmit}
+        >
           <Stack spacing={2}>
             <TextField
               fullWidth
@@ -135,21 +144,24 @@ const Settings = ({ onClose }) => {
               </RadioGroup>
             </FormControl>
           </Stack>
-        </Paper>
 
-        <Box
-          sx={{ position: "absolute", left: 0, right: 0, bottom: 0 }}
-          className="text-right"
-        >
-          <Button sx={{ mr: 2 }} onClick={onClose} variant="outlined">
-            取消
-          </Button>
-          <LoadingButton loading={loading} variant="outlined" type="submit">
-            保存
-          </LoadingButton>
+          <Box
+            sx={{ position: "absolute", left: 0, right: 0, bottom: 0 }}
+            className="text-right"
+          >
+            <Button sx={{ mr: 2 }} onClick={onClose} variant="outlined">
+              取消
+            </Button>
+            <LoadingButton loading={loading} variant="outlined" type="submit">
+              保存
+            </LoadingButton>
+          </Box>
         </Box>
+        <ChangePasswordModal
+          visible={visible}
+          close={() => setVisible(false)}
+        />
       </Box>
-      <ChangePasswordModal visible={visible} close={() => setVisible(false)} />
     </Container>
   );
 };
