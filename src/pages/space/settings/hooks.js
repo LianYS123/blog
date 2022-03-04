@@ -63,5 +63,5 @@ export const useUserFormik = ({ onClose, ...extra } = {}) => {
       }
     }
   });
-  return formik;
+  return { formik, loading };
 };

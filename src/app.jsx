@@ -25,6 +25,8 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import { LocalizationProvider } from "@mui/lab";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
 
 const locales = {
   en_US,
@@ -50,18 +52,20 @@ const App = () => {
             }
           })}
         >
-          <ProgressProvider>
-            <SnackbarProvider
-              // anchorOrigin={{ vertical: "top", horizontal: "right" }}
-              maxSnack={3}
-            >
-              <AlertDialogProvider>
-                <LoginDialogProvider>
-                  <AppRoutes />
-                </LoginDialogProvider>
-              </AlertDialogProvider>
-            </SnackbarProvider>
-          </ProgressProvider>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <ProgressProvider>
+              <SnackbarProvider
+                // anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                maxSnack={3}
+              >
+                <AlertDialogProvider>
+                  <LoginDialogProvider>
+                    <AppRoutes />
+                  </LoginDialogProvider>
+                </AlertDialogProvider>
+              </SnackbarProvider>
+            </ProgressProvider>
+          </LocalizationProvider>
         </ThemeProvider>
       </IntlProvider>
     </Router>

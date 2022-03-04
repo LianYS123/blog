@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { getCommonFieldProps } from "utils";
 import { Box } from "@mui/system";
+import { LoadingButton } from "@mui/lab";
 
 const Settings = ({ onClose }) => {
   const [visible, setVisible] = useState(false); // 修改密码的弹出框状态
@@ -29,7 +30,7 @@ const Settings = ({ onClose }) => {
   const { avatarUrl, email, nickName } = userInfo;
   const time = dayjs(userInfo.birthday || Date.now()).valueOf();
   const [birthday, setBirthday] = useState(time);
-  const formik = useUserFormik({ birthday, onClose });
+  const { formik, loading } = useUserFormik({ birthday, onClose });
 
   return (
     <Container
@@ -71,71 +72,71 @@ const Settings = ({ onClose }) => {
         component="form"
         onSubmit={formik.handleSubmit}
       >
-        <Stack spacing={2}>
-          <TextField
-            fullWidth
-            variant="standard"
-            label="昵称"
-            {...getCommonFieldProps("nickName", formik)}
-          />
+        <Paper sx={{ px: 3, py: 4 }}>
+          <Stack spacing={2}>
+            <TextField
+              fullWidth
+              variant="standard"
+              label="昵称"
+              {...getCommonFieldProps("nickName", formik)}
+            />
 
-          <TextField
-            fullWidth
-            variant="standard"
-            label="邮箱"
-            {...getCommonFieldProps("email", formik)}
-          />
+            <TextField
+              fullWidth
+              variant="standard"
+              label="邮箱"
+              {...getCommonFieldProps("email", formik)}
+            />
 
-          <TextField
-            name="phone"
-            fullWidth
-            variant="standard"
-            label="手机"
-            {...getCommonFieldProps("phone", formik)}
-          />
+            <TextField
+              name="phone"
+              fullWidth
+              variant="standard"
+              label="手机"
+              {...getCommonFieldProps("phone", formik)}
+            />
 
-          <TextField
-            fullWidth
-            variant="standard"
-            label="电话"
-            {...getCommonFieldProps("tel", formik)}
-          />
-          <div>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                label="生日"
-                value={birthday}
-                onChange={setBirthday}
-                renderInput={params => (
-                  <TextField variant="standard" {...params} />
-                )}
-              />
-            </LocalizationProvider>
-          </div>
+            <TextField
+              fullWidth
+              variant="standard"
+              label="电话"
+              {...getCommonFieldProps("tel", formik)}
+            />
 
-          <FormControl fullWidth size="small">
-            <FormLabel>性别</FormLabel>
-            <RadioGroup
-              row
-              defaultValue={1}
-              value={formik.values.sex}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              name="sex"
-            >
-              <FormControlLabel
-                value={1}
-                control={<Radio size="small" />}
-                label="男"
-              />
-              <FormControlLabel
-                value={2}
-                control={<Radio size="small" />}
-                label="女"
-              />
-            </RadioGroup>
-          </FormControl>
-        </Stack>
+            <DatePicker
+              label="生日"
+              value={birthday}
+              onChange={setBirthday}
+              renderInput={params => (
+                <TextField variant="standard" {...params} />
+              )}
+            />
+
+            <FormControl fullWidth size="small">
+              <FormLabel>性别</FormLabel>
+              <RadioGroup
+                row
+                defaultValue={1}
+                value={formik.values.sex}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                name="sex"
+              >
+                <FormControlLabel
+                  value={1}
+                  control={<Radio size="small" />}
+                  label="男"
+                />
+                <FormControlLabel
+                  value={2}
+                  control={<Radio size="small" />}
+                  label="女"
+                />
+              </RadioGroup>
+            </FormControl>
+          </Stack>
+        </Paper>
+
         <Box
           sx={{ position: "absolute", left: 0, right: 0, bottom: 0 }}
           className="text-right"
@@ -143,9 +144,9 @@ const Settings = ({ onClose }) => {
           <Button sx={{ mr: 2 }} onClick={onClose} variant="outlined">
             取消
           </Button>
-          <Button variant="outlined" type="submit">
+          <LoadingButton loading={loading} variant="outlined" type="submit">
             保存
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
       <ChangePasswordModal visible={visible} close={() => setVisible(false)} />
