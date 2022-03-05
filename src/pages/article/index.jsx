@@ -6,19 +6,9 @@ import { useLocation } from "react-router-dom";
 import { parse, stringify } from "query-string";
 import routers from "routers";
 import { useHistory } from "react-router-dom";
-import {
-  Box,
-  Chip,
-  Container,
-  Stack,
-  TextField,
-  useMediaQuery,
-  useTheme
-} from "@mui/material";
+import { Box, Chip, Container, Stack, TextField } from "@mui/material";
 import CardArticle from "./CardArticle";
-import Masonry from "@mui/lab/Masonry";
 import { Empty } from "components/empty";
-import MobileArticle from "./MobileArticle";
 
 const ArticleList = () => {
   const { search: searchStr } = useLocation();
@@ -26,8 +16,6 @@ const ArticleList = () => {
   // const [keyword, setKeyword] = useState(initialKeyword);
   const [tags, setTags] = useState([]);
   const history = useHistory();
-  const theme = useTheme();
-  const upSM = useMediaQuery(theme.breakpoints.up("sm"));
 
   const {
     list = [],
@@ -59,7 +47,7 @@ const ArticleList = () => {
   };
 
   return (
-    <Container className="pt-2 md:pt-6">
+    <Container className="pt-2 md:pt-6 pb-6">
       <div className="mb-4 flex justify-between">
         <div>
           {keyword ? (
@@ -104,9 +92,8 @@ const ArticleList = () => {
       {list.length ? (
         <Stack spacing={2}>
           {list.map(it => {
-            const Comp = upSM ? CardArticle : MobileArticle;
             return (
-              <Comp
+              <CardArticle
                 handleTagClick={tag => handleTagClick(tag)}
                 key={it.id}
                 {...it}
@@ -122,4 +109,5 @@ const ArticleList = () => {
     </Container>
   );
 };
+
 export default ArticleList;
