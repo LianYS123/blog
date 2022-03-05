@@ -1,26 +1,15 @@
-import * as React from "react";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import Settings from "./settings";
 import { Box } from "@mui/system";
 import { grey } from "@mui/material/colors";
 
-const drawerBleeding = 0;
-
-function SettingsDrawser(props) {
-  const { open, onOpen, onClose } = props;
+export function CommonDrawer(props) {
+  const { children } = props;
 
   return (
     <SwipeableDrawer
       PaperProps={{ sx: { height: "95%" } }}
       anchor="bottom"
-      open={open}
-      onOpen={onOpen}
-      onClose={onClose}
-      swipeAreaWidth={drawerBleeding}
-      disableSwipeToOpen={false}
-      ModalProps={{
-        keepMounted: true
-      }}
+      {...props}
     >
       {/* 一个上下滑动指示条 */}
       <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
@@ -34,10 +23,7 @@ function SettingsDrawser(props) {
           }}
         ></Box>
       </Box>
-
-      <Settings onOpen={onOpen} onClose={onClose} />
+      {children}
     </SwipeableDrawer>
   );
 }
-
-export default SettingsDrawser;

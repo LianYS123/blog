@@ -9,7 +9,11 @@ import useSpinDelay, { useIsBottom } from "./useUtils";
  * @param {config.service} 请求方法
  * @param {config.necessaryParams} 必要参数
  */
-export const useFetchList = ({ service, necessaryParams = {} }) => {
+export const useFetchList = ({
+  service,
+  necessaryParams = {},
+  ready = true
+}) => {
   const [list, setList] = useState([]); // 数据列表，页面上显示的所有数据
   const [loadingMore, setLoadingMore] = useState(false); // 正在加载更多数据
   const [loadData, { loading, loadingDelay, data }] = useMutation(service);
@@ -26,11 +30,14 @@ export const useFetchList = ({ service, necessaryParams = {} }) => {
 
   // 每次请求带上必要参数
   const request = values => {
-    return loadData({ ...necessaryParams, ...values });
+    if (ready) {
+      return loadData({ ...necessaryParams, ...values });
+    }
   };
 
   // 加载更多数据
   const fetchMore = async () => {
+    if (!ready) return;
     const { pageNo, totalPage } = data;
     const hasNextPage = pageNo < totalPage; // 是否存在下一页数据
     if (hasNextPage) {
@@ -58,6 +65,9 @@ export const useFetchList = ({ service, necessaryParams = {} }) => {
 
   // 搜索
   const search = async (values = {}) => {
+    if (!ready) {
+      return;
+    }
     const result = await request({
       pageNo: 1,
       ...values
