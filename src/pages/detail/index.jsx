@@ -36,7 +36,7 @@ function Detail() {
   const location = useLocation();
 
   // 请求文章详情
-  const { data, loadingDelay } = useRequest({
+  const { data, loading } = useRequest({
     service: GET_ARTICLE_DETAIL,
     necessaryParams: { id: resourceId },
     ready: !!resourceId && resourceId !== "undefined",
@@ -72,7 +72,7 @@ function Detail() {
         title={y < 36 ? "" : articleName || "文章详情"}
         back={location?.state?.path || true}
       />
-      <SkeletonList loading={loadingDelay} />
+      <SkeletonList loading={loading} />
       <div className="relative px-4 pb-8">
         {/* 标题 */}
         <div className="mb-2">
