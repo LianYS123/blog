@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import BraftEditor from "braft-editor";
 
-import { allTags, controls, simpleControls } from "./config";
+import { controls, simpleControls } from "./config";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useRequest } from "hooks";
 import { Spin } from "@douyinfe/semi-ui";
@@ -9,7 +9,7 @@ import { parse } from "marked";
 import routers from "routers";
 import $ from "jquery";
 import { useMedia } from "react-use";
-import { BREAKPOINT } from "constants/index";
+import { ALL_TAGS, BREAKPOINT } from "constants/index";
 import {
   ADD_ARTICLE,
   EDIT_ARTICLE,
@@ -182,7 +182,7 @@ function Editor() {
                   multiple
                   freeSolo
                   fullWidth
-                  options={allTags}
+                  options={ALL_TAGS}
                   renderTags={(value, getTagProps) =>
                     value.map((option, index) => (
                       <Chip

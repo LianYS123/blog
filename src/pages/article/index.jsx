@@ -9,12 +9,13 @@ import { useHistory } from "react-router-dom";
 import { Box, Chip, Container, Stack, TextField } from "@mui/material";
 import CardArticle from "./CardArticle";
 import { Empty } from "components/empty";
+import { TagFilter } from "./TagFilter";
 
 const ArticleList = () => {
   const { search: searchStr } = useLocation();
   const { keyword } = parse(searchStr);
   // const [keyword, setKeyword] = useState(initialKeyword);
-  const [tags, setTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
   const history = useHistory();
 
   const {
@@ -25,16 +26,18 @@ const ArticleList = () => {
     search
   } = useFetchList({
     service: ARTICLE_LIST,
-    necessaryParams: { tags, keyword }
+    necessaryParams: { tags: selectedTags, keyword }
   });
 
   const handleTagClose = tag => {
-    setTags(tags.filter(t => t !== tag));
+    setSelectedTags(selectedTags.filter(t => t !== tag));
   };
 
   const handleTagClick = tag => {
-    if (!tags.includes(tag)) {
-      setTags([...tags, tag]);
+    if (!selectedTags.includes(tag)) {
+      setSelectedTags([...selectedTags, tag]);
+    } else {
+      setSelectedTags(selectedTags.filter(it => it !== tag));
     }
   };
 
@@ -47,8 +50,8 @@ const ArticleList = () => {
   };
 
   return (
-    <Container className="pt-2 md:pt-6 pb-6">
-      <div className="mb-4 flex justify-between">
+    <Container className="pt-4 md:pt-10 pb-6">
+      <div className="mb-8 flex justify-between">
         <div>
           {keyword ? (
             <React.Fragment>
@@ -71,22 +74,12 @@ const ArticleList = () => {
           />
         </div>
       </div>
-      <Box sx={{ mb: 1 }}>
-        {tags?.length ? (
-          <div className="flex space-x-1">
-            {tags.map(tag => (
-              <Chip
-                className="m-1"
-                onDelete={() => handleTagClose(tag)}
-                key={tag}
-                label={tag}
-              />
-            ))}
-          </div>
-        ) : (
-          []
-        )}
-      </Box>
+
+      <TagFilter
+        handleTagClick={handleTagClick}
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
+      />
 
       <SkeletonList loading={loadingFirstPage} />
       {list.length ? (
