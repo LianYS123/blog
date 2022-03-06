@@ -7,9 +7,9 @@ import { parse, stringify } from "query-string";
 import routers from "routers";
 import { useHistory } from "react-router-dom";
 import { Box, Chip, Container, Stack, TextField } from "@mui/material";
-import CardArticle from "./CardArticle";
 import { Empty } from "components/empty";
 import { TagFilter } from "./TagFilter";
+import CardArticle from "./card/CardArticle";
 
 const ArticleList = () => {
   const { search: searchStr } = useLocation();

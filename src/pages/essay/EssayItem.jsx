@@ -1,18 +1,10 @@
-import { Lock, MoreHoriz } from "@mui/icons-material";
-import {
-  Avatar,
-  IconButton,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Paper,
-  Tooltip
-} from "@mui/material";
+import { Lock } from "@mui/icons-material";
+import { Avatar, Paper, Tooltip } from "@mui/material";
+import { ActionMenuButton } from "components/action/ActionMenuButton";
 import { useMutation } from "hooks";
 import { useAlertDialog } from "providers/AlertDialogProvider";
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import { FILE_PREVIEW } from "services/app";
 import { DELETE_MOMENT } from "services/essay";
 import { getQualityImage, timestampFormat } from "utils";
 import { EssayEditor } from "./EssayEditor";
@@ -35,7 +27,6 @@ export const EssayItem = ({
     visibleStatus
   } = record;
   const { userInfo } = useSelector(state => state.app);
-  const [anchorEl, setAnchorEl] = useState();
   const { open: openDialog } = useAlertDialog();
 
   // 删除
@@ -57,40 +48,21 @@ export const EssayItem = ({
   };
 
   // 操作按钮
-  const renderOperator = () => {
-    return (
-      <div>
-        <IconButton onClick={ev => setAnchorEl(ev.currentTarget)}>
-          <MoreHoriz />
-        </IconButton>
-        <Menu
-          open={!!anchorEl}
-          onClose={() => setAnchorEl(null)}
-          anchorEl={anchorEl}
-        >
-          {/* 编辑 */}
-          <MenuItem
-            onClick={() => {
-              setAnchorEl(null);
-              setEditorRecord(record);
-            }}
-          >
-            <ListItemText>编辑</ListItemText>
-          </MenuItem>
+  const actions = [
+    {
+      text: "编辑",
+      onClick: () => {
+        setEditorRecord(record);
+      }
+    },
+    {
+      text: "删除",
+      onClick: () => {
+        handleDelete();
+      }
+    }
+  ];
 
-          {/* 删除 */}
-          <MenuItem
-            onClick={() => {
-              setAnchorEl(null);
-              handleDelete();
-            }}
-          >
-            <ListItemText>删除</ListItemText>
-          </MenuItem>
-        </Menu>
-      </div>
-    );
-  };
   return (
     <Paper className="px-4 py-3">
       <div className="flex w-full flex-col justify-between">
@@ -112,7 +84,9 @@ export const EssayItem = ({
             {/* 操作 */}
             <div>
               {/* 只有发布者有编辑权限 */}
-              {userInfo.id === createUser ? renderOperator() : null}
+              {userInfo.id === createUser ? (
+                <ActionMenuButton actions={actions} />
+              ) : null}
             </div>
           </div>
           {/* 内容 */}

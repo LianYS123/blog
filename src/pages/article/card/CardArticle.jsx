@@ -18,19 +18,24 @@ import { getQualityImage, timestampFormat } from "utils";
 import routers from "routers";
 import { useHistory } from "react-router-dom";
 import { Lock } from "@mui/icons-material";
+import { ArticleActions } from "./ArticleActions";
 
-export default function CardArticle({
-  authorAvatar,
-  cover,
-  summary,
-  articleName,
-  createTime,
-  authorName,
-  id,
-  tags,
-  visibleStatus,
-  handleTagClick = noop
-}) {
+export default function CardArticle(props) {
+  const {
+    authorAvatar,
+    cover,
+    summary,
+    articleName,
+    createTime,
+    authorName,
+    id,
+    tags,
+    visibleStatus,
+    handleTagClick = noop,
+    showActions = true,
+    headerProps = {}
+  } = props;
+
   const tagArr = tags ? tags.split("|") : [];
   const history = useHistory();
 
@@ -77,6 +82,7 @@ export default function CardArticle({
         ) : null
       }
       subheader={subheaderEl}
+      {...headerProps}
     />
   );
 
@@ -111,7 +117,7 @@ export default function CardArticle({
   // 封面图
   const coverEl = cover ? (
     <CardMedia
-      sx={{ width: { sm: "auto", md: 256 } }}
+      sx={{ width: { xs: "auto", sm: 256 } }}
       component="img"
       image={cover}
       alt={articleName}
@@ -148,9 +154,11 @@ export default function CardArticle({
     <Card>
       <CardActionArea
         onClick={() => history.push(routers.DETAIL.replace(":id", id))}
+        component="div"
       >
         {upSM ? renderMd() : renderXs()}
       </CardActionArea>
+      {showActions ? <ArticleActions {...props} /> : null}
     </Card>
   );
 }

@@ -2,7 +2,7 @@ import { Box, Stack } from "@mui/material";
 import { Empty } from "components/empty";
 import { SkeletonList } from "components/skeleton";
 import { useFetchList } from "hooks";
-import CardArticle from "pages/article/CardArticle";
+import CardArticle from "pages/article/card/CardArticle";
 import { SPACE_ARTICLE_LIST } from "services/space";
 import { MyArticleItem } from "./MyArticleItem";
 

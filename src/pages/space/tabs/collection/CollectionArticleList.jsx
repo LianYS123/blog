@@ -1,10 +1,14 @@
+import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import { Empty } from "components/empty";
 import { SkeletonList } from "components/skeleton";
-import { useFetchList } from "hooks";
-import { Stack } from "immutable";
-import CardArticle from "pages/article/CardArticle";
-import { PAGE_COLLECTION_ARTICLES } from "services/collection";
+import { useFetchList, useMutation } from "hooks";
+import {
+  PAGE_COLLECTION_ARTICLES,
+  REMOVE_FROM_COLLECTION
+} from "services/collection";
+import { ActionMenuButton } from "components/action/ActionMenuButton";
+import CardArticle from "./CardArticle";
 
 export const CollectionArticleList = props => {
   const { id: collectionId } = props;
@@ -14,20 +18,44 @@ export const CollectionArticleList = props => {
     loadingMore,
     loading,
     search,
+    removeItemById,
     reload
   } = useFetchList({
     service: PAGE_COLLECTION_ARTICLES,
     necessaryParams: { collectionId },
     ready: !!collectionId
   });
+  const [removeFromCollection, { loading: loadingRemove }] = useMutation(
+    REMOVE_FROM_COLLECTION
+  );
+  // 删除
+  const handleDelete = async articleId => {
+    //
+    const { success } = await removeFromCollection({ articleId, collectionId });
+    if (success) {
+      removeItemById(articleId);
+    }
+  };
+
   return (
     <Box>
       <SkeletonList loading={loadingFirstPage} />
       {list.length ? (
-        <Stack spacing={2}>
+        <Stack sx={{ px: 2, py: 4 }} spacing={2}>
           {list.map(it => (
-            <CardArticle key={it.id} {...it} />
-            // <MyArticleItem key={it.id} {...it} />
+            <CardArticle
+              key={it.id}
+              headerProps={{
+                action: (
+                  <ActionMenuButton
+                    actions={[
+                      { text: "删除", onClick: () => handleDelete(it.id) }
+                    ]}
+                  />
+                )
+              }}
+              {...it}
+            />
           ))}
         </Stack>
       ) : loading ? null : (

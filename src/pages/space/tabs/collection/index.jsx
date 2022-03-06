@@ -5,19 +5,21 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
-  Grid,
-  IconButton
+  Grid
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { SkeletonList } from "components/skeleton";
-import { useModalAction, useRequest } from "hooks";
+import { useModalAction, useMutation, useRequest } from "hooks";
 import { SPACE_COLLECTION_LIST } from "services/space";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { EditCollectionDialog } from "./EditCollectionDialog";
 import { CommonDrawer } from "components/drawer";
 import { CollectionArticleList } from "./CollectionArticleList";
+import { EditCollectionDialog } from "components/collection/EditCollectionDialog";
+import { ActionMenuButton } from "components/action/ActionMenuButton";
+import { DELETE_COLLECTION } from "services/collection";
+import { useAlertDialog } from "providers/AlertDialogProvider";
 
 export const Collection = () => {
+  // 收藏夹列表
   const {
     data = [],
     loading,
@@ -26,37 +28,72 @@ export const Collection = () => {
     service: SPACE_COLLECTION_LIST,
     initialData: []
   });
-  const { open: openDialog, ...modalProps } = useModalAction();
+
+  // 编辑收藏夹弹出框
+  const { open: openEditCollectionDialog, ...modalProps } = useModalAction();
+
+  const { open: openAlertDialog } = useAlertDialog();
+
+  // 弹出收藏夹文章列表抽屉
   const {
     open: openDrawer,
     visible: drawerVisible,
     close: closeDrawer,
     ...collectionArticleListProps
   } = useModalAction();
+
+  // 删除收藏夹
+  const [deleteCollection] = useMutation(DELETE_COLLECTION);
+
+  const handleDelete = item => {
+    openAlertDialog({
+      title: "提示",
+      content: "你确定要删除这个收藏夹吗？",
+      onOk: async () => {
+        const { success } = await deleteCollection({ collectionId: item.id });
+        if (success) {
+          reload();
+        }
+      }
+    });
+  };
+
   return (
     <Box>
       <SkeletonList loading={loading} />
       <Grid container spacing={2}>
         {data.map(item => {
           const { collectionName, collectionDesc, id, cover } = item;
+          // 操作按钮
+          const actions = [
+            {
+              text: "编辑",
+              onClick: () => {
+                openEditCollectionDialog({ isEdit: true, record: item });
+              }
+            },
+            {
+              text: "删除",
+              onClick: () => {
+                handleDelete(item);
+              }
+            }
+          ];
           return (
-            <Grid item key={id} xs={6} md={4}>
-              <Card onClick={() => openDrawer(item)}>
-                <CardActionArea>
-                  <CardHeader
-                    title={collectionName}
-                    action={
-                      <IconButton
-                        onClick={ev => {
-                          ev.stopPropagation();
-                          openDialog({ isEdit: true, record: item });
-                        }}
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-                    }
-                  />
-                  {cover ? <CardMedia component="img" src={cover} /> : null}
+            <Grid item key={id} xs={12} sm={6} md={4}>
+              <Card sx={{ height: 320 }}>
+                <CardHeader
+                  title={collectionName}
+                  action={<ActionMenuButton actions={actions} />}
+                />
+                <CardActionArea onClick={() => openDrawer(item)}>
+                  {cover ? (
+                    <CardMedia
+                      sx={{ height: 200 }}
+                      component="img"
+                      src={cover}
+                    />
+                  ) : null}
                   <CardContent>{collectionDesc}</CardContent>
                 </CardActionArea>
               </Card>
@@ -65,7 +102,7 @@ export const Collection = () => {
         })}
       </Grid>
       {!loading && !data.length ? (
-        <Button onClick={() => openDialog({ isEdit: false })}>
+        <Button onClick={() => openEditCollectionDialog({ isEdit: false })}>
           创建收藏夹
         </Button>
       ) : null}
