@@ -1,8 +1,15 @@
 import { Delete, Edit, InfoOutlined, SyncAlt } from "@mui/icons-material";
 import { Favorite, ThumbUp } from "@mui/icons-material";
-import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
+import {
+  Box,
+  ClickAwayListener,
+  SpeedDial,
+  SpeedDialAction,
+  SpeedDialIcon
+} from "@mui/material";
 import { CollectionDialog } from "components/collection/SelectCollectionDialog";
 import { useMutation } from "hooks";
+import { useAssertLogged } from "hooks/app";
 import { useSnackbar } from "notistack";
 import { useAlertDialog } from "providers/AlertDialogProvider";
 import React, { useState } from "react";
@@ -22,6 +29,9 @@ export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const isCurrentUser = useIsCurrentUser(authorId);
+
+  // 登录断言
+  const { assertLogged } = useAssertLogged();
 
   // 操作项可视状态
   const [actionVisible, setActionVisible] = React.useState(false);
@@ -78,13 +88,19 @@ export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
     {
       text: "点赞",
       icon: <ThumbUp />,
-      onClick: () => enqueueSnackbar("建设中..."),
+      onClick: () => {
+        assertLogged();
+        enqueueSnackbar("建设中...");
+      },
       auth: false // 是否需要作者权限
     },
     {
       text: "收藏",
       icon: <Favorite />,
-      onClick: openCollectionDialog,
+      onClick: () => {
+        assertLogged();
+        openCollectionDialog();
+      },
       auth: false
     },
     {
@@ -114,29 +130,42 @@ export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
 
   return (
     <Box position="fixed" right={0} bottom={0}>
-      <SpeedDial
-        ariaLabel="操作"
-        open={actionVisible}
-        onClick={() => setActionVisible(!actionVisible)}
-        sx={{
-          position: "absolute",
-          bottom: 64,
-          right: { xs: 16, sm: 64 }
+      <ClickAwayListener
+        onClickAway={() => {
+          if (actionVisible) {
+            setActionVisible(false);
+          }
         }}
-        icon={<SpeedDialIcon />}
       >
-        {actions.reverse().map((action, index) => (
-          <SpeedDialAction
-            key={index}
-            onClick={ev => {
-              ev.stopPropagation();
-              action.onClick();
-            }}
-            icon={action.icon}
-            tooltipTitle={action.text}
-          />
-        ))}
-      </SpeedDial>
+        <SpeedDial
+          ariaLabel="操作"
+          open={actionVisible}
+          onOpen={() => setActionVisible(true)}
+          onClick={() => {
+            if (actionVisible) {
+              setActionVisible(false);
+            }
+          }}
+          sx={{
+            position: "absolute",
+            bottom: 64,
+            right: { xs: 16, sm: 64 }
+          }}
+          icon={<SpeedDialIcon />}
+        >
+          {actions.reverse().map((action, index) => (
+            <SpeedDialAction
+              key={index}
+              onClick={ev => {
+                ev.stopPropagation();
+                action.onClick();
+              }}
+              icon={action.icon}
+              tooltipTitle={action.text}
+            />
+          ))}
+        </SpeedDial>
+      </ClickAwayListener>
 
       {collectionVisible ? (
         <CollectionDialog
