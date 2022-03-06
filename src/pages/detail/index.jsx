@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { Anchor, Empty, Spin } from "@douyinfe/semi-ui";
+import { Anchor, Empty } from "@douyinfe/semi-ui";
 
 import { useParams } from "react-router";
-import routers from "routers";
 import { useRequest } from "hooks";
 import { GET_ARTICLE_DETAIL } from "services/article";
 import { getHtmlAndOutline } from "./utils";
@@ -12,19 +11,10 @@ import { AppTitle } from "components/appTitle";
 import { useWindowScroll } from "react-use";
 import { DetailDialog } from "./DetailDialog";
 import { DialActions } from "./DialActions";
-import { useSelector } from "react-redux";
 import { SkeletonList } from "components/skeleton";
 import { useLocation } from "react-router-dom";
 
 const { Link } = Anchor;
-
-// 指定用户是否是当前登录用户
-const useIsCurrentUser = authorId => {
-  const { userInfo, logged } = useSelector(state => state.app);
-  const { id: userId } = userInfo; // 用户信息
-  const isCurrentUser = logged && userId === authorId; // 是否是当前用户
-  return isCurrentUser;
-};
 
 /**
  * 文章详情
@@ -44,8 +34,6 @@ function Detail() {
   });
   const { articleName, authorId, id, tags } = data;
   const tagArr = tags ? tags.split("|") : [];
-
-  const isCurrentUser = useIsCurrentUser(authorId);
 
   // 生成文章导航
   const { outline, html } = getHtmlAndOutline(data.html);
@@ -107,13 +95,7 @@ function Detail() {
           </div>
         </div>
         {/* 操作栏，对作者显示 */}
-        {isCurrentUser ? (
-          <DialActions
-            visible={infoVisible}
-            setVisible={setVisible}
-            {...data}
-          />
-        ) : null}
+        <DialActions visible={infoVisible} setVisible={setVisible} {...data} />
       </div>
       <DetailDialog visible={infoVisible} setVisible={setVisible} {...data} />
     </Container>

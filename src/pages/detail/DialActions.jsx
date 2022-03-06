@@ -1,19 +1,35 @@
 import { Delete, Edit, InfoOutlined, SyncAlt } from "@mui/icons-material";
+import { Favorite, ThumbUp } from "@mui/icons-material";
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
+import { CollectionDialog } from "components/collection/SelectCollectionDialog";
 import { useMutation } from "hooks";
+import { useSnackbar } from "notistack";
 import { useAlertDialog } from "providers/AlertDialogProvider";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import routers from "routers";
 import { DELETE_ARTICLE, SYNC_TO_MOMENT } from "services/article";
+import { useIsCurrentUser } from "./hooks";
 
 /**
  * 文章操作栏
  */
-export const DialActions = ({ id, setVisible }) => {
+export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
   const { id: resourceId } = useParams(); // 文章id
   const history = useHistory();
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const isCurrentUser = useIsCurrentUser(authorId);
+
+  // 操作项可视状态
+  const [actionVisible, setActionVisible] = React.useState(false);
+
+  // 收藏夹可视状态
+  const [collectionVisible, setCollectionVisible] = useState(false);
+  const closeCollectionDialog = () => setCollectionVisible(false);
+  const openCollectionDialog = () => setCollectionVisible(true);
 
   const { open: openDialog } = useAlertDialog();
 
@@ -58,10 +74,50 @@ export const DialActions = ({ id, setVisible }) => {
     history.push(pathname);
   };
 
+  const actions = [
+    {
+      text: "点赞",
+      icon: <ThumbUp />,
+      onClick: () => enqueueSnackbar("建设中..."),
+      auth: false // 是否需要作者权限
+    },
+    {
+      text: "收藏",
+      icon: <Favorite />,
+      onClick: openCollectionDialog,
+      auth: false
+    },
+    {
+      text: "编辑文章",
+      icon: <Edit />,
+      onClick: jumpToEditor,
+      auth: true
+    },
+    {
+      text: "同步到随笔",
+      icon: <SyncAlt />,
+      onClick: handleSyncToMoment,
+      auth: true
+    },
+    {
+      text: "详细信息",
+      icon: <InfoOutlined />,
+      onClick: () => showArticleInfo(true)
+    },
+    {
+      text: "删除文章",
+      icon: <Delete color="error" />,
+      onClick: handleDelete,
+      auth: true
+    }
+  ].filter(action => !action.auth || isCurrentUser);
+
   return (
     <Box position="fixed" right={0} bottom={0}>
       <SpeedDial
         ariaLabel="操作"
+        open={actionVisible}
+        onClick={() => setActionVisible(!actionVisible)}
         sx={{
           position: "absolute",
           bottom: 64,
@@ -69,27 +125,26 @@ export const DialActions = ({ id, setVisible }) => {
         }}
         icon={<SpeedDialIcon />}
       >
-        <SpeedDialAction
-          onClick={handleDelete}
-          icon={<Delete color="error" />}
-          tooltipTitle="删除文章"
-        />
-        <SpeedDialAction
-          onClick={() => setVisible(true)}
-          icon={<InfoOutlined />}
-          tooltipTitle="详细信息"
-        />
-        <SpeedDialAction
-          onClick={handleSyncToMoment}
-          icon={<SyncAlt />}
-          tooltipTitle="同步到随笔"
-        />
-        <SpeedDialAction
-          onClick={jumpToEditor}
-          icon={<Edit />}
-          tooltipTitle="编辑文章"
-        />
+        {actions.reverse().map((action, index) => (
+          <SpeedDialAction
+            key={index}
+            onClick={ev => {
+              ev.stopPropagation();
+              action.onClick();
+            }}
+            icon={action.icon}
+            tooltipTitle={action.text}
+          />
+        ))}
       </SpeedDial>
+
+      {collectionVisible ? (
+        <CollectionDialog
+          visible={collectionVisible}
+          close={closeCollectionDialog}
+          articleId={resourceId}
+        ></CollectionDialog>
+      ) : null}
     </Box>
   );
 };

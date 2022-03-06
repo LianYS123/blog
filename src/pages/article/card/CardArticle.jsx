@@ -18,7 +18,6 @@ import { getQualityImage, timestampFormat } from "utils";
 import routers from "routers";
 import { useHistory } from "react-router-dom";
 import { Lock } from "@mui/icons-material";
-import { ArticleActions } from "./ArticleActions";
 
 export default function CardArticle(props) {
   const {
@@ -31,9 +30,7 @@ export default function CardArticle(props) {
     id,
     tags,
     visibleStatus,
-    handleTagClick = noop,
-    showActions = true,
-    headerProps = {}
+    handleTagClick = noop
   } = props;
 
   const tagArr = tags ? tags.split("|") : [];
@@ -82,7 +79,6 @@ export default function CardArticle(props) {
         ) : null
       }
       subheader={subheaderEl}
-      {...headerProps}
     />
   );
 
@@ -158,7 +154,6 @@ export default function CardArticle(props) {
       >
         {upSM ? renderMd() : renderXs()}
       </CardActionArea>
-      {showActions ? <ArticleActions {...props} /> : null}
     </Card>
   );
 }
