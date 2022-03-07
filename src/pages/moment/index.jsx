@@ -1,15 +1,15 @@
-import { Paper } from "@mui/material";
+import { Paper, Stack } from "@mui/material";
 import { Empty } from "components/empty";
 import { SkeletonList } from "components/skeleton";
 import { useFetchList } from "hooks";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { MOMENT_LIST } from "services/essay";
-import { EssayEditor } from "./EssayEditor";
-import { EssayItem } from "./EssayItem";
+import { MOMENT_LIST } from "services/moment";
+import { MomentEditor } from "./MomentEditor";
+import { MomentItem } from "./MomentItem";
 import { Filter } from "./Filter";
 
-const Essay = () => {
+const Moment = () => {
   const [editorRecord, setEditorRecord] = useState();
   const [params, setParams] = useState({});
   const {
@@ -30,7 +30,7 @@ const Essay = () => {
     <div className="container py-8 md:pb-16">
       <div className="mb-8">
         <Paper>
-          <EssayEditor reload={reload} />
+          <MomentEditor reload={reload} />
         </Paper>
       </div>
       {logged ? (
@@ -39,14 +39,14 @@ const Essay = () => {
         </div>
       ) : null}
 
-      <div className="space-y-3 mb-4">
-        <SkeletonList
-          showButton={false}
-          showImage={false}
-          loading={loadingFirstPage}
-        />
+      <SkeletonList
+        showButton={false}
+        showImage={false}
+        loading={loadingFirstPage}
+      />
+      <Stack spacing={2}>
         {list.map(it => (
-          <EssayItem
+          <MomentItem
             key={it.id}
             setEditorRecord={setEditorRecord}
             editorRecord={editorRecord}
@@ -56,18 +56,16 @@ const Essay = () => {
             {...it}
           />
         ))}
-        {!list.length && !loading ? <Empty /> : null}
-        <SkeletonList
-          showButton={false}
-          showImage={false}
-          loading={loadingMore}
-        />
-      </div>
-      {/* {essayModalProps.visible ? (
-        <EditEssayModal {...essayModalProps} reload={refresh} />
-      ) : null} */}
+      </Stack>
+
+      {!list.length && !loading ? <Empty /> : null}
+      <SkeletonList
+        showButton={false}
+        showImage={false}
+        loading={loadingMore}
+      />
     </div>
   );
 };
 
-export default Essay;
+export default Moment;

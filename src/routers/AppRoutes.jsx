@@ -11,7 +11,7 @@ import Home from "pages/home";
 import ArticleList from "pages/article";
 import Detail from "pages/detail";
 import Space from "pages/space";
-import Essay from "pages/essay";
+import Moment from "pages/moment";
 import NotFound from "pages/404";
 import Login from "pages/login";
 import About from "pages/about";
@@ -50,8 +50,8 @@ const APP_ROUTES = [
         component: Space
       },
       {
-        path: routers.ESSAY,
-        component: Essay
+        path: routers.MOMENT,
+        component: Moment
       },
       {
         path: routers.ABOUT,

@@ -1,13 +1,13 @@
 import { Lock } from "@mui/icons-material";
-import { Avatar, Paper, Tooltip } from "@mui/material";
+import { Avatar, CardHeader, Paper, Tooltip } from "@mui/material";
 import { ActionMenuButton } from "components/action/ActionMenuButton";
 import { useMutation } from "hooks";
 import { useAlertDialog } from "providers/AlertDialogProvider";
 import React from "react";
 import { useSelector } from "react-redux";
-import { DELETE_MOMENT } from "services/essay";
+import { DELETE_MOMENT } from "services/moment";
 import { getQualityImage, timestampFormat } from "utils";
-import { EssayEditor } from "./EssayEditor";
+import { MomentEditor } from "./MomentEditor";
 
 export const EssayItem = ({
   editorRecord,
@@ -93,7 +93,7 @@ export const EssayItem = ({
           <div className="flex">
             <div className="w-full mb-1">
               {editorRecord?.id === id ? (
-                <EssayEditor
+                <MomentEditor
                   onCancel={() => setEditorRecord(null)}
                   onSuccess={() => setEditorRecord(null)}
                   isEdit={true}

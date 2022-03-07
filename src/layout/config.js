@@ -16,7 +16,7 @@ export const APP_MENUS = [
     icon: <Article />
   },
   {
-    to: routers.ESSAY,
+    to: routers.MOMENT,
     text: "动态",
     icon: (
       <SvgIcon>
@@ -43,7 +43,7 @@ export const BOTTOM_MENUS = [
     icon: <Article />
   },
   {
-    to: routers.ESSAY,
+    to: routers.MOMENT,
     text: "动态",
     icon: (
       <SvgIcon>

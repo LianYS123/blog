@@ -2,7 +2,7 @@ const routers = {
   LOGIN: "/pages/login",
   HOME: "/pages/home",
   ARTICLE_LIST: "/pages/list",
-  ESSAY: "/pages/essay",
+  MOMENT: "/pages/moment",
   NOT_FOUND: "/pages/404",
   EDITOR: "/pages/editor",
   EDITOR_EDIT: "/pages/editor/:id",

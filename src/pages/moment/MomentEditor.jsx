@@ -1,13 +1,16 @@
 import React from "react";
 
 import { noop } from "lodash";
-import { ADD_MOMENT, EDIT_MOMENT } from "services/essay";
+import { ADD_MOMENT, EDIT_MOMENT } from "services/moment";
 import { useEditorState, CommonEditor } from "components/editor";
 import { useMutation } from "hooks";
 import { useAssertLogged } from "hooks/app";
 import { Button, Checkbox, FormControlLabel } from "@mui/material";
 
-export const EssayEditor = ({
+/**
+ * 动态编辑器
+ */
+export const MomentEditor = ({
   reload = noop,
   editItem = noop,
   record,
