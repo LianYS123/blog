@@ -5,9 +5,7 @@ import Box from "@mui/material/Box";
 import { MyArticleList } from "./articleList";
 import { MyMomentList } from "./momentList";
 import { Collection } from "./collection";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { useLocation } from "react-router-dom";
-import routers from "routers";
+import { useHistoryState } from "hooks";
 
 const TAB_ENUM = {
   ARTICLE: "article",
@@ -26,12 +24,11 @@ function TabPanel(props) {
 }
 
 export default function SpaceTabs() {
-  const history = useHistory();
-  const { state = {} } = useLocation();
+  const { state, setState } = useHistoryState();
   const { tab = TAB_ENUM.ARTICLE } = state;
 
-  const handleChange = (event, newValue) => {
-    history.push(routers.USER_SPACE, { tab: newValue });
+  const handleChange = (event, tab) => {
+    setState({ tab });
   };
 
   return (
