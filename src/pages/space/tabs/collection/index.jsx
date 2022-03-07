@@ -11,12 +11,11 @@ import { Box } from "@mui/system";
 import { SkeletonList } from "components/skeleton";
 import { useModalAction, useMutation, useRequest } from "hooks";
 import { SPACE_COLLECTION_LIST } from "services/space";
-import { CommonDrawer } from "components/drawer";
-import { CollectionArticleList } from "./CollectionArticleList";
 import { EditCollectionDialog } from "components/collection/EditCollectionDialog";
 import { ActionMenuButton } from "components/action/ActionMenuButton";
 import { DELETE_COLLECTION } from "services/collection";
 import { useAlertDialog } from "providers/AlertDialogProvider";
+import { CollectionDrawer } from "./CollectionDrawer";
 
 export const Collection = () => {
   // 收藏夹列表
@@ -35,12 +34,7 @@ export const Collection = () => {
   const { open: openAlertDialog } = useAlertDialog();
 
   // 弹出收藏夹文章列表抽屉
-  const {
-    open: openDrawer,
-    visible: drawerVisible,
-    close: closeDrawer,
-    ...collectionArticleListProps
-  } = useModalAction();
+  const collectionDrawerProps = useModalAction();
 
   // 删除收藏夹
   const [deleteCollection] = useMutation(DELETE_COLLECTION);
@@ -86,7 +80,9 @@ export const Collection = () => {
                   title={collectionName}
                   action={<ActionMenuButton actions={actions} />}
                 />
-                <CardActionArea onClick={() => openDrawer(item)}>
+                <CardActionArea
+                  onClick={() => collectionDrawerProps.open(item)}
+                >
                   {cover ? (
                     <CardMedia
                       sx={{ height: 200 }}
@@ -107,13 +103,7 @@ export const Collection = () => {
         </Button>
       ) : null}
       <EditCollectionDialog reload={reload} {...modalProps} />
-      <CommonDrawer
-        open={drawerVisible}
-        onOpen={() => openDrawer()}
-        onClose={closeDrawer}
-      >
-        <CollectionArticleList {...collectionArticleListProps} />
-      </CommonDrawer>
+      <CollectionDrawer {...collectionDrawerProps} />
     </Box>
   );
 };

@@ -94,6 +94,7 @@ export const useFetchList = ({
   }, [necessaryParams]);
 
   return {
+    data,
     list,
     fetchMore,
     search,

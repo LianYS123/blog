@@ -58,6 +58,7 @@ export default function Space() {
 
       {/* 个人信息设置弹出框 */}
       <CommonDrawer
+        title={"个人信息设置"}
         open={visible}
         onClose={() => setVisible(false)}
         onOpen={() => setVisible(true)}
