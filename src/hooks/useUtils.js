@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import { useEffect, useState, useRef, useCallback } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import { usePrevious, useWindowScroll, useWindowSize } from "react-use";
 import routers from "routers";
@@ -203,4 +203,18 @@ export function useSpinDelay(loading, options) {
   return state === "DISPLAY" || state === "EXPIRE";
 }
 
-export default useSpinDelay;
+/**
+ * 修改历史记录状态
+ */
+export const useHistoryState = () => {
+  const history = useHistory();
+
+  const { state = {}, pathname } = useLocation();
+
+  // 修改 history 状态
+  const setState = (newState = {}) => {
+    history.replace(pathname, { ...state, ...newState });
+  };
+
+  return { state, setState, history };
+};

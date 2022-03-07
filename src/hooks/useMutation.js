@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getAPIMethod } from "utils/apiUtils";
 import xFetch from "utils/fetch";
-import useSpinDelay from "./useUtils";
+import { useSpinDelay } from "./useUtils";
 
 /**
  * @description: 异步方法的简单封装，处理请求的loading状态

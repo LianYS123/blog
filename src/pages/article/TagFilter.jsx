@@ -3,6 +3,7 @@ import { Box, useTheme } from "@mui/system";
 import { ALL_TAGS } from "constants/index";
 import { makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
+import { useHistoryState } from "hooks";
 
 const useStyles = makeStyles({
   root: {
@@ -13,11 +14,9 @@ const useStyles = makeStyles({
   }
 });
 
-export const TagFilter = ({
-  handleTagClick,
-  selectedTags,
-  setSelectedTags
-}) => {
+export const TagFilter = ({ handleTagClick }) => {
+  const { state, setState } = useHistoryState();
+  const { selectedTags = [], keyword } = state;
   const theme = useTheme();
   const upSM = useMediaQuery(theme.breakpoints.up("sm"));
   const unextendTags = upSM ? ALL_TAGS.slice(0, 20) : ALL_TAGS.slice(0, 13);
@@ -109,18 +108,6 @@ export const TagFilter = ({
               </Box>
             </Box>
           </Box>
-
-          {/* <Box mt={2}>
-            <Chip
-              classes={{ label: styles.label, root: styles.root }}
-              onClick={() => setSelectedTags([])}
-              variant="outlined"
-              disabled={!selectedTags.length}
-              size="medium"
-              sx={{ mr: 1, mb: 1 }}
-              label="重置"
-            />
-          </Box> */}
         </Box>
       </Box>
       {selectedTags.length ? (
@@ -135,7 +122,7 @@ export const TagFilter = ({
           <Link
             ml={2}
             sx={{ cursor: "pointer" }}
-            onClick={() => setSelectedTags([])}
+            onClick={() => setState({ selectedTags: [] })}
           >
             重置
           </Link>

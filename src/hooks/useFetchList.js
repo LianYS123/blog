@@ -2,7 +2,7 @@ import { isEmpty, uniqBy } from "lodash";
 import { useEffect, useState } from "react";
 import { useDeepCompareEffect } from "react-use";
 import { useMutation } from "./useMutation";
-import useSpinDelay, { useIsBottom } from "./useUtils";
+import { useIsBottom, useSpinDelay } from "./useUtils";
 
 /**
  * 无限滚动数据加载逻辑

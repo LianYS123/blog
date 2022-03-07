@@ -1,22 +1,16 @@
-import React, { useState } from "react";
-import { useFetchList } from "hooks";
+import React from "react";
+import { useFetchList, useHistoryState } from "hooks";
 import { ARTICLE_LIST } from "services/article";
 import { SkeletonList } from "components/skeleton";
-import { useLocation } from "react-router-dom";
-import { parse, stringify } from "query-string";
-import routers from "routers";
-import { useHistory } from "react-router-dom";
-import { Box, Chip, Container, Stack, TextField } from "@mui/material";
+import { Container, Stack, TextField } from "@mui/material";
 import { Empty } from "components/empty";
 import { TagFilter } from "./TagFilter";
 import CardArticle from "./card/CardArticle";
 
 const ArticleList = () => {
-  const { search: searchStr } = useLocation();
-  const { keyword } = parse(searchStr);
-  // const [keyword, setKeyword] = useState(initialKeyword);
-  const [selectedTags, setSelectedTags] = useState([]);
-  const history = useHistory();
+  const { state, setState } = useHistoryState();
+
+  const { selectedTags = [], keyword } = state;
 
   const {
     list = [],
@@ -29,24 +23,17 @@ const ArticleList = () => {
     necessaryParams: { tags: selectedTags, keyword }
   });
 
-  const handleTagClose = tag => {
-    setSelectedTags(selectedTags.filter(t => t !== tag));
-  };
-
   const handleTagClick = tag => {
-    if (!selectedTags.includes(tag)) {
-      setSelectedTags([...selectedTags, tag]);
-    } else {
-      setSelectedTags(selectedTags.filter(it => it !== tag));
-    }
+    // 如果标签已选中，则取消选中，否则选中该标签
+    const newTags = selectedTags.includes(tag)
+      ? selectedTags.filter(it => it !== tag)
+      : [...selectedTags, tag];
+    setState({ selectedTags: newTags });
   };
 
   // 搜索
   const handleSearch = (kw = keyword) => {
-    history.push({
-      pathname: routers.ARTICLE_LIST,
-      search: stringify({ keyword: kw })
-    });
+    setState({ keyword: kw });
   };
 
   return (
@@ -75,11 +62,7 @@ const ArticleList = () => {
         </div>
       </div>
 
-      <TagFilter
-        handleTagClick={handleTagClick}
-        selectedTags={selectedTags}
-        setSelectedTags={setSelectedTags}
-      />
+      <TagFilter handleTagClick={handleTagClick} />
 
       <SkeletonList loading={loadingFirstPage} />
       {list.length ? (
