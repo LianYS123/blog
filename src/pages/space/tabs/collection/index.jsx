@@ -16,6 +16,7 @@ import { ActionMenuButton } from "components/action/ActionMenuButton";
 import { DELETE_COLLECTION } from "services/collection";
 import { useAlertDialog } from "providers/AlertDialogProvider";
 import { CollectionDrawer } from "./CollectionDrawer";
+import { useHistoryState } from "hooks";
 
 export const Collection = () => {
   // 收藏夹列表
@@ -28,13 +29,14 @@ export const Collection = () => {
     initialData: []
   });
 
+  // 弹出收藏夹文章列表抽屉
+  const { state, setState } = useHistoryState();
+  const { collectionDrawerVisible = false, drawerCollectionId } = state;
+
   // 编辑收藏夹弹出框
   const { open: openEditCollectionDialog, ...modalProps } = useModalAction();
 
   const { open: openAlertDialog } = useAlertDialog();
-
-  // 弹出收藏夹文章列表抽屉
-  const collectionDrawerProps = useModalAction();
 
   // 删除收藏夹
   const [deleteCollection] = useMutation(DELETE_COLLECTION);
@@ -81,7 +83,12 @@ export const Collection = () => {
                   action={<ActionMenuButton actions={actions} />}
                 />
                 <CardActionArea
-                  onClick={() => collectionDrawerProps.open(item)}
+                  onClick={() =>
+                    setState({
+                      drawerCollectionId: item.id,
+                      collectionDrawerVisible: true
+                    })
+                  }
                 >
                   {cover ? (
                     <CardMedia
@@ -103,7 +110,12 @@ export const Collection = () => {
         </Button>
       ) : null}
       <EditCollectionDialog reload={reload} {...modalProps} />
-      <CollectionDrawer {...collectionDrawerProps} />
+      <CollectionDrawer
+        visible={collectionDrawerVisible}
+        id={drawerCollectionId}
+        open={() => setState({ collectionDrawerVisible: true })}
+        close={() => setState({ collectionDrawerVisible: false })}
+      />
     </Box>
   );
 };
