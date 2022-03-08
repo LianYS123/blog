@@ -13,17 +13,23 @@ import { DetailDialog } from "./DetailDialog";
 import { DialActions } from "./DialActions";
 import { SkeletonList } from "components/skeleton";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const { Link } = Anchor;
 
 /**
  * 文章详情
  */
-function Detail() {
-  const { id: resourceId } = useParams(); // 文章id
+function Detail(props) {
+  const { showTitle = true } = props;
+  let { id: resourceId } = useParams(); // 文章id
+  if (props.id) {
+    resourceId = props.id;
+  }
   const [infoVisible, setVisible] = useState(false); // 文章详情Dialog
   const { y } = useWindowScroll();
   const location = useLocation();
+  const { userInfo, logged } = useSelector(state => state.app);
 
   // 请求文章详情
   const { data, loading } = useRequest({
@@ -56,24 +62,32 @@ function Detail() {
 
   return (
     <Container className="pt-14">
-      <AppTitle
-        title={y < 36 ? "" : articleName || "文章详情"}
-        back={location?.state?.path || true}
-      />
+      {showTitle ? (
+        <AppTitle
+          title={y < 36 ? "" : articleName || "文章详情"}
+          back={location?.state?.path || true}
+        />
+      ) : null}
       <SkeletonList loading={loading} />
       <div className="relative px-4 pb-8">
         {/* 标题 */}
-        <div className="mb-2">
-          <Typography variant="h4">{articleName}</Typography>
-        </div>
+        {showTitle && (
+          <div className="mb-2">
+            <Typography variant="h4">{articleName}</Typography>
+          </div>
+        )}
+
         {/* 标签 */}
-        <div>
-          <span className="flex space-x-1">
-            {tagArr.map(tag => (
-              <Chip size="small" key={tag} label={tag} />
-            ))}
-          </span>
-        </div>
+        {showTitle && (
+          <div>
+            <span className="flex space-x-1">
+              {tagArr.map(tag => (
+                <Chip size="small" key={tag} label={tag} />
+              ))}
+            </span>
+          </div>
+        )}
+
         {/* 正文 */}
         <div className="mr-0 sm:mr-52 mt-4">
           {html ? (
@@ -94,8 +108,14 @@ function Detail() {
             ) : null}
           </div>
         </div>
-        {/* 操作栏，对作者显示 */}
-        <DialActions visible={infoVisible} setVisible={setVisible} {...data} />
+        {/* 操作栏 */}
+        {logged ? (
+          <DialActions
+            visible={infoVisible}
+            setVisible={setVisible}
+            {...data}
+          />
+        ) : null}
       </div>
       <DetailDialog visible={infoVisible} setVisible={setVisible} {...data} />
     </Container>

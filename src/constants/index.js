@@ -15,33 +15,34 @@ export const BREAKPOINT = {
 export const ENCRYPT_PUBLICKEY =
   "04298364ec840088475eae92a591e01284d1abefcda348b47eb324bb521bb03b0b2a5bc393f6b71dabb8f15c99a0050818b56b23f31743b93df9cf8948f15ddb54";
 
+export const TAGS_MAP = {
+  Translation: [
+    "Technology",
+    "Project Doc",
+    "Politics",
+    "Finance",
+    "Education",
+    "Literature"
+  ],
+  "UX Writing": ["Desktop", "Mobile", "Website"],
+  "Technical Writing": [
+    "Help Articles",
+    "Manuals",
+    "API Doc",
+    "Feature Updates"
+  ],
+  Copywriting: [
+    "Website",
+    "Posts",
+    "Visual Essay",
+    "H5",
+    "PPT",
+    "Video Script"
+  ],
+  "Content Strategy": ["Style Guide"],
+  Language: ["ZH", "EN", "ZH > EN", "EN > ZH"]
+};
+
 // 所有文章标签
 
-export const ALL_TAGS = [
-  "想法",
-  "技术",
-  "项目",
-  "前端",
-  "后端",
-  "知识",
-  "生活",
-  "心情",
-  "读书",
-  "游戏",
-  "工作",
-  "兴趣",
-  "风景",
-  "故事",
-  "概念",
-  "学科",
-  "语言",
-  "文字",
-  "记录",
-  "资源",
-  "系统",
-  "收藏",
-  "图像",
-  "学习",
-  "记忆",
-  "梦"
-];
+export const ALL_TAGS = Object.values(TAGS_MAP).flat();

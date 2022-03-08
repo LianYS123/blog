@@ -20,11 +20,12 @@ export default function AppHeader() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         color="inherit"
-        sx={{ boxShadow: y > 10 ? 1 : 0 }}
-        position="fixed"
+        sx={{ boxShadow: 0 }}
+        position="static"
+        // position="fixed"
       >
         <Toolbar>
-          <SideBarMenuButton />
+          {/* <SideBarMenuButton /> */}
           <Typography
             className="cursor-pointer"
             variant="h6"
@@ -32,7 +33,7 @@ export default function AppHeader() {
             onClick={() => history.push(routers.HOME)}
             sx={{ flexGrow: 1 }}
           >
-            Victoria
+            Victoria Chen
           </Typography>
           <div className="space-x-4 mr-2 hidden sm:block">
             {APP_MENUS.map(({ to, text, icon }) => {
@@ -53,8 +54,8 @@ export default function AppHeader() {
             })}
           </div>
           <div className="flex items-center">
-            <ThemeSwitch />
-            <UserAvatar />
+            {/* <ThemeSwitch /> */}
+            {/* <UserAvatar /> */}
           </div>
         </Toolbar>
       </AppBar>

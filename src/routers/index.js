@@ -1,6 +1,7 @@
 const routers = {
   LOGIN: "/pages/login",
-  HOME: "/pages/home",
+  // HOME: "/pages/home",
+  HOME: "/pages/about", // 主页就是文章列表页
   ARTICLE_LIST: "/pages/list",
   MOMENT: "/pages/moment",
   NOT_FOUND: "/pages/404",

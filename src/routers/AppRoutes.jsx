@@ -37,10 +37,10 @@ const APP_ROUTES = [
     path: "/pages",
     component: AppLayout,
     children: [
-      {
-        path: routers.HOME,
-        component: Home
-      },
+      // {
+      //   path: routers.HOME,
+      //   component: Home
+      // },
       {
         path: routers.ARTICLE_LIST,
         component: ArticleList

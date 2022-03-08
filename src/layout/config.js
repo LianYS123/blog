@@ -6,55 +6,26 @@ import { SvgIcon } from "@mui/material";
 
 export const APP_MENUS = [
   {
-    to: routers.HOME,
-    text: "首页",
-    icon: <Home />
+    to: routers.ABOUT,
+    text: "About",
+    icon: <Info />
   },
   {
     to: routers.ARTICLE_LIST,
-    text: "文章",
+    text: "Portfolio",
     icon: <Article />
-  },
-  {
-    to: routers.MOMENT,
-    text: "动态",
-    icon: (
-      <SvgIcon>
-        <MomentIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    to: routers.ABOUT,
-    text: "关于",
-    icon: <Info />
   }
-];
+].filter(it => !it.hidden);
 
 export const BOTTOM_MENUS = [
   {
-    to: routers.HOME,
-    text: "首页",
-    icon: <Home />
+    to: routers.ABOUT,
+    text: "About",
+    icon: <Info />
   },
   {
     to: routers.ARTICLE_LIST,
-    text: "文章",
+    text: "Portfolio",
     icon: <Article />
-  },
-  {
-    to: routers.MOMENT,
-    text: "动态",
-    icon: (
-      <SvgIcon>
-        <MomentIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    to: routers.USER_SPACE,
-    text: "我的",
-    icon: <AccountCircle />,
-    requireLogin: true
   }
-];
+].filter(it => !it.hidden);

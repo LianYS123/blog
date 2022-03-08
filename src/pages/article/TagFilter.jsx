@@ -1,6 +1,6 @@
-import { Chip, Link, Typography, useMediaQuery } from "@mui/material";
+import { Chip, Grid, Link, Typography, useMediaQuery } from "@mui/material";
 import { Box, useTheme } from "@mui/system";
-import { ALL_TAGS } from "constants/index";
+import { ALL_TAGS, TAGS_MAP } from "constants/index";
 import { makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
 import { useHistoryState } from "hooks";
@@ -44,76 +44,45 @@ export const TagFilter = ({ handleTagClick }) => {
         </Typography> */}
         <Box sx={{ mb: 2 }}>
           <Box mb={1}>
-            <Box display="flex">
-              <Typography
-                variant="subtitle1"
-                sx={{ padding: { md: "4px" }, whiteSpace: "nowrap" }}
-              >
-                常用：
-              </Typography>
-              <Box>
-                {showTags.slice(0, 5).map((tag, index) => (
-                  <Chip
-                    color={selectedTags.includes(tag) ? "primary" : "default"}
-                    classes={{
-                      label: upSM ? styles.label : "",
-                      root: upSM ? styles.root : ""
-                    }}
-                    onClick={() => handleTagClick(tag)}
-                    size="medium"
-                    sx={{ mr: 1, mb: 1 }}
-                    key={tag}
-                    label={tag}
-                  />
-                ))}
-              </Box>
-            </Box>
-          </Box>
-
-          <Box>
-            <Box display="flex">
-              <Typography
-                variant="subtitle1"
-                sx={{ whiteSpace: "nowrap", padding: { md: "4px" } }}
-              >
-                其他：
-              </Typography>
-              <Box>
-                {showTags.slice(5).map((tag, index) => (
-                  <Chip
-                    color={selectedTags.includes(tag) ? "primary" : "default"}
-                    classes={{
-                      label: upSM ? styles.label : "",
-                      root: upSM ? styles.root : ""
-                    }}
-                    onClick={() => handleTagClick(tag)}
-                    size="medium"
-                    sx={{ mr: 1, mb: 1 }}
-                    key={tag}
-                    label={tag}
-                  />
-                ))}
-                {/* 展开收起 */}
-                <Chip
-                  classes={{
-                    label: upSM ? styles.label : "",
-                    root: upSM ? styles.root : ""
-                  }}
-                  onClick={toggleExtend}
-                  variant="outlined"
-                  size="medium"
-                  sx={{ mr: 1, mb: 1 }}
-                  label={extend ? "收起" : "查看全部"}
-                />
-              </Box>
-            </Box>
+            {Object.entries(TAGS_MAP).map(([key, tags], index) => {
+              return (
+                <Box display="flex" key={index}>
+                  <Box sx={{ width: 140, textAlign: "right", mr: 1 }}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ whiteSpace: "nowrap", padding: { md: "4px" } }}
+                    >
+                      {key}:
+                    </Typography>
+                  </Box>
+                  <Box>
+                    {tags.map((tag, index) => (
+                      <Chip
+                        color={
+                          selectedTags.includes(tag) ? "primary" : "default"
+                        }
+                        classes={{
+                          label: upSM ? styles.label : "",
+                          root: upSM ? styles.root : ""
+                        }}
+                        onClick={() => handleTagClick(tag)}
+                        size="medium"
+                        sx={{ mr: 1, mb: 1 }}
+                        key={tag}
+                        label={tag}
+                      />
+                    ))}
+                  </Box>
+                </Box>
+              );
+            })}
           </Box>
         </Box>
       </Box>
       {selectedTags.length ? (
         <Box>
           <Typography variant="subtitle1" sx={{ mr: 1 }} component="span">
-            搜索标签:
+            Selected:
           </Typography>
           <Typography variant="body1" component="span">
             {selectedTags.join(", ")}
@@ -124,7 +93,7 @@ export const TagFilter = ({ handleTagClick }) => {
             sx={{ cursor: "pointer" }}
             onClick={() => setState({ selectedTags: [] })}
           >
-            重置
+            Reset
           </Link>
         </Box>
       ) : null}

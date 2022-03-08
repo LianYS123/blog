@@ -77,7 +77,7 @@ export default function Login() {
           className="font-extrabold"
           style={{ transform: "translateY(-2px)" }}
         >
-          Victoria
+          Victoria Chen
         </Typography>
       </Box>
 

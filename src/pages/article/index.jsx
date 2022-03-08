@@ -37,31 +37,7 @@ const ArticleList = () => {
   };
 
   return (
-    <Container className="pt-4 md:pt-10 pb-6">
-      <div className="mb-8 flex justify-between">
-        <div>
-          {keyword ? (
-            <React.Fragment>
-              <span className="text-sm font-light mr-2">搜索:</span>
-              <span className="text-sm">{keyword}</span>
-            </React.Fragment>
-          ) : null}
-        </div>
-        <div>
-          <TextField
-            label="搜索"
-            variant="standard"
-            size="small"
-            placeholder="输入关键词搜索"
-            onKeyPress={ev => {
-              if (ev.key.toUpperCase() === "ENTER") {
-                handleSearch(ev.target.value);
-              }
-            }}
-          />
-        </div>
-      </div>
-
+    <Container>
       <TagFilter handleTagClick={handleTagClick} />
 
       <SkeletonList loading={loadingFirstPage} />

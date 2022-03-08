@@ -70,15 +70,7 @@ export default function CardArticle(props) {
   const headerEl = (
     <CardHeader
       title={articleName} // 文章标题
-      avatar={
-        // 头像
-        authorName ? (
-          <Tooltip title={authorName}>
-            <Avatar src={getQualityImage(authorAvatar)} />
-          </Tooltip>
-        ) : null
-      }
-      subheader={subheaderEl}
+      // subheader={subheaderEl}
     />
   );
 
