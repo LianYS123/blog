@@ -27,6 +27,7 @@ export const TagFilter = ({ handleTagClick }) => {
                 <Typography
                   color="primary.main"
                   variant="subtitle1"
+                  fontWeight={700}
                   // gutterBottom
                   sx={{
                     whiteSpace: "nowrap",
