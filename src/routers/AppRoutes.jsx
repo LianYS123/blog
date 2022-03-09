@@ -12,6 +12,7 @@ import ArticleList from "pages/article";
 import Detail from "pages/detail";
 import Space from "pages/space";
 import Moment from "pages/moment";
+import Credentials from "pages/credentials";
 import NotFound from "pages/404";
 import Login from "pages/login";
 import About from "pages/about";
@@ -45,17 +46,21 @@ const APP_ROUTES = [
         path: routers.ARTICLE_LIST,
         component: ArticleList
       },
-      {
-        path: routers.USER_SPACE,
-        component: Space
-      },
-      {
-        path: routers.MOMENT,
-        component: Moment
-      },
+      // {
+      //   path: routers.USER_SPACE,
+      //   component: Space
+      // },
+      // {
+      //   path: routers.MOMENT,
+      //   component: Moment
+      // },
       {
         path: routers.ABOUT,
         component: About
+      },
+      {
+        path: routers.CREDENTIALS,
+        component: Credentials
       },
       {
         path: routers.NOT_FOUND,

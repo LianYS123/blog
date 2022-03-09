@@ -138,7 +138,9 @@ export const getQualityImage = (url, quality = 60) => {
 export const getRQualityImage = (url, quality = 60) => {
   const isValid =
     url &&
-    [".png", ".jpg", ".PNG", ".JPG"].some(suffix => url.endsWith(suffix));
+    [".png", ".jpg", ".jpeg", ".PNG", ".JPG", ".JPEG"].some(suffix =>
+      url.endsWith(suffix)
+    );
   if (!isValid) {
     return url;
   }

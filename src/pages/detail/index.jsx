@@ -21,7 +21,7 @@ const { Link } = Anchor;
  * 文章详情
  */
 function Detail(props) {
-  const { showTitle = true } = props;
+  const { isAbout = false } = props;
   let { id: resourceId } = useParams(); // 文章id
   if (props.id) {
     resourceId = props.id;
@@ -62,7 +62,7 @@ function Detail(props) {
 
   return (
     <Container className="pt-14">
-      {showTitle ? (
+      {!isAbout ? (
         <AppTitle
           title={y < 36 ? "" : articleName || "文章详情"}
           back={location?.state?.path || true}
@@ -71,14 +71,14 @@ function Detail(props) {
       <SkeletonList loading={loading} />
       <div className="relative px-4 pb-8">
         {/* 标题 */}
-        {showTitle && (
+        {!isAbout && (
           <div className="mb-2">
             <Typography variant="h4">{articleName}</Typography>
           </div>
         )}
 
         {/* 标签 */}
-        {showTitle && (
+        {!isAbout && (
           <div>
             <span className="flex space-x-1">
               {tagArr.map(tag => (
@@ -109,7 +109,7 @@ function Detail(props) {
           </div>
         </div>
         {/* 操作栏 */}
-        {logged ? (
+        {logged && !isAbout ? (
           <DialActions
             visible={infoVisible}
             setVisible={setVisible}

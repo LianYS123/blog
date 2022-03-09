@@ -12,6 +12,7 @@ const routers = {
   USER_SPACE: "/pages/space",
   SETTING: "/pages/setting",
   ABOUT: "/pages/about",
+  CREDENTIALS: "/pages/credentials",
 
   TMP_REDIRECT: "/tmp-redirect"
 };

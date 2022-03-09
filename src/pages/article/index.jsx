@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFetchList, useHistoryState } from "hooks";
 import { ARTICLE_LIST } from "services/article";
 import { SkeletonList } from "components/skeleton";
-import { Container, Stack, TextField } from "@mui/material";
+import {
+  Container,
+  IconButton,
+  Slide,
+  Stack,
+  TextField,
+  Tooltip
+} from "@mui/material";
 import { Empty } from "components/empty";
 import { TagFilter } from "./TagFilter";
 import CardArticle from "./card/CardArticle";
+import { Box } from "@mui/system";
+import { FilterListOutlined } from "@mui/icons-material";
 
 const ArticleList = () => {
   const { state, setState } = useHistoryState();
@@ -36,9 +45,24 @@ const ArticleList = () => {
     setState({ keyword: kw });
   };
 
+  // 显示过滤项
+  const [showFilters, setShowFilters] = useState(false);
+
   return (
-    <Container>
-      <TagFilter handleTagClick={handleTagClick} />
+    <Box>
+      <Box sx={{ textAlign: "left", mb: 2 }}>
+        <Tooltip title="显示过滤项">
+          <IconButton onClick={() => setShowFilters(b => !b)}>
+            <FilterListOutlined />
+          </IconButton>
+        </Tooltip>
+      </Box>
+      {/* <Slide mountOnEnter unmountOnExit in={showFilters}>
+        <Box>
+          <TagFilter handleTagClick={handleTagClick} />
+        </Box>
+      </Slide> */}
+      {showFilters && <TagFilter handleTagClick={handleTagClick} />}
 
       <SkeletonList loading={loadingFirstPage} />
       {list.length ? (
@@ -58,7 +82,7 @@ const ArticleList = () => {
       )}
 
       <SkeletonList loading={loadingMore} />
-    </Container>
+    </Box>
   );
 };
 
