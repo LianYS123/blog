@@ -10,32 +10,28 @@ import { APP_MENUS } from "./config";
 import { ButtonBase, Container, Tab, Tabs, Typography } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import LogoSvg from "./logo";
+import { UserAvatar } from "./userAvatar";
 
 // 页面布局
 const AppLayout = ({ children }) => {
   const history = useHistory();
   const { pathname } = useLocation();
+  const { logged } = useSelector(state => state.app);
   return (
     <Box>
-      {/* <AppHeader /> */}
       <Container>
-        {/* <Typography
-          variant="h4"
-          gutterBottom
-          sx={{ mt: 8, textAlign: "center" }}
-        >
-          Title...
-        </Typography> */}
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+          <UserAvatar />
+        </Box>
         <Box
           sx={{
-            mt: 8,
+            mt: 6,
             mb: 2,
             textAlign: "center",
             display: "flex",
             justifyContent: "center"
           }}
         >
-          {/* <Box sx={{ mt: 8, mb: 2, textAlign: "center" }}> */}
           <LogoSvg />
         </Box>
 

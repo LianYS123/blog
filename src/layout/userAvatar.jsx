@@ -1,4 +1,11 @@
-import { Avatar, ButtonBase, Menu, MenuItem } from "@mui/material";
+import {
+  Avatar,
+  ButtonBase,
+  Link,
+  Menu,
+  MenuItem,
+  Typography
+} from "@mui/material";
 import { appSlice } from "models/app";
 import { useSnackbar } from "notistack";
 import { useLoginDialog } from "providers/LoginDialogProvider";
@@ -12,6 +19,7 @@ import { FILE_PREVIEW } from "services/app";
 import { USER_LOGOUT } from "services/auth";
 import qs from "query-string";
 import { getQualityImage } from "utils";
+import { Box } from "@mui/system";
 
 // 用户头像和下拉菜单, 以及登录与退出逻辑
 export const UserAvatar = () => {
@@ -42,15 +50,9 @@ export const UserAvatar = () => {
     dispatch(appSlice.actions.setLogged(false)); // 修改登录状态
   };
 
-  const handleLogout = () => {
-    openAlertDialog({
-      content: "你确定要登出吗？",
-      onOk: async () => {
-        await logout();
-        enqueueSnackbar("已登出");
-        handleJumpToLogin();
-      }
-    });
+  const handleLogout = async () => {
+    await logout();
+    handleJumpToLogin();
     // openLoginDialog({ tip: "已登出，请重新登录" });
   };
 
@@ -69,7 +71,15 @@ export const UserAvatar = () => {
           />
         </span>
       ) : (
-        <ButtonBase onClick={handleJumpToLogin}>登录</ButtonBase>
+        <ButtonBase onClick={handleJumpToLogin}>
+          <Typography
+            component="span"
+            variant="overline"
+            sx={{ cursor: "pointer" }}
+          >
+            Login
+          </Typography>
+        </ButtonBase>
       )}
       <Menu
         open={!!anchorEl}
@@ -82,15 +92,7 @@ export const UserAvatar = () => {
             history.push(routers.EDITOR);
           }}
         >
-          写文章
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            setAnchorEl(null);
-            history.push(routers.USER_SPACE);
-          }}
-        >
-          个人空间
+          Add Article
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -98,7 +100,7 @@ export const UserAvatar = () => {
             handleLogout();
           }}
         >
-          退出
+          Log Out
         </MenuItem>
       </Menu>
     </React.Fragment>

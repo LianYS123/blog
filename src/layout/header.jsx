@@ -55,7 +55,7 @@ export default function AppHeader() {
           </div>
           <div className="flex items-center">
             {/* <ThemeSwitch /> */}
-            {/* <UserAvatar /> */}
+            <UserAvatar />
           </div>
         </Toolbar>
       </AppBar>

@@ -46,13 +46,13 @@ export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
   // 删除文章操作
   const [deleteArticle] = useMutation(DELETE_ARTICLE, null, {
     autoHandleError: true,
-    successMessage: "文章已删除"
+    successMessage: "Deleted"
   });
 
   const handleDelete = () => {
     openDialog({
-      title: "提示",
-      content: "你确定要删除该文章吗？",
+      title: "Tips",
+      content: "Are you sure you want to delete this article?",
       onOk: async () => {
         const { success } = await deleteArticle({ id });
         if (success) {
@@ -86,42 +86,18 @@ export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
 
   const actions = [
     {
-      text: "点赞",
-      icon: <ThumbUp />,
-      onClick: () => {
-        assertLogged();
-        enqueueSnackbar("建设中...");
-      },
-      auth: false // 是否需要作者权限
-    },
-    {
-      text: "收藏",
-      icon: <Favorite />,
-      onClick: () => {
-        assertLogged();
-        openCollectionDialog();
-      },
-      auth: false
-    },
-    {
-      text: "编辑文章",
+      text: "Edit Article",
       icon: <Edit />,
       onClick: jumpToEditor,
       auth: true
     },
     {
-      text: "同步到随笔",
-      icon: <SyncAlt />,
-      onClick: handleSyncToMoment,
-      auth: true
-    },
-    {
-      text: "详细信息",
+      text: "Details",
       icon: <InfoOutlined />,
       onClick: () => showArticleInfo(true)
     },
     {
-      text: "删除文章",
+      text: "Delete Article",
       icon: <Delete color="error" />,
       onClick: handleDelete,
       auth: true

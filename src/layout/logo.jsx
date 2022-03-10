@@ -1,12 +1,13 @@
 import React from "react";
 
 // 字体: Allison, 文字: Victoria Chen
-function LogoSvg() {
+function LogoSvg(props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="347.6"
       height="72.4"
+      {...props}
       viewBox="0 0 347.6 72.4"
     >
       <path

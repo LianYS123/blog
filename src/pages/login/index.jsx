@@ -16,6 +16,7 @@ import { useLocation } from "react-router-dom";
 import routers from "routers";
 import LogoWithText from "./LogoWithText";
 import Logo from "./Logo";
+import LogoSvg from "layout/logo";
 
 /**
  * 登录页
@@ -31,12 +32,14 @@ export default function Login() {
   const dispatch = useDispatch();
 
   const validationSchema = yup.object({
-    account: yup.string("请输入账号").required("请输入账号"),
+    account: yup
+      .string("Please enter account")
+      .required("Please enter account"),
     password: yup
-      .string("请输入密码")
+      .string("Please enter password")
       .min(6, "密码长度必须大于6位")
       .max(20, "密码长度必须小于20位")
-      .required("请输入密码")
+      .required("Please enter password")
   });
 
   const formik = useFormik({
@@ -59,7 +62,7 @@ export default function Login() {
           history.push(routers.HOME);
         }
       } else if (code === 1011002) {
-        enqueueSnackbar("账号或密码错误");
+        enqueueSnackbar("Invalid username or password");
       } else {
         enqueueSnackbar(message);
       }
@@ -69,8 +72,12 @@ export default function Login() {
   return (
     <Container sx={{ overflow: "auto", py: 2 }}>
       {/* header */}
-      <Box className="flex items-center cursor-pointer">
-        <Logo onClick={() => history.push(routers.HOME)} width="80" />
+      <Box
+        onClick={() => history.push(routers.HOME)}
+        className="cursor-pointer"
+      >
+        <LogoSvg style={{ width: 220 }} />
+        {/* <Logo onClick={() => history.push(routers.HOME)} width="80" />
         <Typography
           onClick={() => history.push(routers.HOME)}
           variant="h6"
@@ -78,7 +85,7 @@ export default function Login() {
           style={{ transform: "translateY(-2px)" }}
         >
           Victoria Chen
-        </Typography>
+        </Typography> */}
       </Box>
 
       {/* 登录卡片 */}
@@ -119,7 +126,8 @@ export default function Login() {
           <Box p={4} component="form" onSubmit={formik.handleSubmit}>
             {/* Logo */}
             <Box className="flex justify-center" color="primary.main">
-              <LogoWithText style={{ width: 160 }} />
+              {/* <LogoWithText style={{ width: 160 }} /> */}
+              <LogoSvg style={{ width: 160 }} />
             </Box>
 
             {/* 登录表单 */}
@@ -127,14 +135,14 @@ export default function Login() {
               <TextField
                 fullWidth
                 variant="standard"
-                label="账号"
+                label="Account"
                 {...getCommonFieldProps("account", formik)}
               />
               <TextField
                 type="password"
                 fullWidth
                 variant="standard"
-                label="密码"
+                label="Password"
                 {...getCommonFieldProps("password", formik)}
               />
             </Stack>
@@ -146,7 +154,7 @@ export default function Login() {
               disabled={loading}
               loading={loading}
             >
-              登录
+              Login
             </LoadingButton>
           </Box>
         </Box>
