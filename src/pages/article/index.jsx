@@ -46,12 +46,12 @@ const ArticleList = () => {
   };
 
   // 显示过滤项
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(true);
 
   return (
     <Box>
       <Box sx={{ textAlign: "left", mb: 2 }}>
-        <Tooltip title="显示过滤项">
+        <Tooltip title={showFilters ? "Hide Filters" : "Show Filters"}>
           <IconButton onClick={() => setShowFilters(b => !b)}>
             <FilterListOutlined />
           </IconButton>
