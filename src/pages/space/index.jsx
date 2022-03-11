@@ -1,5 +1,4 @@
 import { Avatar, Box, Button, Container, Typography } from "@mui/material";
-import { CommonDrawer } from "components/drawer";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Settings from "./settings";
@@ -57,17 +56,11 @@ export default function Space() {
       <SpaceTabs />
 
       {/* 个人信息设置弹出框 */}
-      <CommonDrawer
-        title={"个人信息设置"}
+      <Settings
         open={visible}
+        onOpen={() => setVisible(false)}
         onClose={() => setVisible(false)}
-        onOpen={() => setVisible(true)}
-      >
-        <Settings
-          onOpen={() => setVisible(false)}
-          onClose={() => setVisible(false)}
-        />
-      </CommonDrawer>
+      />
     </Container>
   );
 }
