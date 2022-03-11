@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { useWindowScroll } from "react-use";
+import { useMeasure, useSize, useWindowScroll } from "react-use";
 
 /**
  * 带返回图标的页头
@@ -28,13 +28,15 @@ export const AppTitle = ({ back, title, extra }) => {
       history.goBack();
     }
   };
+  const [ref, { height }] = useMeasure();
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ height }}>
       <Slide in={!trigger}>
         <AppBar
           color="inherit"
           sx={{ boxShadow: y > 10 ? 1 : 0 }}
           position="fixed"
+          ref={ref}
         >
           <Toolbar variant="dense">
             {back ? (

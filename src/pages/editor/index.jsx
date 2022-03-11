@@ -8,19 +8,22 @@ import {
   EDIT_ARTICLE,
   GET_ARTICLE_DETAIL
 } from "services/article";
-import { Button, TextField } from "@mui/material";
+import { Button, Container, TextField } from "@mui/material";
 import _ from "lodash";
 import { AppTitle } from "components/appTitle";
-import { TagSelector } from "./TagSelector";
 import { RichEditor } from "./RichEditor";
+import { DetailsConfirmModal } from "./DetailsConfirmModal";
 
 function Editor() {
   const history = useHistory();
+
   const { id } = useParams();
   const isEdit = !!id;
 
   const [articleName, setArticleName] = useState("");
-  const [tags, setTags] = useState([]);
+
+  const [initialValues, setInitialValues] = useState({}); // 文章确认后，点击下一步填充到信息编辑框中的内容
+  const [visible, setVisible] = useState(false); // 是否显示编辑文章详细信息
 
   // 请求文章数据
   const { loading, data } = useRequest({
@@ -29,17 +32,8 @@ function Editor() {
     ready: !!id
   });
 
-  // 初始化表单
   useEffect(() => {
-    if (!_.isEmpty(data)) {
-      const { tags, articleName } = data;
-      if (articleName) {
-        setArticleName(articleName);
-      }
-      if (tags) {
-        setTags(tags.split("|"));
-      }
-    }
+    setArticleName(data?.articleName);
   }, [data]);
 
   // 新增/修改文章
@@ -51,12 +45,9 @@ function Editor() {
   const getParamsFnRef = useRef();
 
   // 保存文章
-  const handleSubmit = async () => {
+  const handleSubmit = async values => {
     const params = getParamsFnRef.current();
-    if (!params) {
-      return;
-    }
-    const { success, data } = await load({ ...params, articleName, tags });
+    const { success, data } = await load({ ...params, ...values });
     if (success) {
       if (isEdit) {
         history.goBack();
@@ -69,39 +60,66 @@ function Editor() {
     }
   };
 
+  // 编辑完成，点击下一步打开文章信息框
+  const showDetails = () => {
+    setVisible(true);
+    const params = getParamsFnRef.current();
+    const { cover, summary } = params;
+    setInitialValues({
+      cover,
+      summary,
+      tags: data?.tags,
+      articleName
+    });
+  };
+
   return (
-    <div>
+    <Container>
       <AppTitle
         title={isEdit ? "编辑文章" : "写文章"}
         back={true}
-        extra={<Button onClick={handleSubmit}>发布</Button>}
-      />
-      <div className="container pt-14">
-        <Spin spinning={loading}>
-          {/* 文章标题 */}
-          <TextField
-            variant="standard"
+        extra={
+          <Button
             size="small"
-            value={articleName}
-            onChange={ev => setArticleName(ev.target.value)}
-            name="articleName"
-            fullWidth
-            label="文章标题"
-            placeholder="请输入文章标题"
-          />
+            sx={{ boxShadow: 0 }}
+            variant="contained"
+            onClick={showDetails}
+          >
+            {isEdit ? "保存" : "发布"}
+          </Button>
+        }
+      />
+      <Spin spinning={loading}>
+        {/* 文章标题 */}
+        <TextField
+          variant="standard"
+          size="small"
+          value={articleName}
+          onChange={ev => setArticleName(ev.target.value)}
+          name="articleName"
+          fullWidth
+          label="标题"
+          sx={{ mb: 2 }}
+        />
 
-          {/* 标签 */}
-          <TagSelector tags={tags} setTags={setTags} />
+        {/* 文章内容编辑器 */}
+        <RichEditor
+          isEdit={isEdit}
+          data={data}
+          getParamsFnRef={getParamsFnRef}
+        />
+      </Spin>
 
-          {/* 文章内容编辑器 */}
-          <RichEditor
-            isEdit={isEdit}
-            data={data}
-            getParamsFnRef={getParamsFnRef}
-          />
-        </Spin>
-      </div>
-    </div>
+      {/* 编辑文章标签、摘要、封面图 */}
+      <DetailsConfirmModal
+        record={data}
+        initialValues={initialValues}
+        visible={visible}
+        onOpen={() => setVisible(true)}
+        onClose={() => setVisible(false)}
+        handleSubmit={handleSubmit}
+      />
+    </Container>
   );
 }
 

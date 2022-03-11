@@ -44,10 +44,6 @@ export const RichEditor = ({ isEdit, data, getParamsFnRef }) => {
   const cs = isSM ? controls : simpleControls;
 
   getParamsFnRef.current = () => {
-    if (isEmpty()) {
-      return;
-    }
-
     const params = getParams();
     const { html } = params;
     const $html = $(html);

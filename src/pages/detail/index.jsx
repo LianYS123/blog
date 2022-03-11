@@ -55,7 +55,7 @@ function Detail() {
   };
 
   return (
-    <Container className="pt-14">
+    <Container>
       <AppTitle
         title={y < 36 ? "" : articleName || "文章详情"}
         back={location?.state?.path || true}
