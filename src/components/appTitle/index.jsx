@@ -38,16 +38,14 @@ export const AppTitle = ({ back, title, extra }) => {
         >
           <Toolbar variant="dense">
             {back ? (
-              <span className="mr-1">
-                <IconButton size="small" onClick={handleBack}>
-                  <ArrowBackIos fontSize="small" />
-                </IconButton>
-              </span>
+              <IconButton sx={{ mr: 0.3 }} size="small" onClick={handleBack}>
+                <ArrowBackIos fontSize="small" />
+              </IconButton>
             ) : null}
-            <Typography variant="body1" component="div">
+            <Typography variant="body1" component="div" sx={{ flexGrow: 1 }}>
               <span>{title}</span>
             </Typography>
-            <div>{extra}</div>
+            {extra}
           </Toolbar>
         </AppBar>
       </Slide>

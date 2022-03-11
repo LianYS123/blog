@@ -55,6 +55,9 @@
     "zip-webpack-plugin": "^4.0.1"
   },
   "dependencies": {
+    "@bytemd/plugin-gfm": "^1.11.0",
+    "@bytemd/plugin-highlight": "^1.11.0",
+    "@bytemd/react": "^1.11.0",
     "@douyinfe/semi-icons": "^2.0.0",
     "@douyinfe/semi-ui": "^2.0.0",
     "@emotion/react": "^11.7.1",
