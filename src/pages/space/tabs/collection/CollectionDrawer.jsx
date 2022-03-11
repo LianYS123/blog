@@ -24,6 +24,7 @@ export const CollectionDrawer = props => {
     loadingMore,
     loading,
     search,
+    scrollRef,
     removeItemById,
     reload
   } = useFetchList({
@@ -51,7 +52,7 @@ export const CollectionDrawer = props => {
       onOpen={() => openDrawer()}
       onClose={closeDrawer}
     >
-      <Container>
+      <Container ref={scrollRef} sx={{ height: "100%", overflow: "auto" }}>
         <SkeletonList loading={loadingFirstPage} />
         {list.length ? (
           <Stack sx={{ py: 4 }} spacing={2}>

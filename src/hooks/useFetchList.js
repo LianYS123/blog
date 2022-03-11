@@ -1,5 +1,6 @@
 import { isEmpty, uniqBy } from "lodash";
 import { useEffect, useState } from "react";
+import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useDeepCompareEffect } from "react-use";
 import { useMutation } from "./useMutation";
 import { useIsBottom, useSpinDelay } from "./useUtils";
@@ -19,8 +20,6 @@ export const useFetchList = ({
   const [loadData, { loading, loadingDelay, data }] = useMutation(service);
 
   const loadingMoreDelay = useSpinDelay(loadingMore, { delay: 500 }); // loading 状态延迟显示
-
-  const isBottom = useIsBottom(); // 是否已经滚动到底部
 
   // 在数据列表中新增数据
   const addToList = rows => {
@@ -82,11 +81,18 @@ export const useFetchList = ({
   };
 
   // 滚动到底部时加载更多数据
-  useEffect(() => {
-    if (isBottom && !loading && !isEmpty(list)) {
-      fetchMore();
+  const scrollRef = useBottomScrollListener(
+    () => {
+      if (!loading && !isEmpty(list)) {
+        fetchMore();
+      }
+    },
+    {
+      offset: 50,
+      debounce: 1000,
+      triggerOnNoScroll: true // 自动触发一次
     }
-  }, [isBottom]);
+  );
 
   // 必要参数改变时重新加载数据
   useDeepCompareEffect(() => {
@@ -96,9 +102,9 @@ export const useFetchList = ({
   return {
     data,
     list,
+    scrollRef,
     fetchMore,
     search,
-    isBottom,
     reload,
     loading,
     loadingDelay,
