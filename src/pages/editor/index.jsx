@@ -64,7 +64,7 @@ function Editor() {
   const showDetails = () => {
     setVisible(true);
     const params = getParamsFnRef.current();
-    const { cover, summary } = params;
+    const { cover = data?.cover, summary } = params;
     setInitialValues({
       cover,
       summary,

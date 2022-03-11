@@ -7,6 +7,7 @@ import {
   Stack,
   TextField
 } from "@mui/material";
+import { UploadImage } from "components/upload";
 import { useEffect, useState } from "react";
 import { TagSelector } from "./TagSelector";
 
@@ -81,6 +82,11 @@ export const DetailsConfirmModal = ({
             fullWidth
             label="摘要"
           />
+
+          {/* 上传封面 */}
+          <UploadImage value={cover} onChange={setCover}>
+            <Button>上传封面</Button>
+          </UploadImage>
         </Stack>
       </DialogContent>
 
