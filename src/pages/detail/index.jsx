@@ -51,7 +51,7 @@ function Detail() {
       />
       <SkeletonList loading={loading} />
 
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom sx={{ mt: 2 }}>
         {articleName}
       </Typography>
 
