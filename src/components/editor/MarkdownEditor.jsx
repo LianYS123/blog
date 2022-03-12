@@ -3,6 +3,7 @@ import gfm from "@bytemd/plugin-gfm";
 import highlight from "@bytemd/plugin-highlight";
 import { upload } from "utils/fetch";
 import { useSnackbar } from "notistack";
+import zhHans from "bytemd/lib/locales/zh_Hans.json";
 
 const plugins = [gfm(), highlight()];
 
@@ -17,9 +18,10 @@ export const MarkdownEditor = props => {
   const { enqueueSnackbar } = useSnackbar();
   return (
     <Editor
+      {...props}
       className="markdown-body"
       plugins={plugins}
-      {...props}
+      locale={zhHans}
       uploadImages={async files => {
         if (files && files.length) {
           const res = await upload(files[0]);
