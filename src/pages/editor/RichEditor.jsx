@@ -9,6 +9,9 @@ import { controls, simpleControls } from "./config";
 import $ from "jquery";
 import { getRQualityImage, getSummary } from "utils";
 
+/**
+ * 富文本编辑器
+ */
 export const RichEditor = ({ isEdit, data, getParamsFnRef }) => {
   // 编辑器状态操作
   const {
@@ -24,7 +27,7 @@ export const RichEditor = ({ isEdit, data, getParamsFnRef }) => {
 
   // 是否是电脑端
   const isSM = useMedia(BREAKPOINT.sm);
-  // 转换markdown
+  // 转换 Markdown
   const handleConvert = () => {
     if (isEmpty()) {
       return;
@@ -50,7 +53,7 @@ export const RichEditor = ({ isEdit, data, getParamsFnRef }) => {
   };
 
   return (
-    <Paper>
+    <Paper className="rich-editor" sx={{ flexGrow: 1 }}>
       {/* 文章内容编辑器 */}
       <CommonEditor
         {...editorProps}

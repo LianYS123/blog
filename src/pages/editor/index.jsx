@@ -8,12 +8,25 @@ import {
   EDIT_ARTICLE,
   GET_ARTICLE_DETAIL
 } from "services/article";
-import { Button, Container, TextField } from "@mui/material";
+import {
+  Button,
+  Container,
+  IconButton,
+  TextField,
+  Tooltip
+} from "@mui/material";
 import _ from "lodash";
 import { AppTitle } from "components/appTitle";
 import { RichEditor } from "./RichEditor";
 import { DetailsConfirmModal } from "./DetailsConfirmModal";
+import { Box } from "@mui/system";
+import { MDEditor } from "./MdEditor";
+import { SyncAlt } from "@mui/icons-material";
+import { useAlertDialog } from "providers/AlertDialogProvider";
 
+/**
+ * 文章编辑器
+ */
 function Editor() {
   const history = useHistory();
 
@@ -21,6 +34,8 @@ function Editor() {
   const isEdit = !!id;
 
   const [articleName, setArticleName] = useState("");
+  const [contentType, setContentType] = useState("MD"); // 内容为富文本编辑器格式(RICH)还是Markdown(MD)格式
+  const isRich = contentType === "RICH";
 
   const [initialValues, setInitialValues] = useState({}); // 文章确认后，点击下一步填充到信息编辑框中的内容
   const [visible, setVisible] = useState(false); // 是否显示编辑文章详细信息
@@ -47,7 +62,7 @@ function Editor() {
   // 保存文章
   const handleSubmit = async values => {
     const params = getParamsFnRef.current();
-    const { success, data } = await load({ ...params, ...values });
+    const { success, data } = await load({ ...params, ...values, contentType });
     if (success) {
       if (isEdit) {
         history.goBack();
@@ -74,42 +89,72 @@ function Editor() {
     });
   };
 
+  const { open: openAlertDialog } = useAlertDialog();
+
+  // 修改编辑器类型
+  const handleToggleType = () => {
+    openAlertDialog({
+      content:
+        "编辑器类型改变后，可能会造成文章内容部分信息丢失，你确定要转换吗？",
+      onOk: () => {
+        if (isRich) {
+          setContentType("MD");
+        } else {
+          setContentType("RICH");
+        }
+      }
+    });
+  };
+
+  const extra = (
+    <Box>
+      <Tooltip title={isRich ? "使用 Markdown 编辑器" : "使用富文本编辑器"}>
+        <IconButton onClick={handleToggleType} sx={{ boxShadow: 0, mr: 2 }}>
+          <SyncAlt />
+        </IconButton>
+      </Tooltip>
+      <Button
+        size="small"
+        sx={{ boxShadow: 0 }}
+        variant="contained"
+        onClick={showDetails}
+      >
+        {isEdit ? "保存" : "发布"}
+      </Button>
+    </Box>
+  );
+
   return (
-    <Container>
+    <Container
+      sx={{ display: "flex", flexDirection: "column", height: "100%", pb: 4 }}
+    >
       <AppTitle
         title={isEdit ? "编辑文章" : "写文章"}
         back={true}
-        extra={
-          <Button
-            size="small"
-            sx={{ boxShadow: 0 }}
-            variant="contained"
-            onClick={showDetails}
-          >
-            {isEdit ? "保存" : "发布"}
-          </Button>
-        }
+        extra={extra}
       />
-      <Spin spinning={loading}>
-        {/* 文章标题 */}
-        <TextField
-          variant="standard"
-          size="small"
-          value={articleName}
-          onChange={ev => setArticleName(ev.target.value)}
-          name="articleName"
-          fullWidth
-          label="标题"
-          sx={{ mb: 2 }}
-        />
+      {/* 文章标题 */}
+      <TextField
+        variant="standard"
+        size="small"
+        value={articleName}
+        onChange={ev => setArticleName(ev.target.value)}
+        name="articleName"
+        fullWidth
+        label="标题"
+        sx={{ mb: 2 }}
+      />
 
-        {/* 文章内容编辑器 */}
+      {/* 文章内容编辑器 */}
+      {isRich ? (
         <RichEditor
           isEdit={isEdit}
           data={data}
           getParamsFnRef={getParamsFnRef}
         />
-      </Spin>
+      ) : (
+        <MDEditor isEdit={isEdit} data={data} getParamsFnRef={getParamsFnRef} />
+      )}
 
       {/* 编辑文章标签、摘要、封面图 */}
       <DetailsConfirmModal
