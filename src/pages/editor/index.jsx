@@ -64,12 +64,13 @@ function Editor() {
   const showDetails = () => {
     setVisible(true);
     const params = getParamsFnRef.current();
-    const { cover = data?.cover, summary } = params;
+    const { cover = data?.cover, summary, visibleStatus } = params;
     setInitialValues({
       cover,
       summary,
       tags: data?.tags,
-      articleName
+      articleName,
+      visibleStatus
     });
   };
 

@@ -1,9 +1,11 @@
 import {
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControlLabel,
   Stack,
   TextField
 } from "@mui/material";
@@ -27,13 +29,15 @@ export const DetailsConfirmModal = ({
   const [articleName, setArticleName] = useState("");
   const [summary, setSummary] = useState();
   const [cover, setCover] = useState();
+  const [visibleStatus, setVisibleStatus] = useState(0); // 是否仅自己可见，0：否，1：是
 
   const setValues = data => {
-    const { tags, articleName, cover, summary } = data;
+    const { tags, articleName, cover, summary, visibleStatus } = data;
     tags && setTags(tags?.split("|"));
     articleName && setArticleName(articleName);
     summary && setSummary(summary);
     cover && setCover(cover);
+    setVisibleStatus(visibleStatus || 0);
   };
 
   // 使用原文章数据初始化表单
@@ -48,7 +52,7 @@ export const DetailsConfirmModal = ({
 
   // 点击发布
   const handleConfirm = () => {
-    handleSubmit({ tags, articleName, summary, cover });
+    handleSubmit({ tags, articleName, summary, cover, visibleStatus });
   };
 
   return (
@@ -87,6 +91,21 @@ export const DetailsConfirmModal = ({
           <UploadImage value={cover} onChange={setCover}>
             <Button>上传封面</Button>
           </UploadImage>
+
+          {/* 仅自己可见 */}
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={visibleStatus === 1 ? true : false}
+                size="small"
+                color="primary"
+                onChange={(ev, checked) => {
+                  setVisibleStatus(checked ? 1 : 0);
+                }}
+              />
+            }
+            label="仅自己可见"
+          />
         </Stack>
       </DialogContent>
 

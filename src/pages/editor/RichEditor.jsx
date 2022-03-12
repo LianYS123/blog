@@ -1,11 +1,4 @@
-import {
-  Checkbox,
-  FormControlLabel,
-  IconButton,
-  Paper,
-  SvgIcon,
-  Tooltip
-} from "@mui/material";
+import { IconButton, Paper, SvgIcon, Tooltip } from "@mui/material";
 import MDIcon from "./MDIcon";
 import { useMedia } from "react-use";
 import { parse } from "marked";
@@ -43,6 +36,7 @@ export const RichEditor = ({ isEdit, data, getParamsFnRef }) => {
   };
   const cs = isSM ? controls : simpleControls;
 
+  // 父组件获取参数的方法
   getParamsFnRef.current = () => {
     const params = getParams();
     const { html } = params;
@@ -87,21 +81,6 @@ export const RichEditor = ({ isEdit, data, getParamsFnRef }) => {
             )
           }
         ]}
-      />
-
-      <FormControlLabel
-        sx={{ ml: 1 }}
-        control={
-          <Checkbox
-            checked={visibleStatus === 1 ? true : false}
-            size="small"
-            color="primary"
-            onChange={(ev, checked) => {
-              onVisibleStatusChange(checked ? 1 : 0);
-            }}
-          />
-        }
-        label={<span className="text-sm">仅自己可见</span>}
       />
     </Paper>
   );
