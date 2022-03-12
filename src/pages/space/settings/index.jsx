@@ -34,7 +34,12 @@ const Settings = props => {
   const [birthday, setBirthday] = useState(time);
   const { formik, loading } = useUserFormik({ birthday, onClose });
   const extra = (
-    <LoadingButton loading={loading} variant="outlined" type="submit">
+    <LoadingButton
+      loading={loading}
+      variant="outlined"
+      size="small"
+      type="submit"
+    >
       保存
     </LoadingButton>
   );
