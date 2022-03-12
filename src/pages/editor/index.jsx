@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useRequest } from "hooks";
-import { Spin } from "@douyinfe/semi-ui";
 import routers from "routers";
 import {
   ADD_ARTICLE,
@@ -23,6 +22,7 @@ import { Box } from "@mui/system";
 import { MDEditor } from "./MdEditor";
 import { SyncAlt } from "@mui/icons-material";
 import { useAlertDialog } from "providers/AlertDialogProvider";
+import { SkeletonList } from "components/skeleton";
 
 /**
  * 文章编辑器
@@ -49,6 +49,11 @@ function Editor() {
 
   useEffect(() => {
     setArticleName(data?.articleName);
+    if (data?.contentType) {
+      setContentType(data.contentType);
+    } else if (data?.contentType === null) {
+      setContentType("RICH");
+    }
   }, [data]);
 
   // 新增/修改文章
@@ -62,7 +67,12 @@ function Editor() {
   // 保存文章
   const handleSubmit = async values => {
     const params = getParamsFnRef.current();
-    const { success, data } = await load({ ...params, ...values, contentType });
+    const { success, data } = await load({
+      id,
+      ...params,
+      ...values,
+      contentType
+    });
     if (success) {
       if (isEdit) {
         history.goBack();
@@ -132,27 +142,36 @@ function Editor() {
         back={true}
         extra={extra}
       />
-      {/* 文章标题 */}
-      <TextField
-        variant="standard"
-        size="small"
-        value={articleName}
-        onChange={ev => setArticleName(ev.target.value)}
-        name="articleName"
-        fullWidth
-        label="标题"
-        sx={{ mb: 2 }}
-      />
+      <SkeletonList loading={loading} />
+      {loading ? null : (
+        <>
+          {/* 文章标题 */}
+          <TextField
+            variant="standard"
+            size="small"
+            value={articleName}
+            onChange={ev => setArticleName(ev.target.value)}
+            name="articleName"
+            fullWidth
+            label="标题"
+            sx={{ mb: 2 }}
+          />
 
-      {/* 文章内容编辑器 */}
-      {isRich ? (
-        <RichEditor
-          isEdit={isEdit}
-          data={data}
-          getParamsFnRef={getParamsFnRef}
-        />
-      ) : (
-        <MDEditor isEdit={isEdit} data={data} getParamsFnRef={getParamsFnRef} />
+          {/* 文章内容编辑器 */}
+          {isRich ? (
+            <RichEditor
+              isEdit={isEdit}
+              data={data}
+              getParamsFnRef={getParamsFnRef}
+            />
+          ) : (
+            <MDEditor
+              isEdit={isEdit}
+              data={data}
+              getParamsFnRef={getParamsFnRef}
+            />
+          )}
+        </>
       )}
 
       {/* 编辑文章标签、摘要、封面图 */}

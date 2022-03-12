@@ -30,7 +30,7 @@ export const AppTitle = ({ back, title, extra }) => {
   };
   const [ref, { height }] = useMeasure();
   return (
-    <Box sx={{ height }}>
+    <Box sx={{ minHeight: height }}>
       <Slide in={!trigger}>
         <AppBar
           color="inherit"

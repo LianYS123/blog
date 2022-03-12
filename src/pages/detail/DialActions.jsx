@@ -129,51 +129,53 @@ export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
   ].filter(action => !action.auth || isCurrentUser);
 
   return (
-    <Box position="fixed" right={0} bottom={0}>
-      <ClickAwayListener
-        onClickAway={() => {
-          if (actionVisible) {
-            setActionVisible(false);
-          }
-        }}
-      >
-        <SpeedDial
-          ariaLabel="操作"
-          open={actionVisible}
-          onOpen={() => setActionVisible(true)}
-          onClick={() => {
+    <Box position="absolute" right={0} bottom={0}>
+      <Box position="fixed" right={0} bottom={0}>
+        <ClickAwayListener
+          onClickAway={() => {
             if (actionVisible) {
               setActionVisible(false);
             }
           }}
-          sx={{
-            position: "absolute",
-            bottom: 64,
-            right: { xs: 16, sm: 64 }
-          }}
-          icon={<SpeedDialIcon />}
         >
-          {actions.reverse().map((action, index) => (
-            <SpeedDialAction
-              key={index}
-              onClick={ev => {
-                ev.stopPropagation();
-                action.onClick();
-              }}
-              icon={action.icon}
-              tooltipTitle={action.text}
-            />
-          ))}
-        </SpeedDial>
-      </ClickAwayListener>
+          <SpeedDial
+            ariaLabel="操作"
+            open={actionVisible}
+            onOpen={() => setActionVisible(true)}
+            onClick={() => {
+              if (actionVisible) {
+                setActionVisible(false);
+              }
+            }}
+            sx={{
+              position: "absolute",
+              bottom: 64,
+              right: { xs: 16, sm: 64 }
+            }}
+            icon={<SpeedDialIcon />}
+          >
+            {actions.reverse().map((action, index) => (
+              <SpeedDialAction
+                key={index}
+                onClick={ev => {
+                  ev.stopPropagation();
+                  action.onClick();
+                }}
+                icon={action.icon}
+                tooltipTitle={action.text}
+              />
+            ))}
+          </SpeedDial>
+        </ClickAwayListener>
 
-      {collectionVisible ? (
-        <CollectionDialog
-          visible={collectionVisible}
-          close={closeCollectionDialog}
-          articleId={resourceId}
-        ></CollectionDialog>
-      ) : null}
+        {collectionVisible ? (
+          <CollectionDialog
+            visible={collectionVisible}
+            close={closeCollectionDialog}
+            articleId={resourceId}
+          ></CollectionDialog>
+        ) : null}
+      </Box>
     </Box>
   );
 };

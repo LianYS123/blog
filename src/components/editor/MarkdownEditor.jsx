@@ -3,15 +3,12 @@ import gfm from "@bytemd/plugin-gfm";
 import highlight from "@bytemd/plugin-highlight";
 import { upload } from "utils/fetch";
 import { useSnackbar } from "notistack";
-import "bytemd/dist/index.min.css";
-import "github-markdown-css/github-markdown-light.css";
-import "highlight.js/styles/default.css";
 
-const plugins = [
-  gfm(),
-  highlight()
-  // Add more plugins here
-];
+const plugins = [gfm(), highlight()];
+
+export const MarkdownViewer = props => {
+  return <Viewer plugins={plugins} {...props} />;
+};
 
 /**
  * Markdown 编辑器

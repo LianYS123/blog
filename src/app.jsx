@@ -28,6 +28,10 @@ import "@fontsource/roboto/700.css";
 import { LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 
+import "bytemd/dist/index.min.css";
+import "github-markdown-css/github-markdown-light.css";
+import "highlight.js/styles/default.css";
+
 const locales = {
   en_US,
   zh_CN
