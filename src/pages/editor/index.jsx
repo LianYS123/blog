@@ -94,8 +94,7 @@ function Editor() {
   // 修改编辑器类型
   const handleToggleType = () => {
     openAlertDialog({
-      content:
-        "编辑器类型改变后，可能会造成文章内容部分信息丢失，你确定要转换吗？",
+      content: "编辑器类型改变后，编辑器中的内容不会被保存，你确定要转换吗？",
       onOk: () => {
         if (isRich) {
           setContentType("MD");

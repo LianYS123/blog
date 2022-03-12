@@ -5,6 +5,9 @@ import { parse } from "marked";
 import { getRQualityImage, getSummary } from "utils";
 import { Box, Paper } from "@mui/material";
 import "./styles.less";
+import TurndownService from "turndown";
+
+const turndownService = new TurndownService();
 
 /**
  * Markdown 编辑器
@@ -14,6 +17,9 @@ export const MDEditor = ({ isEdit, data, getParamsFnRef }) => {
   useEffect(() => {
     if (data?.markdownContent) {
       onChange(data.markdownContent);
+    } else if (data?.html) {
+      const md = turndownService.turndown(data?.html);
+      onChange(md);
     }
   }, [data]);
 

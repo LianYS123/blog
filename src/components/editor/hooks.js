@@ -1,5 +1,6 @@
 import BraftEditor from "braft-editor";
 import { useEffect, useState } from "react";
+import { parse } from "marked";
 
 /**
  * 编辑器操作封装
@@ -17,6 +18,8 @@ export const useEditorState = ({ record }) => {
     if (data) {
       const state = BraftEditor.createEditorState(data);
       setState(state);
+    } else if (record?.markdownContent) {
+      setState(parse(record.markdownContent));
     }
     if (Number.isInteger(record?.visibleStatus)) {
       setVisibleStatus(record.visibleStatus);
