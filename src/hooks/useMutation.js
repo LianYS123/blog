@@ -50,6 +50,27 @@ export const useMutation = (service, initialData = {}, config = {}) => {
       const { success, code, message } = res;
       const method = getAPIMethod(service) || config.method;
 
+      // 请求结果处理
+      if (success) {
+        onSuccess(res.data, data, res); // 新数据、老数据、请求结果
+        setData(res.data || {});
+      } else if (code === 1011008 || code === 1011006) {
+        // 登录已过期
+        dispatch(appSlice.actions.setUserInfo({})); // 清空用户信息
+        dispatch(appSlice.actions.clearToken()); // 清除token
+        dispatch(appSlice.actions.setLogged(false)); // 修改登录状态
+        if (code === 1011008) {
+          openLoginDialog({
+            tip: "登录已过期, 请重新登录"
+          });
+        } else {
+          openLoginDialog({
+            tip: "登录认证异常, 请重新登录"
+          });
+        }
+        return res;
+      }
+
       // 处理操作成功和失败的提示
       if (success) {
         const actionMessageMap = {
@@ -68,24 +89,6 @@ export const useMutation = (service, initialData = {}, config = {}) => {
         } else {
           enqueueSnackbar("未知错误，请刷新重试", { variant: "error" });
         }
-      }
-
-      // 请求结果处理
-      if (success) {
-        onSuccess(res.data, data, res); // 新数据、老数据、请求结果
-        setData(res.data || {});
-      } else if (code === 1011008) {
-        // 登录已过期
-        dispatch(appSlice.actions.setUserInfo({})); // 清空用户信息
-        dispatch(appSlice.actions.clearToken()); // 清除token
-        dispatch(appSlice.actions.setLogged(false)); // 修改登录状态
-        openLoginDialog({ tip: "登录已过期, 请重新登录" });
-      } else if (code === 1011006) {
-        // 请求token错误
-        dispatch(appSlice.actions.setUserInfo({}));
-        dispatch(appSlice.actions.clearToken()); // 清除token
-        dispatch(appSlice.actions.setLogged(false)); // 修改登录状态
-        openLoginDialog({ tip: "登录认证异常, 请重新登录" });
       }
 
       setLoading(false);
