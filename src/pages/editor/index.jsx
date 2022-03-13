@@ -135,7 +135,13 @@ function Editor() {
 
   return (
     <Container
-      sx={{ display: "flex", flexDirection: "column", height: "100%", pb: 4 }}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        pb: 4,
+        pt: 2
+      }}
     >
       <AppTitle
         title={isEdit ? "编辑文章" : "写文章"}

@@ -38,7 +38,11 @@ export const MDEditor = ({ isEdit, data, getParamsFnRef }) => {
   };
 
   return (
-    <Box className="markdown-editor" component={"div"} sx={{ flexGrow: 1 }}>
+    <Box
+      className="markdown-editor"
+      component={"div"}
+      sx={{ flexGrow: 1, overflow: "hidden" }}
+    >
       <MarkdownEditor value={value} onChange={onChange} />
     </Box>
   );
