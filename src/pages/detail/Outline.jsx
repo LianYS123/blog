@@ -24,6 +24,6 @@ export const Outline = ({ outline }) => {
   };
 
   return outline && outline.length ? (
-    <Anchor>{renderLink(outline)}</Anchor>
+    <Anchor style={{ height: 450 }}>{renderLink(outline)}</Anchor>
   ) : null;
 };
