@@ -84,7 +84,7 @@ function Detail() {
           )}
         </Box>
         {/* 导航 */}
-        {upSM ? (
+        {upSM && outline.length ? (
           <Box sx={{ minWidth: 200, ml: 2, position: "relative" }}>
             <Box sx={{ position: "fixed" }}>
               <Outline outline={outline} />
