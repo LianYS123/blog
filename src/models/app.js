@@ -52,10 +52,12 @@ export const appSlice = createSlice({
       if (isDark) {
         body.setAttribute("theme-mode", "dark");
         body.classList.add("dark");
+        body.classList.remove("light");
         document.documentElement.style.colorScheme = "dark";
       } else {
         body.removeAttribute("theme-mode");
         body.classList.remove("dark");
+        body.classList.add("light");
         document.documentElement.style.colorScheme = "light";
       }
     },

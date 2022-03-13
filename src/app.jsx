@@ -32,8 +32,7 @@ import "bytemd/dist/index.min.css";
 // import "github-markdown-css/github-markdown-light.css";
 import "./github-markdown.css";
 import "./highlight.less"; // 代码高亮
-// import "highlight.js/styles/default.css";
-// import "highlight.js/styles/github.css";
+import "./highlight-dark.less"; // 代码高亮
 
 const locales = {
   en_US,
