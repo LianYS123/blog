@@ -19,7 +19,6 @@ export const MarkdownEditor = props => {
   return (
     <Editor
       {...props}
-      className="markdown-body"
       plugins={plugins}
       locale={zhHans}
       uploadImages={async files => {

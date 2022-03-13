@@ -16,7 +16,7 @@ import { useSpinDelay } from "./useUtils";
  */
 export const useMutation = (service, initialData = {}, config = {}) => {
   const {
-    autoHandleError = false, // 请求出错弹出错误提示
+    autoHandleError = true, // 请求出错弹出错误提示
     showActionMessage = false, // POST请求成功弹出提示信息
     successMessage,
     onSuccess = noop,
