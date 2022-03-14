@@ -57,10 +57,14 @@ function Editor() {
   }, [data]);
 
   // 新增/修改文章
-  const [load] = useMutation(id ? EDIT_ARTICLE : ADD_ARTICLE, null, {
-    autoHandleError: true
-    // successMessage: isEdit ? "文章修改成功" : "文章发布成功"
-  });
+  const [load, { loading: submiting }] = useMutation(
+    id ? EDIT_ARTICLE : ADD_ARTICLE,
+    null,
+    {
+      autoHandleError: true
+      // successMessage: isEdit ? "文章修改成功" : "文章发布成功"
+    }
+  );
 
   const getParamsFnRef = useRef();
 
@@ -182,6 +186,7 @@ function Editor() {
 
       {/* 编辑文章标签、摘要、封面图 */}
       <DetailsConfirmModal
+        submiting={submiting}
         record={data}
         initialValues={initialValues}
         visible={visible}

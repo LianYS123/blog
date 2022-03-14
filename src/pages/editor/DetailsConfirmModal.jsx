@@ -1,3 +1,4 @@
+import { LoadingButton } from "@mui/lab";
 import {
   Button,
   Checkbox,
@@ -23,7 +24,8 @@ export const DetailsConfirmModal = ({
   onOpen,
   visible,
   onClose,
-  handleSubmit
+  handleSubmit,
+  submiting
 }) => {
   const [tags, setTags] = useState([]);
   const [articleName, setArticleName] = useState("");
@@ -111,7 +113,9 @@ export const DetailsConfirmModal = ({
 
       <DialogActions>
         <Button onClick={resetValues}>重置</Button>
-        <Button onClick={handleConfirm}>{isEdit ? "保存" : "发布"}</Button>
+        <LoadingButton loading={submiting} onClick={handleConfirm}>
+          {isEdit ? "保存" : "发布"}
+        </LoadingButton>
       </DialogActions>
     </Dialog>
   );
