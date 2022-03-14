@@ -68,7 +68,7 @@ function Detail() {
       <SkeletonList loading={loading} />
 
       {/* 标题 */}
-      <Typography variant="h4" gutterBottom sx={{ mt: 2 }}>
+      <Typography variant="h3" component="h1" sx={{ mt: 2, mb: 4.5 }}>
         {articleName}
       </Typography>
       <Box sx={{ display: "flex", justifyItems: "start" }}>
@@ -85,7 +85,7 @@ function Detail() {
         </Box>
         {/* 导航 */}
         {upSM && outline.length ? (
-          <Box sx={{ minWidth: 200, ml: 2, position: "relative" }}>
+          <Box sx={{ minWidth: 128, ml: 2, position: "relative" }}>
             <Box sx={{ position: "fixed" }}>
               <Outline outline={outline} />
             </Box>
