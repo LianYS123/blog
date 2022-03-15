@@ -4,8 +4,9 @@ import highlight from "@bytemd/plugin-highlight";
 import { upload } from "utils/fetch";
 import { useSnackbar } from "notistack";
 import zhHans from "bytemd/lib/locales/zh_Hans.json";
+import mediumZoom from "@bytemd/plugin-medium-zoom";
 
-const plugins = [gfm(), highlight()];
+const plugins = [gfm(), highlight(), mediumZoom()];
 
 export const MarkdownViewer = props => {
   return <Viewer plugins={plugins} {...props} />;

@@ -123,23 +123,28 @@ export const isiosDevice = () => {
   return iOS;
 };
 
+// 是否是上传到腾讯云cos上的可压缩图片
+const isValidCosUrl = url => {
+  if (!url) {
+    return false;
+  }
+  if (!url.includes("cos")) {
+    return false;
+  }
+  return /(png|jpe?g)$/i.test(url);
+};
+
 // 获取指定质量的图片
 export const getQualityImage = (url, quality = 60) => {
-  const isValid =
-    url &&
-    [".png", ".jpg", ".PNG", ".JPG"].some(suffix => url.endsWith(suffix));
-  if (!isValid) {
+  if (!isValidCosUrl(url)) {
     return url;
   }
   return `${url}?imageMogr2/quality/${quality}`;
 };
 
-// 获取指定相对质量的图片
+// 获取相对质量的图片
 export const getRQualityImage = (url, quality = 60) => {
-  const isValid =
-    url &&
-    [".png", ".jpg", ".PNG", ".JPG"].some(suffix => url.endsWith(suffix));
-  if (!isValid) {
+  if (!isValidCosUrl(url)) {
     return url;
   }
   return `${url}?imageMogr2/rquality/${quality}`;

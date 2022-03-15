@@ -1,3 +1,4 @@
+import { CompareArrowsOutlined, CompareOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
   Button,
@@ -7,10 +8,14 @@ import {
   DialogContent,
   DialogTitle,
   FormControlLabel,
+  IconButton,
   Stack,
-  TextField
+  TextField,
+  Tooltip
 } from "@mui/material";
+import { Box } from "@mui/system";
 import { UploadImage } from "components/upload";
+import { isEmpty, pickBy } from "lodash";
 import { useEffect, useState } from "react";
 import { TagSelector } from "./TagSelector";
 
@@ -19,7 +24,7 @@ import { TagSelector } from "./TagSelector";
  */
 export const DetailsConfirmModal = ({
   isEdit,
-  record, // 原文章数据
+  record = {}, // 原文章数据
   initialValues,
   onOpen,
   visible,
@@ -49,12 +54,21 @@ export const DetailsConfirmModal = ({
 
   // 初始化
   useEffect(() => {
-    setValues(initialValues);
+    // 优先使用已有文章数据初始化表单，若表单字段在原文章中不存在，则尝试从文章中生成数据
+    setValues({ ...pickBy(initialValues, it => !isEmpty(it)), ...record });
   }, [initialValues]);
 
   // 点击发布
   const handleConfirm = () => {
     handleSubmit({ tags, articleName, summary, cover, visibleStatus });
+  };
+
+  // 张图片是否一样
+  const isSameCover = (c1, c2) => {
+    if (!c1 || !c2) {
+      return false;
+    }
+    return c2.startsWith(c1) || c1.startsWith(c2);
   };
 
   return (
@@ -90,16 +104,44 @@ export const DetailsConfirmModal = ({
           />
 
           {/* 上传封面 */}
-          <UploadImage value={cover} onChange={setCover}>
-            <Button>上传封面</Button>
-          </UploadImage>
+          <Box sx={{ display: "flex" }}>
+            <UploadImage value={cover} onChange={setCover}>
+              <Button>上传封面</Button>
+            </UploadImage>
+            {/* 文章封面切换按钮 */}
+            {/* 只有在编辑时原先已有封面，且封面不是文章的第一张图片时才会显示 */}
+            <Box>
+              {initialValues.cover &&
+              !isSameCover(record.cover, initialValues.cover) ? (
+                <Tooltip
+                  title={
+                    !isSameCover(cover, initialValues.cover)
+                      ? "使用文章中的第一张图片作为封面"
+                      : "使用原文章封面"
+                  }
+                >
+                  <IconButton
+                    onClick={() => {
+                      setCover(
+                        !isSameCover(cover, initialValues.cover)
+                          ? initialValues.cover
+                          : record.cover
+                      );
+                    }}
+                  >
+                    <CompareArrowsOutlined />
+                  </IconButton>
+                </Tooltip>
+              ) : null}
+            </Box>
+          </Box>
 
           {/* 仅自己可见 */}
           <FormControlLabel
             control={
               <Checkbox
                 checked={visibleStatus === 1 ? true : false}
-                size="small"
+                // size="small"
                 color="primary"
                 onChange={(ev, checked) => {
                   setVisibleStatus(checked ? 1 : 0);
@@ -112,7 +154,7 @@ export const DetailsConfirmModal = ({
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={resetValues}>重置</Button>
+        <Button onClick={onClose}>取消</Button>
         <LoadingButton loading={submiting} onClick={handleConfirm}>
           {isEdit ? "保存" : "发布"}
         </LoadingButton>
