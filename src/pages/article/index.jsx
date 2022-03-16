@@ -20,7 +20,7 @@ const ArticleList = () => {
     search
   } = useFetchList({
     service: ARTICLE_LIST,
-    necessaryParams: { tags: selectedTags, keyword }
+    necessaryParams: { tags: selectedTags, searchValue: keyword }
   });
 
   const handleTagClick = tag => {
