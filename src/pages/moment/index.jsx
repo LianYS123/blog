@@ -8,8 +8,10 @@ import { MOMENT_LIST } from "services/moment";
 import { MomentEditor } from "./MomentEditor";
 import { MomentItem } from "./MomentItem";
 import { Filter } from "./Filter";
+import { useAppTitle } from "hooks/app";
 
 const Moment = () => {
+  useAppTitle();
   const [editorRecord, setEditorRecord] = useState();
   const [params, setParams] = useState({});
   const {

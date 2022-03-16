@@ -16,22 +16,26 @@ import NotFound from "pages/404";
 import Login from "pages/login";
 import About from "pages/about";
 
-const APP_ROUTES = [
+export const APP_ROUTES = [
   {
     path: routers.DETAIL,
-    component: Detail
+    component: Detail,
+    title: "文章详情"
   },
   {
     path: routers.EDITOR, // 新增文章
-    component: Editor
+    component: Editor,
+    title: "写文章"
   },
   {
     path: routers.EDITOR_EDIT, // 编辑文章
-    component: Editor
+    component: Editor,
+    title: "编辑文章"
   },
   {
     path: routers.LOGIN,
-    component: Login
+    component: Login,
+    title: "登录"
   },
   {
     path: "/pages",
@@ -39,27 +43,33 @@ const APP_ROUTES = [
     children: [
       {
         path: routers.HOME,
-        component: Home
+        component: Home,
+        title: "首页"
       },
       {
         path: routers.ARTICLE_LIST,
-        component: ArticleList
+        component: ArticleList,
+        title: "文章列表"
       },
       {
         path: routers.USER_SPACE,
-        component: Space
+        component: Space,
+        title: "个人空间"
       },
       {
         path: routers.MOMENT,
-        component: Moment
+        component: Moment,
+        title: "动态"
       },
       {
         path: routers.ABOUT,
-        component: About
+        component: About,
+        title: "关于"
       },
       {
         path: routers.NOT_FOUND,
-        component: NotFound
+        component: NotFound,
+        title: "404"
       },
       {
         key: "redirect",

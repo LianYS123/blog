@@ -19,8 +19,10 @@ import { useHistory } from "react-router-dom";
 import routers from "routers";
 import { useRequest } from "hooks";
 import { PROJECT_LIST } from "services/project";
+import { useAppTitle } from "hooks/app";
 
 const Home = () => {
+  useAppTitle();
   const theme = useTheme();
   const upSM = useMediaQuery(theme.breakpoints.up("sm"));
   const history = useHistory();

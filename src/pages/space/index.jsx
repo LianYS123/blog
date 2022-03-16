@@ -1,4 +1,5 @@
 import { Avatar, Box, Button, Container, Typography } from "@mui/material";
+import { useAppTitle } from "hooks/app";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Settings from "./settings";
@@ -8,6 +9,7 @@ import SpaceTabs from "./tabs";
  * 个人空间
  */
 export default function Space() {
+  useAppTitle();
   const { userInfo } = useSelector(state => state.app);
   const [visible, setVisible] = useState(false); // 设置抽屉是否可视
   const { avatarUrl, email, nickName } = userInfo;

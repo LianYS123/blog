@@ -1,9 +1,12 @@
 import { appSlice } from "models/app";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { GET_LOGIN_USER } from "services/auth";
 import { useRequest } from "./useRequest";
 import { useLoginDialog } from "providers/LoginDialogProvider";
+import { APP_ROUTES } from "routers/AppRoutes";
+import { useRouteMatch } from "react-router-dom";
+import { useTitle } from "react-use";
 
 // 主题操作
 export const useTheme = () => {
@@ -77,4 +80,29 @@ export const useAssertLogged = () => {
     }
   };
   return { assertLogged, logged };
+};
+
+/**
+ * 页面标题
+ */
+export const useAppTitle = () => {
+  // 路由地址和标题的映射
+  const getRoutesTitleMap = (routes = []) => {
+    const map = {};
+    const stack = [...routes];
+    while (stack.length) {
+      const { title, path, children } = stack.pop();
+      if (children && children.length) {
+        stack.push(...children);
+      }
+      if (title && path) {
+        map[path] = title;
+      }
+    }
+    return map;
+  };
+  const routesTitleMap = useMemo(() => getRoutesTitleMap(APP_ROUTES), []);
+  const { path } = useRouteMatch();
+  const title = routesTitleMap[path] || "Blog";
+  useTitle(title);
 };

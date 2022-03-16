@@ -5,8 +5,10 @@ import { useMedia } from "react-use";
 import routers from "routers";
 import NotFoundIcon from "./NotFoundIcon";
 import { BREAKPOINT } from "constants/index";
+import { useAppTitle } from "hooks/app";
 
 function NotFound() {
+  useAppTitle();
   const history = useHistory();
   const isSM = useMedia(BREAKPOINT.sm);
   return (

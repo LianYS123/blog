@@ -15,11 +15,13 @@ import { renderOutline } from "./utils";
 import { MarkdownViewer } from "components/editor/MarkdownEditor";
 import { Box, useTheme } from "@mui/system";
 import { Outline } from "./Outline";
+import { useAppTitle } from "hooks/app";
 
 /**
  * 文章详情
  */
 function Detail() {
+  useAppTitle();
   const { id: resourceId } = useParams(); // 文章id
   const [infoVisible, setVisible] = useState(false); // 文章详情Dialog
   const { y } = useWindowScroll();
