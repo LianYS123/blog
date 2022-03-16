@@ -12,7 +12,7 @@ export const PROJECT_ITEMS = [
     articleId: 5
   },
   {
-    title: "Lian's Space",
+    title: "Liam's Blog",
     subTitle: "记录生活、想法和有趣的事。",
     description:
       "基于 Spring Boot 和 React 开发的个人空间，旨在沉淀一些想法、记录一些知识。",

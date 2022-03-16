@@ -11,11 +11,12 @@ import { appSlice } from "models/app";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "notistack";
 import { useHistory } from "react-router-dom";
-import { Box, Container, Link, Stack, Typography } from "@mui/material";
+import { Box, Card, Container, Link, Stack, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import routers from "routers";
 import LogoWithText from "./LogoWithText";
 import Logo from "./Logo";
+import LiamsBlog from "svg/LiamsBlog";
 
 /**
  * 登录页
@@ -67,26 +68,38 @@ export default function Login() {
   });
 
   return (
-    <Container sx={{ overflow: "auto", py: 2 }}>
+    <Container sx={{ overflow: "auto", py: { xs: 6, sm: 4 }, height: "100%" }}>
       {/* header */}
-      <Box className="flex items-center cursor-pointer">
-        <Logo onClick={() => history.push(routers.HOME)} width="80" />
-        <Typography
-          onClick={() => history.push(routers.HOME)}
-          variant="h6"
-          className="font-extrabold"
-          style={{ transform: "translateY(-2px)" }}
+      <Box
+        sx={{
+          display: "flex"
+          // justifyContent: { xs: "center", sm: "flex-start" }
+        }}
+      >
+        <Box
+          sx={{
+            width: { xs: 200, sm: 220 }
+          }}
         >
-          Lian's Space
-        </Typography>
+          <LiamsBlog
+            onClick={() => history.push(routers.HOME)}
+            style={{ width: "100%", cursor: "pointer" }}
+          />
+        </Box>
       </Box>
 
       {/* 登录卡片 */}
-      <Box
-        className="flex justify-center rounded-xl shadow overflow-hidden mx-auto mt-16 md:mt-8"
+      <Card
+        className="mx-auto"
         sx={{
-          width: { sx: "auto", md: 720 },
-          height: { sx: "auto", md: 510 }
+          display: "flex",
+          justifyContent: "center",
+          mt: {
+            xs: "15vh",
+            sm: 8
+          },
+          width: { xs: "auto", sm: 720 },
+          height: { xs: "auto", sm: 510 }
         }}
       >
         {/* 左边的插画 */}
@@ -95,7 +108,7 @@ export default function Login() {
             flex: 1,
             backgroundColor: "primary.main",
             // p: 4,
-            display: { xs: "none", md: "flex" },
+            display: { xs: "none", sm: "flex" },
             alignItems: "center"
           }}
         >
@@ -116,12 +129,25 @@ export default function Login() {
             justifyContent: "center"
           }}
         >
-          <Box p={4} component="form" onSubmit={formik.handleSubmit}>
+          <Box
+            sx={{ px: 4, py: 6 }}
+            component="form"
+            onSubmit={formik.handleSubmit}
+          >
             {/* Logo */}
-            <Box className="flex justify-center" color="primary.main">
-              <LogoWithText style={{ width: 160 }} />
-            </Box>
-
+            {/* <Box className="flex justify-center" color="primary.main" mb={2}>
+              <LiamsBlog style={{ width: 160 }} />
+            </Box> */}
+            <Typography mb={1} variant="h5">
+              登录
+            </Typography>
+            <Typography
+              variant="subtitle2"
+              mb={3}
+              color={theme => theme.palette.text.secondary}
+            >
+              欢迎回来！输入你的个人信息
+            </Typography>
             {/* 登录表单 */}
             <Stack spacing={2}>
               <TextField
@@ -151,7 +177,7 @@ export default function Login() {
             {/* <Link href="/api/oauth/render/github">Github</Link> */}
           </Box>
         </Box>
-      </Box>
+      </Card>
     </Container>
   );
 }

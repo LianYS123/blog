@@ -3,8 +3,8 @@
   "display": "fullscreen",
   "scope": "/",
   "start_url": "/",
-  "name": "Lian's Space",
-  "short_name": "Lian's Space",
+  "name": "Liam's Blog",
+  "short_name": "Liam's Blog",
   "icons": [
     {
       "src": "/icon-192x192.png",
