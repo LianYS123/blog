@@ -1,7 +1,7 @@
 import { Lock } from "@mui/icons-material";
 import { Avatar, CardHeader, Paper, Tooltip } from "@mui/material";
 import { ActionMenuButton } from "components/action/ActionMenuButton";
-import { useMutation } from "hooks";
+import { useCustomMutation } from "hooks";
 import { useAlertDialog } from "providers/AlertDialogProvider";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -30,7 +30,7 @@ export const EssayItem = ({
   const { open: openDialog } = useAlertDialog();
 
   // 删除
-  const [deleteEssay, { loading }] = useMutation(DELETE_MOMENT, null, {
+  const [deleteEssay, { loading }] = useCustomMutation(DELETE_MOMENT, {
     successMessage: "删除成功"
   });
 

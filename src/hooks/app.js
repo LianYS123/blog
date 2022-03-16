@@ -57,7 +57,7 @@ export const useInitApp = () => {
       dispatch(appSlice.actions.setUserInfo(data));
       dispatch(appSlice.actions.setLogged(true));
     },
-    onFinish: () => {
+    onSettled: () => {
       dispatch(appSlice.actions.setIsAppLoaded(true));
     }
   });

@@ -3,7 +3,7 @@ import React from "react";
 import { noop } from "lodash";
 import { ADD_MOMENT, EDIT_MOMENT } from "services/moment";
 import { useEditorState, CommonEditor } from "components/editor";
-import { useMutation } from "hooks";
+import { useCustomMutation } from "hooks";
 import { useAssertLogged } from "hooks/app";
 import { Button, Checkbox, FormControlLabel } from "@mui/material";
 
@@ -17,9 +17,8 @@ export const MomentEditor = ({
   isEdit = false,
   onCancel = noop
 }) => {
-  const successMessage = isEdit ? "修改成功" : "发布成功";
   const service = isEdit ? EDIT_MOMENT : ADD_MOMENT;
-  const [request] = useMutation(service, null, { successMessage });
+  const [request] = useCustomMutation(service);
   const {
     reset,
     isEmpty,

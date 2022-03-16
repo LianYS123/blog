@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { USER_LOGIN } from "services/auth";
-import { useMutation } from "hooks";
+import { useCustomMutation } from "hooks";
 import { useDispatch } from "react-redux";
 import { encrypt, getCommonFieldProps } from "utils";
 import { appSlice } from "models/app";
@@ -27,7 +27,7 @@ export default function Login() {
   const { enqueueSnackbar } = useSnackbar();
 
   // 登录
-  const [submit, { loading }] = useMutation(USER_LOGIN);
+  const [submit, { loading }] = useCustomMutation(USER_LOGIN);
   const dispatch = useDispatch();
 
   const validationSchema = yup.object({

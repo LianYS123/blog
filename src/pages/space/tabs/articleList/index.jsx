@@ -10,9 +10,8 @@ export const MyArticleList = () => {
   const {
     list = [],
     loadingFirstPage,
-    loadingMore,
-    loading,
-    search,
+    isFetchingNextPage,
+    isLoading,
     reload
   } = useFetchList({
     service: SPACE_ARTICLE_LIST
@@ -27,11 +26,11 @@ export const MyArticleList = () => {
             // <MyArticleItem key={it.id} {...it} />
           ))}
         </Stack>
-      ) : loading ? null : (
+      ) : isLoading ? null : (
         <Empty reload={reload} />
       )}
 
-      <SkeletonList loading={loadingMore} />
+      <SkeletonList loading={isFetchingNextPage} />
     </Box>
   );
 };

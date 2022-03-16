@@ -19,25 +19,23 @@ import { SnackbarProvider } from "notistack";
 import AlertDialogProvider from "providers/AlertDialogProvider";
 import LoginDialogProvider from "providers/LoginDialogProvider";
 import { ProgressProvider } from "providers/ProgressProvider";
-
-// 字体
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-
-import "bytemd/dist/index.min.css";
-// import "github-markdown-css/github-markdown-light.css";
-import "./github-markdown.css";
-import "./highlight.less"; // 代码高亮
-import "./highlight-dark.less"; // 代码高亮
 
 const locales = {
   en_US,
   zh_CN
 };
+
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false
+    }
+  }
+});
 
 const App = () => {
   const { local, theme } = useSelector(({ app }) => app);
@@ -64,18 +62,20 @@ const App = () => {
           })}
         >
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <ProgressProvider>
-              <SnackbarProvider
-                // anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                maxSnack={3}
-              >
-                <AlertDialogProvider>
-                  <LoginDialogProvider>
-                    <AppRoutes />
-                  </LoginDialogProvider>
-                </AlertDialogProvider>
-              </SnackbarProvider>
-            </ProgressProvider>
+            <QueryClientProvider client={queryClient}>
+              <ProgressProvider>
+                <SnackbarProvider
+                  // anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                  maxSnack={3}
+                >
+                  <AlertDialogProvider>
+                    <LoginDialogProvider>
+                      <AppRoutes />
+                    </LoginDialogProvider>
+                  </AlertDialogProvider>
+                </SnackbarProvider>
+              </ProgressProvider>
+            </QueryClientProvider>
           </LocalizationProvider>
         </ThemeProvider>
       </IntlProvider>

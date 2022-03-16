@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Viewer } from "@bytemd/react";
 
 import { useParams } from "react-router";
 import { useRequest } from "hooks";
 import { GET_ARTICLE_DETAIL } from "services/article";
-import { Chip, Container, Typography, useMediaQuery } from "@mui/material";
+import { Container, Typography, useMediaQuery } from "@mui/material";
 
 import { AppTitle } from "components/appTitle";
 import { useWindowScroll } from "react-use";
@@ -12,7 +11,7 @@ import { DetailDialog } from "./DetailDialog";
 import { DialActions } from "./DialActions";
 import { SkeletonList } from "components/skeleton";
 import { useLocation } from "react-router-dom";
-import { getHtmlAndOutline, renderOutline } from "./utils";
+import { renderOutline } from "./utils";
 import { MarkdownViewer } from "components/editor/MarkdownEditor";
 import { Box, useTheme } from "@mui/system";
 import { Outline } from "./Outline";
@@ -27,11 +26,10 @@ function Detail() {
   const location = useLocation();
 
   // 请求文章详情
-  const { data, loading } = useRequest({
+  const { data = {}, isLoading } = useRequest({
     service: GET_ARTICLE_DETAIL,
-    necessaryParams: { id: resourceId },
-    ready: !!resourceId && resourceId !== "undefined",
-    initialData: { html: "" }
+    params: { id: resourceId },
+    ready: !!resourceId && resourceId !== "undefined"
   });
   const {
     articleName,
@@ -65,7 +63,7 @@ function Detail() {
         title={y < 36 ? "" : articleName || "文章详情"}
         back={location?.state?.path || true}
       />
-      <SkeletonList loading={loading} />
+      <SkeletonList loading={isLoading} />
 
       {/* 标题 */}
       <Typography variant="h3" component="h1" sx={{ mt: 2, mb: 4.5 }}>

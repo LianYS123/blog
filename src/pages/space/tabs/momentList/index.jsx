@@ -10,9 +10,8 @@ export const MyMomentList = () => {
   const {
     list = [],
     loadingFirstPage,
-    loadingMore,
-    loading,
-    search,
+    isFetchingNextPage,
+    isLoading,
     removeItemById,
     editItem,
     reload
@@ -37,11 +36,11 @@ export const MyMomentList = () => {
             />
           ))}
         </Stack>
-      ) : loading ? null : (
+      ) : isLoading ? null : (
         <Empty reload={reload} />
       )}
 
-      <SkeletonList loading={loadingMore} />
+      <SkeletonList loading={isFetchingNextPage} />
     </Box>
   );
 };

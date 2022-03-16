@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { SkeletonList } from "components/skeleton";
-import { useModalAction, useMutation, useRequest } from "hooks";
+import { useModalAction, useCustomMutation, useRequest } from "hooks";
 import { SPACE_COLLECTION_LIST } from "services/space";
 import { EditCollectionDialog } from "components/collection/EditCollectionDialog";
 import { ActionMenuButton } from "components/action/ActionMenuButton";
@@ -23,10 +23,9 @@ export const Collection = () => {
   const {
     data = [],
     loading,
-    reload
+    refetch
   } = useRequest({
-    service: SPACE_COLLECTION_LIST,
-    initialData: []
+    service: SPACE_COLLECTION_LIST
   });
 
   // 弹出收藏夹文章列表抽屉
@@ -39,7 +38,7 @@ export const Collection = () => {
   const { open: openAlertDialog } = useAlertDialog();
 
   // 删除收藏夹
-  const [deleteCollection] = useMutation(DELETE_COLLECTION);
+  const [deleteCollection] = useCustomMutation(DELETE_COLLECTION);
 
   const handleDelete = item => {
     openAlertDialog({
@@ -48,7 +47,7 @@ export const Collection = () => {
       onOk: async () => {
         const { success } = await deleteCollection({ collectionId: item.id });
         if (success) {
-          reload();
+          refetch();
         }
       }
     });
@@ -109,7 +108,7 @@ export const Collection = () => {
           创建收藏夹
         </Button>
       ) : null}
-      <EditCollectionDialog reload={reload} {...modalProps} />
+      <EditCollectionDialog reload={refetch} {...modalProps} />
       <CollectionDrawer
         visible={collectionDrawerVisible}
         id={drawerCollectionId}

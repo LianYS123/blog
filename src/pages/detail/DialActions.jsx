@@ -8,7 +8,7 @@ import {
   SpeedDialIcon
 } from "@mui/material";
 import { CollectionDialog } from "components/collection/SelectCollectionDialog";
-import { useMutation } from "hooks";
+import { useCustomMutation } from "hooks";
 import { useAssertLogged } from "hooks/app";
 import { useSnackbar } from "notistack";
 import { useAlertDialog } from "providers/AlertDialogProvider";
@@ -44,7 +44,7 @@ export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
   const { open: openDialog } = useAlertDialog();
 
   // 删除文章操作
-  const [deleteArticle] = useMutation(DELETE_ARTICLE, null, {
+  const [deleteArticle] = useCustomMutation(DELETE_ARTICLE, {
     autoHandleError: true,
     successMessage: "文章已删除"
   });
@@ -63,7 +63,7 @@ export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
   };
 
   // 同步到随笔
-  const [syncToMoment] = useMutation(SYNC_TO_MOMENT, null, {
+  const [syncToMoment] = useCustomMutation(SYNC_TO_MOMENT, {
     autoHandleError: true,
     successMessage: "同步成功"
   });
@@ -109,12 +109,12 @@ export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
       onClick: jumpToEditor,
       auth: true
     },
-    {
-      text: "同步到随笔",
-      icon: <SyncAlt />,
-      onClick: handleSyncToMoment,
-      auth: true
-    },
+    // {
+    //   text: "同步到随笔",
+    //   icon: <SyncAlt />,
+    //   onClick: handleSyncToMoment,
+    //   auth: true
+    // },
     {
       text: "详细信息",
       icon: <InfoOutlined />,

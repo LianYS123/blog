@@ -3,7 +3,7 @@ import { Upload, Avatar } from "@douyinfe/semi-ui";
 import { IconCamera } from "@douyinfe/semi-icons";
 import { FILE_UPLOAD } from "services/app";
 import { useSelector } from "react-redux";
-import { useMutation } from "hooks";
+import { useCustomMutation } from "hooks";
 import { CHANGE_AVATAR } from "services/user";
 import { useReloadUserInfo } from "./hooks";
 import { useSnackbar } from "notistack";
@@ -11,11 +11,7 @@ import { useSnackbar } from "notistack";
 export const ChangeAvatar = () => {
   const { userInfo } = useSelector(state => state.app);
   const { avatarUrl, id, nickName } = userInfo;
-  const [changeAvatar] = useMutation(
-    CHANGE_AVATAR,
-    {},
-    { showActionMessage: true, autoHandleError: true }
-  );
+  const [changeAvatar] = useCustomMutation(CHANGE_AVATAR);
   const reloadUserInfo = useReloadUserInfo();
   const { enqueueSnackbar } = useSnackbar();
 

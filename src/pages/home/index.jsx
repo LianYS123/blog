@@ -25,8 +25,7 @@ const Home = () => {
   const upSM = useMediaQuery(theme.breakpoints.up("sm"));
   const history = useHistory();
   const { data: projectItems = [] } = useRequest({
-    service: PROJECT_LIST,
-    initialData: []
+    service: PROJECT_LIST
   });
 
   return (

@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useMutation } from "hooks";
+import { useCustomMutation } from "hooks";
 import { isEmpty, pick, pickBy } from "lodash";
 import { useEffect } from "react";
 import { ADD_COLLECTION, EDIT_COLLECTION } from "services/collection";
@@ -13,9 +13,7 @@ export const useCollectionFormik = ({
   extra = {}
 }) => {
   const service = isEdit ? EDIT_COLLECTION : ADD_COLLECTION;
-  const [submit, { loading }] = useMutation(service, null, {
-    autoHandleError: true
-  });
+  const [submit, { loading }] = useCustomMutation(service);
 
   const validationSchema = yup.object({
     collectionName: yup.string("请输入收藏夹名称").required("请输入收藏夹名称"),

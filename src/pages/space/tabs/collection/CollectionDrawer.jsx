@@ -1,7 +1,7 @@
 import { Container, Stack, Typography } from "@mui/material";
 import { Empty } from "components/empty";
 import { SkeletonList } from "components/skeleton";
-import { useFetchList, useMutation } from "hooks";
+import { useFetchList, useCustomMutation } from "hooks";
 import {
   PAGE_COLLECTION_ARTICLES,
   REMOVE_FROM_COLLECTION
@@ -21,21 +21,18 @@ export const CollectionDrawer = props => {
     data,
     list = [],
     loadingFirstPage,
-    loadingMore,
-    loading,
-    search,
+    isFetchingNextPage,
+    isLoading,
     scrollRef,
     removeItemById,
     reload
   } = useFetchList({
     service: PAGE_COLLECTION_ARTICLES,
-    necessaryParams: { collectionId },
+    params: { collectionId },
     ready: !!collectionId
   });
   const total = data?.totalRows || 0;
-  const [removeFromCollection, { loading: loadingRemove }] = useMutation(
-    REMOVE_FROM_COLLECTION
-  );
+  const [removeFromCollection] = useCustomMutation(REMOVE_FROM_COLLECTION);
   // 删除
   const handleDelete = async articleId => {
     //
@@ -72,11 +69,11 @@ export const CollectionDrawer = props => {
               />
             ))}
           </Stack>
-        ) : loading ? null : (
+        ) : isLoading ? null : (
           <Empty reload={reload} />
         )}
 
-        <SkeletonList loading={loadingMore} />
+        <SkeletonList loading={isFetchingNextPage} />
       </Container>
     </CommonDrawer>
   );

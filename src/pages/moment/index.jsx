@@ -15,15 +15,14 @@ const Moment = () => {
   const {
     list = [],
     reload,
-    search,
     loadingFirstPage,
-    loadingMore,
-    loading,
+    isFetchingNextPage,
+    isLoading,
     removeItemById,
     editItem
   } = useFetchList({
     service: MOMENT_LIST,
-    necessaryParams: { pageSize: 10, ...params }
+    params: { pageSize: 10, ...params }
   });
   const { logged } = useSelector(state => state.app);
   return (
@@ -58,11 +57,11 @@ const Moment = () => {
         ))}
       </Stack>
 
-      {!list.length && !loading ? <Empty /> : null}
+      {!list.length && !isLoading ? <Empty /> : null}
       <SkeletonList
         showButton={false}
         showImage={false}
-        loading={loadingMore}
+        loading={isFetchingNextPage}
       />
     </div>
   );

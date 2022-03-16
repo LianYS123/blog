@@ -2,7 +2,7 @@ import { Lock } from "@mui/icons-material";
 import { Avatar, Card, CardHeader, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { ActionMenuButton } from "components/action/ActionMenuButton";
-import { useMutation } from "hooks";
+import { useCustomMutation } from "hooks";
 import { useAlertDialog } from "providers/AlertDialogProvider";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -28,9 +28,7 @@ export const MomentItem = ({ reload, removeItemById, editItem, ...record }) => {
   const [editing, setEditing] = useState(false); // 是否正在编辑
 
   // 删除
-  const [deleteEssay] = useMutation(DELETE_MOMENT, null, {
-    successMessage: "删除成功"
-  });
+  const [deleteEssay] = useCustomMutation(DELETE_MOMENT);
 
   const handleDelete = () => {
     openDialog({

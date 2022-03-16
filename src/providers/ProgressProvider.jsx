@@ -1,34 +1,18 @@
-import React, { createContext, useContext, useState } from "react";
-import { noop } from "lodash";
+import React from "react";
 import { Portal } from "@mui/base";
 import { LinearProgress } from "@mui/material";
 import { Box } from "@mui/system";
-
-const Context = createContext({
-  showProgress: noop,
-  hideProgress: noop,
-  setProgressVisible: noop
-});
-
-export const useGlobalProgress = () => {
-  return useContext(Context);
-};
+import { useIsFetching } from "react-query";
+import { useSpinDelay } from "hooks";
 
 /**
  * 全局加载状态
  */
 export const ProgressProvider = ({ children }) => {
-  const [visible, setVisible] = useState(false);
-  const showProgress = () => {
-    setVisible(true);
-  };
-  const hideProgress = () => {
-    setVisible(false);
-  };
+  const isFetching = useIsFetching() > 0;
+  const visible = useSpinDelay(isFetching);
   return (
-    <Context.Provider
-      value={{ showProgress, hideProgress, setProgressVisible: setVisible }}
-    >
+    <>
       <Portal container={document.body}>
         {visible ? (
           <Box
@@ -54,6 +38,6 @@ export const ProgressProvider = ({ children }) => {
         ) : null}
       </Portal>
       {children}
-    </Context.Provider>
+    </>
   );
 };

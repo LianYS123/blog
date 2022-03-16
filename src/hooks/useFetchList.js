@@ -1,9 +1,8 @@
 import { isEmpty, uniqBy } from "lodash";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
-import { useDeepCompareEffect } from "react-use";
-import { useMutation } from "./useMutation";
-import { useIsBottom, useSpinDelay } from "./useUtils";
+import { useInfiniteQuery, useQueryClient } from "react-query";
+import { useFetch } from "./useFetch";
 
 /**
  * 无限滚动数据加载逻辑
@@ -12,106 +11,124 @@ import { useIsBottom, useSpinDelay } from "./useUtils";
  */
 export const useFetchList = ({
   service,
-  necessaryParams = {},
-  ready = true
+  params,
+  deps = [],
+  ready = true,
+  ...config
 }) => {
-  const [list, setList] = useState([]); // 数据列表，页面上显示的所有数据
-  const [loadingMore, setLoadingMore] = useState(false); // 正在加载更多数据
-  const [loadData, { loading, loadingDelay, data }] = useMutation(service);
+  const queryClient = useQueryClient();
 
-  const loadingMoreDelay = useSpinDelay(loadingMore, { delay: 500 }); // loading 状态延迟显示
+  const fetch = useFetch(service, config);
+
+  const queryFn = async ({ pageParam = 1 }) => {
+    const { data } = await fetch({ ...params, pageNo: pageParam }, config);
+    return data;
+  };
+  const queryKey = [service, params, ...deps];
+
+  const res = useInfiniteQuery({
+    queryFn,
+    queryKey,
+    enabled: ready,
+    getNextPageParam: (lastPage, allPages) => {
+      if (!lastPage) {
+        return;
+      }
+      const { pageNo, totalPage } = lastPage;
+      const hasNextPage = pageNo < totalPage; // 是否存在下一页数据
+      if (hasNextPage) {
+        return pageNo + 1;
+      }
+    },
+    getPreviousPageParam: (firstPage, allPages) => {
+      if (!firstPage) {
+        return;
+      }
+      const { pageNo, totalPage } = firstPage;
+      if (pageNo > 1) {
+        return pageNo - 1;
+      }
+    },
+    ...config
+  });
+
+  const { data, isLoading, fetchNextPage, refetch } = res;
 
   // 在数据列表中新增数据
-  const addToList = rows => {
-    const newList = uniqBy([...list, ...rows], it => it.id);
-    setList(newList);
-  };
+  // const addToList = rows => {
+  //   const newList = uniqBy([...list, ...rows], it => it.id);
+  //   setList(newList);
+  // };
 
-  // 每次请求带上必要参数
-  const request = values => {
-    if (ready) {
-      return loadData({ ...necessaryParams, ...values });
-    }
-  };
+  // 添加一项
+  // const addItem = item => {
+  //   // 如果列表中不存在这一项，则添加为第一项
+  //   if (item && list.every(it => it.id !== item.id)) {
+  //     setList(setList([item, ...list]));
+  //   }
+  // };
 
-  // 加载更多数据
-  const fetchMore = async () => {
-    if (!ready) return;
-    const { pageNo, totalPage } = data;
-    const hasNextPage = pageNo < totalPage; // 是否存在下一页数据
-    if (hasNextPage) {
-      setLoadingMore(true);
-      const result = await request({
-        pageNo: pageNo + 1
-      });
-      const { rows } = result?.data || {};
-      addToList(rows);
-      setLoadingMore(false);
-      return result;
-    }
+  const setPages = pages => {
+    queryClient.setQueriesData(queryKey, data => ({
+      pages,
+      pageParams: data.pageParams
+    }));
   };
 
   // 根据id删除
   const removeItemById = id => {
-    setList(list => list.filter(it => it.id !== id));
+    const newPagesArray =
+      data.pages.map(page => {
+        const { rows = [] } = page;
+        const newRows = rows.filter(val => val.id !== id);
+        return {
+          ...page,
+          rows: newRows
+        };
+      }) ?? [];
+    setPages(newPagesArray);
   };
 
   // 编辑指定项
   const editItem = item => {
-    const newList = list.map(cur => (cur.id === item.id ? item : cur));
-    setList(newList);
+    const newPagesArray =
+      data.pages.map(page => {
+        const { rows = [] } = page;
+        const newRows = rows.map(cur => (cur.id === item.id ? item : cur));
+        return {
+          ...page,
+          rows: newRows
+        };
+      }) ?? [];
+    setPages(newPagesArray);
   };
 
-  // 搜索
-  const search = async (values = {}) => {
-    if (!ready) {
-      return;
+  const list = useMemo(() => {
+    if (data && data.pages) {
+      const list = data.pages
+        .filter(it => !!it)
+        .map(it => it.rows)
+        .flat();
+      return uniqBy(list, it => it.id);
+    } else {
+      return [];
     }
-    const result = await request({
-      pageNo: 1,
-      ...values
-    });
-    const { rows = [] } = result?.data || {};
-    setList(rows);
-  };
-
-  // 重新加载数据
-  const reload = async () => {
-    search();
-  };
+  }, [data]);
 
   // 滚动到底部时加载更多数据
-  const scrollRef = useBottomScrollListener(
-    () => {
-      if (!loading && !isEmpty(list)) {
-        fetchMore();
-      }
-    },
-    {
-      offset: 50,
-      debounce: 1000,
-      triggerOnNoScroll: true // 自动触发一次
-    }
-  );
-
-  // 必要参数改变时重新加载数据
-  useDeepCompareEffect(() => {
-    reload();
-  }, [necessaryParams]);
+  const scrollRef = useBottomScrollListener(fetchNextPage, {
+    offset: 50,
+    debounce: 1000
+    // triggerOnNoScroll: true // 自动触发一次
+  });
 
   return {
-    data,
     list,
-    scrollRef,
-    fetchMore,
-    search,
-    reload,
-    loading,
-    loadingDelay,
-    loadingMore,
-    loadingMoreDelay,
-    loadingFirstPage: loading && !list.length,
     removeItemById,
-    editItem
+    editItem,
+    scrollRef,
+    loadingFirstPage: isLoading && isEmpty(list),
+    reload: refetch,
+    ...res
   };
 };

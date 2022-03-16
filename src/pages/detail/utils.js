@@ -1,16 +1,6 @@
 // 处理存储在oss的文章
 import $ from "jquery";
 
-export const getHtmlAndOutline = htmlTemplate => {
-  if (!htmlTemplate) {
-    return { html: "", outline: [] };
-  }
-  const div = document.createElement("div");
-  div.innerHTML = htmlTemplate;
-  const outline = renderOutline(div);
-  return { html: div.innerHTML, outline };
-};
-
 export const renderOutline = doc => {
   const elements = $(doc).children();
   const tempArr = [];

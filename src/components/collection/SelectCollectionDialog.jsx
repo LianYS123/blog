@@ -19,7 +19,7 @@ import {
   COLLECTION_ARTICLE_LIST,
   REMOVE_FROM_COLLECTION
 } from "services/collection";
-import { useModalAction, useMutation, useRequest } from "hooks";
+import { useModalAction, useCustomMutation, useRequest } from "hooks";
 import { CheckCircleOutlined } from "@mui/icons-material";
 import { EditCollectionDialog } from "./EditCollectionDialog";
 
@@ -35,12 +35,12 @@ const CollectionItemCard = props => {
   } = props;
 
   // 添加文章到收藏夹
-  const [addArticle, { loading: loadingAdd }] = useMutation(
+  const [addArticle, { loading: loadingAdd }] = useCustomMutation(
     ADD_ARTICLE_TO_COLLECTION
   );
 
   // 从收藏夹中移除文章
-  const [removeArticle, { loading: loadingRemove }] = useMutation(
+  const [removeArticle, { loading: loadingRemove }] = useCustomMutation(
     REMOVE_FROM_COLLECTION
   );
 
@@ -116,11 +116,10 @@ export const CollectionDialog = ({ visible, close, articleId }) => {
   const {
     data: collections = [],
     loading,
-    reload
+    refetch
   } = useRequest({
     service: COLLECTION_ARTICLE_LIST,
-    initialData: [],
-    necessaryParams: { articleId }
+    params: { articleId }
   });
 
   // 创建收藏夹弹出框
@@ -136,7 +135,7 @@ export const CollectionDialog = ({ visible, close, articleId }) => {
               {...item}
               key={item.id}
               articleId={articleId}
-              reload={reload}
+              reload={refetch}
             />
           ))}
         </Stack>
@@ -147,7 +146,7 @@ export const CollectionDialog = ({ visible, close, articleId }) => {
         </Button>
         <LoadingButton onClick={close}>完成</LoadingButton>
       </DialogActions>
-      <EditCollectionDialog reload={reload} {...modalProps} />
+      <EditCollectionDialog reload={refetch} {...modalProps} />
     </Dialog>
   );
 };

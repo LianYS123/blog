@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useHistory, useParams } from "react-router";
-import { useMutation, useRequest } from "hooks";
+import { useCustomMutation, useRequest } from "hooks";
 import routers from "routers";
 import {
   ADD_ARTICLE,
@@ -41,9 +41,9 @@ function Editor() {
   const [visible, setVisible] = useState(false); // 是否显示编辑文章详细信息
 
   // 请求文章数据
-  const { loading, data } = useRequest({
+  const { isLoading, data } = useRequest({
     service: GET_ARTICLE_DETAIL,
-    necessaryParams: { id },
+    params: { id },
     ready: !!id
   });
 
@@ -57,13 +57,8 @@ function Editor() {
   }, [data]);
 
   // 新增/修改文章
-  const [load, { loading: submiting }] = useMutation(
-    id ? EDIT_ARTICLE : ADD_ARTICLE,
-    null,
-    {
-      autoHandleError: true
-      // successMessage: isEdit ? "文章修改成功" : "文章发布成功"
-    }
+  const [load, { loading: submiting }] = useCustomMutation(
+    id ? EDIT_ARTICLE : ADD_ARTICLE
   );
 
   const getParamsFnRef = useRef();
@@ -152,8 +147,8 @@ function Editor() {
         back={true}
         extra={extra}
       />
-      <SkeletonList loading={loading} />
-      {loading ? null : (
+      <SkeletonList loading={isLoading} />
+      {isLoading ? null : (
         <>
           {/* 文章标题 */}
           <TextField

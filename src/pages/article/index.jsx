@@ -15,12 +15,11 @@ const ArticleList = () => {
   const {
     list = [],
     loadingFirstPage,
-    loadingMore,
-    loading,
-    search
+    isFetchingNextPage,
+    isLoading
   } = useFetchList({
     service: ARTICLE_LIST,
-    necessaryParams: { tags: selectedTags, searchValue: keyword }
+    params: { tags: selectedTags, searchValue: keyword }
   });
 
   const handleTagClick = tag => {
@@ -77,11 +76,11 @@ const ArticleList = () => {
             );
           })}
         </Stack>
-      ) : loading ? null : (
+      ) : isLoading ? null : (
         <Empty />
       )}
 
-      <SkeletonList loading={loadingMore} />
+      <SkeletonList loading={isFetchingNextPage} />
     </Container>
   );
 };

@@ -9,7 +9,7 @@ import {
   DialogTitle,
   TextField
 } from "@mui/material";
-import { useMutation } from "hooks";
+import { useCustomMutation } from "hooks";
 import * as yup from "yup";
 import { useSnackbar } from "notistack";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -18,9 +18,7 @@ import { getCommonFieldProps } from "utils";
 // 修改密码弹出框
 export const ChangePasswordModal = ({ close, visible }) => {
   const { enqueueSnackbar } = useSnackbar();
-  const [request, { loading }] = useMutation(CHANGE_PASSWORD, null, {
-    autoHandleError: true
-  });
+  const [request, { loading }] = useCustomMutation(CHANGE_PASSWORD);
 
   const validationSchema = yup.object({
     password: yup
