@@ -1,4 +1,5 @@
 import { isEmpty, uniqBy } from "lodash";
+import { useGlobalProgress } from "providers/ProgressProvider";
 import { useMemo } from "react";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useInfiniteQuery, useQueryClient } from "react-query";
@@ -103,6 +104,7 @@ export const useFetchList = ({
     setPages(newPagesArray);
   };
 
+  // 提取所有分页数据
   const list = useMemo(() => {
     if (data && data.pages) {
       const list = data.pages
@@ -121,6 +123,9 @@ export const useFetchList = ({
     debounce: 1000
     // triggerOnNoScroll: true // 自动触发一次
   });
+
+  // 全局加载进度条
+  useGlobalProgress(isLoading);
 
   return {
     list,

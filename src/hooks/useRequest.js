@@ -1,3 +1,4 @@
+import { useGlobalProgress } from "providers/ProgressProvider";
 import { useQuery } from "react-query";
 import { useFetch } from "./useFetch";
 
@@ -16,10 +17,15 @@ export const useRequest = ({
     const { data } = await fetch(params, config);
     return data;
   };
-  return useQuery({
+  const res = useQuery({
     queryFn,
     queryKey: [service, params, ...deps],
     enabled: ready,
     ...config
   });
+
+  // 全局加载进度条
+  useGlobalProgress(res.isLoading);
+
+  return res;
 };
