@@ -8,23 +8,20 @@ import {
   Container,
   IconButton,
   Tooltip,
-  Typography,
-  useMediaQuery,
-  useTheme
+  Typography
 } from "@mui/material";
 import React from "react";
 import Masonry from "@mui/lab/Masonry";
 import { Article as ArticleIcon, GitHub, Web } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 import routers from "routers";
-import { useRequest } from "hooks";
+import { useRequest, useUpSM } from "hooks";
 import { PROJECT_LIST } from "services/project";
 import { useAppTitle } from "hooks/app";
 
 const Home = () => {
   useAppTitle();
-  const theme = useTheme();
-  const upSM = useMediaQuery(theme.breakpoints.up("sm"));
+  const upSM = useUpSM();
   const history = useHistory();
   const { data: projectItems = [] } = useRequest({
     service: PROJECT_LIST

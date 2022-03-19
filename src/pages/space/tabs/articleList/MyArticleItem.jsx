@@ -6,10 +6,9 @@ import {
   CardHeader,
   CardMedia,
   Chip,
-  Typography,
-  useMediaQuery,
-  useTheme
+  Typography
 } from "@mui/material";
+import { useUpSM } from "hooks";
 import { useHistory } from "react-router-dom";
 import routers from "routers";
 import { timestampFormat } from "utils";
@@ -21,8 +20,7 @@ export const MyArticleItem = props => {
   const { cover, articleName, createTime, id, summary, tags } = props;
   const tagArr = tags ? tags.split("|") : [];
   const history = useHistory();
-  const theme = useTheme();
-  const upSM = useMediaQuery(theme.breakpoints.up("sm"));
+  const upSM = useUpSM();
 
   return (
     <Card>

@@ -1,9 +1,9 @@
-import { Chip, Link, Typography, useMediaQuery } from "@mui/material";
-import { Box, useTheme } from "@mui/system";
+import { Chip, Link, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import { ALL_TAGS } from "constants/index";
 import { makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
-import { useHistoryState } from "hooks";
+import { useHistoryState, useUpSM } from "hooks";
 
 const useStyles = makeStyles({
   root: {
@@ -17,8 +17,7 @@ const useStyles = makeStyles({
 export const TagFilter = ({ handleTagClick }) => {
   const { state, setState } = useHistoryState();
   const { selectedTags = [], keyword } = state;
-  const theme = useTheme();
-  const upSM = useMediaQuery(theme.breakpoints.up("sm"));
+  const upSM = useUpSM();
   const unextendTags = upSM ? ALL_TAGS.slice(0, 20) : ALL_TAGS.slice(0, 13);
   const [showTags, setShowTags] = useState(unextendTags);
   const [extend, setExtend] = useState(false);

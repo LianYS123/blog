@@ -10,14 +10,13 @@ import {
   CardActionArea,
   CardHeader,
   Chip,
-  Tooltip,
-  useMediaQuery,
-  useTheme
+  Tooltip
 } from "@mui/material";
 import { getQualityImage, timestampFormat } from "utils";
 import routers from "routers";
 import { useHistory } from "react-router-dom";
 import { Lock } from "@mui/icons-material";
+import { useUpSM } from "hooks";
 
 export default function CardArticle(props) {
   const {
@@ -37,8 +36,7 @@ export default function CardArticle(props) {
   const tagArr = tags ? tags.split("|") : [];
   const history = useHistory();
 
-  const theme = useTheme();
-  const upSM = useMediaQuery(theme.breakpoints.up("sm"));
+  const upSM = useUpSM();
 
   // 副标题
   const subheaderEl = (

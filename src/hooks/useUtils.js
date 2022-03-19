@@ -1,4 +1,6 @@
 // eslint-disable-next-line no-unused-vars
+import { useMediaQuery } from "@mui/material";
+import { useTheme } from "@mui/system";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 
@@ -217,4 +219,11 @@ export const useHistoryState = () => {
   };
 
   return { state, setState, history };
+};
+
+// 媒体查询
+export const useUpSM = () => {
+  const theme = useTheme();
+  const upSM = useMediaQuery(theme.breakpoints.up("sm"));
+  return upSM;
 };

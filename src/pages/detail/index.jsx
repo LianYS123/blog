@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 import { useParams } from "react-router";
-import { useRequest } from "hooks";
+import { useRequest, useUpSM } from "hooks";
 import { GET_ARTICLE_DETAIL } from "services/article";
-import { Container, Typography, useMediaQuery } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 
 import { AppTitle } from "components/appTitle";
 import { useWindowScroll } from "react-use";
@@ -13,7 +13,7 @@ import { SkeletonList } from "components/skeleton";
 import { useLocation } from "react-router-dom";
 import { renderOutline } from "./utils";
 import { MarkdownViewer } from "components/editor/MarkdownEditor";
-import { Box, useTheme } from "@mui/system";
+import { Box } from "@mui/system";
 import { Outline } from "./Outline";
 import { useAppTitle } from "hooks/app";
 
@@ -56,8 +56,7 @@ function Detail() {
       setOutline(outline);
     }
   }, [contentType]);
-  const theme = useTheme();
-  const upSM = useMediaQuery(theme.breakpoints.up("sm"));
+  const upSM = useUpSM();
 
   return (
     <Container sx={{ pb: 4 }}>
