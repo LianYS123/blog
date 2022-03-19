@@ -2,7 +2,6 @@ import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import { ThemeSwitch } from "./themeSwitch";
 import { UserAvatar } from "./userAvatar";
 import { SideBarMenuButton } from "./sidebar";
@@ -12,12 +11,14 @@ import routers from "routers";
 import { APP_MENUS } from "./config";
 import { ButtonBase, Slide, useScrollTrigger } from "@mui/material";
 import LiamsBlog from "svg/LiamsBlog";
+import { useUpSM } from "hooks";
 
 export default function AppHeader() {
   const { y } = useWindowScroll();
   const history = useHistory();
   const { pathname } = useLocation();
   const trigger = useScrollTrigger();
+  const upSM = useUpSM();
   return (
     <Slide in={!trigger}>
       <AppBar
@@ -26,13 +27,19 @@ export default function AppHeader() {
         position="fixed"
       >
         <Toolbar>
-          {/* <SideBarMenuButton /> */}
-          <Box sx={{ flexGrow: 1, ml: { xs: 0, sm: 2 } }}>
-            <LiamsBlog
-              onClick={() => history.push(routers.HOME)}
-              style={{ height: 36, cursor: "pointer" }}
-            />
-          </Box>
+          {upSM ? (
+            <Box sx={{ flexGrow: 1, ml: 2 }}>
+              <LiamsBlog
+                onClick={() => history.push(routers.HOME)}
+                style={{ height: 36, cursor: "pointer" }}
+              />
+            </Box>
+          ) : (
+            <Box sx={{ flexGrow: 1 }}>
+              <SideBarMenuButton />
+            </Box>
+          )}
+
           <div className="space-x-4 mr-2 hidden sm:block">
             {APP_MENUS.map(({ to, text, icon }) => {
               return (
