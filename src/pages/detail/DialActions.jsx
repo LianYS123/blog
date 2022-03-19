@@ -1,4 +1,10 @@
-import { Delete, Edit, InfoOutlined, SyncAlt } from "@mui/icons-material";
+import {
+  ArrowUpwardOutlined,
+  Delete,
+  Edit,
+  InfoOutlined,
+  SyncAlt
+} from "@mui/icons-material";
 import { Favorite, ThumbUp } from "@mui/icons-material";
 import {
   Box,
@@ -119,6 +125,16 @@ export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
       text: "详细信息",
       icon: <InfoOutlined />,
       onClick: () => showArticleInfo(true)
+    },
+    {
+      text: "回到顶部",
+      icon: <ArrowUpwardOutlined />,
+      onClick: () => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      }
     },
     {
       text: "删除文章",

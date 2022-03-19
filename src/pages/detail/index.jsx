@@ -42,6 +42,7 @@ function Detail() {
     markdownContent,
     html
   } = data;
+  const upSM = useUpSM();
   const isRich = !contentType || contentType === "RICH";
   const tagArr = tags ? tags.split("|") : [];
   const [outline, setOutline] = useState([]);
@@ -55,8 +56,7 @@ function Detail() {
       const outline = renderOutline(el);
       setOutline(outline);
     }
-  }, [contentType]);
-  const upSM = useUpSM();
+  }, [contentType, markdownContent, html]);
 
   return (
     <Container sx={{ pb: 4 }}>
@@ -64,6 +64,7 @@ function Detail() {
         title={y < 36 ? "" : articleName || "文章详情"}
         back={location?.state?.path || true}
       />
+
       <SkeletonList loading={isLoading} />
 
       {/* 标题 */}

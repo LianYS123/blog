@@ -9,6 +9,7 @@ import { MomentEditor } from "./MomentEditor";
 import { MomentItem } from "./MomentItem";
 import { Filter } from "./Filter";
 import { useAppTitle } from "hooks/app";
+import { ScrollTop } from "components/scrollTop";
 
 const Moment = () => {
   useAppTitle();
@@ -29,6 +30,7 @@ const Moment = () => {
   const { logged } = useSelector(state => state.app);
   return (
     <div className="container py-8 md:pb-16">
+      <ScrollTop />
       <div className="mb-8">
         <Paper>
           <MomentEditor reload={reload} />

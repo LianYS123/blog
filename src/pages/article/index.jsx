@@ -7,6 +7,7 @@ import { Empty } from "components/empty";
 import { TagFilter } from "./TagFilter";
 import CardArticle from "./card/CardArticle";
 import { useAppTitle } from "hooks/app";
+import { ScrollTop } from "components/scrollTop";
 
 const ArticleList = () => {
   useAppTitle();
@@ -39,6 +40,7 @@ const ArticleList = () => {
 
   return (
     <Container className="pt-4 md:pt-10 pb-6">
+      <ScrollTop />
       <div className="mb-8 flex justify-between">
         <div>
           {keyword ? (
