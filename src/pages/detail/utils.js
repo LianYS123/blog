@@ -3,7 +3,7 @@ import $ from "jquery";
 
 export const renderOutline = doc => {
   const elements = $(doc).children();
-  const tempArr = [];
+  const outline = [];
 
   const pushLast = (obj, arr) => {
     const level = obj.level;
@@ -36,8 +36,8 @@ export const renderOutline = doc => {
         level: hMap[ele.nodeName],
         children: []
       };
-      pushLast(obj, tempArr);
+      pushLast(obj, outline);
     }
   });
-  return tempArr;
+  return outline;
 };
