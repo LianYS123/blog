@@ -9,7 +9,7 @@ import "@fontsource/roboto/700.css";
 
 // markdown
 import "bytemd/dist/index.min.css";
-import "./github-markdown.css";
+import "./github-markdown.less";
 import "./highlight.less"; // 代码高亮
 import "./highlight-dark.less"; // 代码高亮
 

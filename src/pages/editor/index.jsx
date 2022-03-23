@@ -24,6 +24,7 @@ import { SyncAlt } from "@mui/icons-material";
 import { useAlertDialog } from "providers/AlertDialogProvider";
 import { SkeletonList } from "components/skeleton";
 import { useAppTitle } from "hooks/app";
+import { TTEditor } from "./TTEditor";
 
 /**
  * 文章编辑器
@@ -36,11 +37,12 @@ function Editor() {
   const isEdit = !!id;
 
   const [articleName, setArticleName] = useState("");
-  const [contentType, setContentType] = useState("MD"); // 内容为富文本编辑器格式(RICH)还是Markdown(MD)格式
+  const [contentType, setContentType] = useState("RICH"); // 内容为富文本编辑器格式(RICH)还是Markdown(MD)格式
   const isRich = contentType === "RICH";
 
   const [initialValues, setInitialValues] = useState({}); // 文章确认后，点击下一步填充到信息编辑框中的内容
   const [visible, setVisible] = useState(false); // 是否显示编辑文章详细信息
+  const [convertContent, setConvertContent] = useState();
 
   // 请求文章数据
   const { isLoading, data } = useRequest({
@@ -70,6 +72,7 @@ function Editor() {
     const params = getParamsFnRef.current();
     const { success, data } = await load({
       id,
+      articleName,
       ...params,
       ...values,
       contentType
@@ -95,7 +98,6 @@ function Editor() {
       cover,
       summary,
       tags: data?.tags,
-      articleName,
       visibleStatus
     });
   };
@@ -105,12 +107,15 @@ function Editor() {
   // 修改编辑器类型
   const handleToggleType = () => {
     openAlertDialog({
-      content: "编辑器类型改变后，编辑器中的内容不会被保存，你确定要转换吗？",
+      content: "编辑器类型改变后，可以能导致内容转换格式错误，你确定要转换吗？",
       onOk: () => {
+        const params = getParamsFnRef.current();
         if (isRich) {
           setContentType("MD");
+          setConvertContent(params.html);
         } else {
           setContentType("RICH");
+          setConvertContent(params.markdownContent);
         }
       }
     });
@@ -133,6 +138,16 @@ function Editor() {
       </Button>
     </Box>
   );
+
+  const isNotEmpty = () => {
+    if (isRich) {
+      return !!data?.html;
+    } else {
+      return !!data?.markdownContent;
+    }
+  };
+
+  const empty = !isNotEmpty();
 
   return (
     <Container
@@ -166,15 +181,17 @@ function Editor() {
 
           {/* 文章内容编辑器 */}
           {isRich ? (
-            <RichEditor
+            <TTEditor
               isEdit={isEdit}
               data={data}
+              convertContent={convertContent}
               getParamsFnRef={getParamsFnRef}
             />
           ) : (
             <MDEditor
               isEdit={isEdit}
               data={data}
+              convertContent={convertContent}
               getParamsFnRef={getParamsFnRef}
             />
           )}

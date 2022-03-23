@@ -1,4 +1,4 @@
-import { CompareArrowsOutlined, CompareOutlined } from "@mui/icons-material";
+import { CompareArrowsOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
   Button,
@@ -33,7 +33,6 @@ export const DetailsConfirmModal = ({
   submiting
 }) => {
   const [tags, setTags] = useState([]);
-  const [articleName, setArticleName] = useState("");
   const [summary, setSummary] = useState();
   const [cover, setCover] = useState();
   const [visibleStatus, setVisibleStatus] = useState(0); // 是否仅自己可见，0：否，1：是
@@ -41,7 +40,6 @@ export const DetailsConfirmModal = ({
   const setValues = data => {
     const { tags, articleName, cover, summary, visibleStatus } = data;
     tags && setTags(tags?.split("|"));
-    articleName && setArticleName(articleName);
     summary && setSummary(summary);
     cover && setCover(cover);
     setVisibleStatus(visibleStatus || 0);
@@ -60,7 +58,7 @@ export const DetailsConfirmModal = ({
 
   // 点击发布
   const handleConfirm = () => {
-    handleSubmit({ tags, articleName, summary, cover, visibleStatus });
+    handleSubmit({ tags, summary, cover, visibleStatus });
   };
 
   // 张图片是否一样
@@ -76,17 +74,6 @@ export const DetailsConfirmModal = ({
       <DialogTitle>文章详情</DialogTitle>
       <DialogContent>
         <Stack spacing={1}>
-          {/* 文章标题 */}
-          <TextField
-            variant="standard"
-            size="small"
-            value={articleName}
-            onChange={ev => setArticleName(ev.target.value)}
-            name="articleName"
-            fullWidth
-            label="文章标题"
-          />
-
           {/* 文章标签 */}
           <TagSelector tags={tags} setTags={setTags} />
 

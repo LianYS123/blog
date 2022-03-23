@@ -12,16 +12,20 @@ const turndownService = new TurndownService();
 /**
  * Markdown 编辑器
  */
-export const MDEditor = ({ isEdit, data, getParamsFnRef }) => {
+export const MDEditor = ({ isEdit, data, getParamsFnRef, convertContent }) => {
   const [value, onChange] = useState("");
   useEffect(() => {
+    // if (convertContent) {
+    //   const md = turndownService.turndown(convertContent);
+    //   onChange(md);
+    // } else
     if (data?.markdownContent) {
       onChange(data.markdownContent);
     } else if (data?.html) {
       const md = turndownService.turndown(data?.html);
       onChange(md);
     }
-  }, [data]);
+  }, [data, convertContent]);
 
   getParamsFnRef.current = () => {
     const params = {
