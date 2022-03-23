@@ -1,101 +1,122 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { noop } from "lodash";
 import { ADD_MOMENT, EDIT_MOMENT } from "services/moment";
-import { useEditorState, CommonEditor } from "components/editor";
 import { useCustomMutation } from "hooks";
 import { useAssertLogged } from "hooks/app";
 import { Button, Checkbox, FormControlLabel } from "@mui/material";
+import { EditorContent } from "@tiptap/react";
+import { useMinimalEditor } from "components/editor/tiptap";
+import { Box } from "@mui/system";
+import { LoadingButton } from "@mui/lab";
+import classNames from "classnames";
 
 /**
  * 动态编辑器
  */
 export const MomentEditor = ({
-  reload = noop,
-  editItem = noop,
   record,
   isEdit = false,
-  onCancel = noop
+  onCancel = noop,
+  onSuccess = noop,
+  editable
 }) => {
   const service = isEdit ? EDIT_MOMENT : ADD_MOMENT;
-  const [request] = useCustomMutation(service);
-  const {
-    reset,
-    isEmpty,
-    getParams,
-    visibleStatus,
-    onVisibleStatusChange,
-    ...editorProps
-  } = useEditorState({
-    record
-  });
+  const [request, { isLoading }] = useCustomMutation(service);
   const { assertLogged } = useAssertLogged();
+  const [visibleStatus, setVS] = useState(0);
+
+  // 编辑器
+  const editor = useMinimalEditor({
+    editable,
+    content: record?.html,
+    placeholder: `说点什么吧...`
+  });
+
+  // 同步可视状态
+  useEffect(() => {
+    if (isEdit && record) {
+      setVS(record.visibleStatus);
+    }
+  }, [record?.visibleStatus]);
+
+  // 可编辑时，自动聚焦
+  useEffect(() => {
+    if (editable && editor) {
+      editor.commands.focus();
+    }
+  }, [editor, editable]);
+
+  // 提交
   const onSubmit = async () => {
-    if (isEmpty()) {
+    if (editor.isEmpty) {
       return;
     }
     assertLogged();
-    const params = getParams();
+    const params = {
+      visibleStatus,
+      html: editor.getHTML(),
+      id: record?.id
+    };
     const { success } = await request(params);
     if (success) {
       if (!isEdit) {
         // 如果是新增操作，成功后重置输入框
-        reset();
-      } else {
-        editItem({ ...record, ...params });
+        editor.commands.clearContent();
       }
-      reload();
-      onCancel();
+      onSuccess();
     }
   };
-  return (
-    <div>
-      <CommonEditor
-        controls={[
-          "bold",
-          "italic",
-          "emoji",
-          "underline",
-          "text-indent",
-          "remove-styles"
-        ]}
-        placeholder={
-          isEdit
-            ? "按 Ctrl + S / Command + S 保存"
-            : "按 Ctrl + S / Command + S 发布"
-        }
-        contentStyle={{ height: 160 }}
-        onSave={onSubmit}
-        {...editorProps}
-      />
-      <div className="flex justify-between">
-        <div className="ml-4">
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={visibleStatus === 1 ? true : false}
-                size="small"
-                color="primary"
-                onChange={(ev, checked) => {
-                  onVisibleStatusChange(checked ? 1 : 0);
-                }}
-              />
-            }
-            label={<span className="text-sm">仅自己可见</span>}
-          />
-        </div>
-        <div className="text-right">
-          {isEdit && (
-            <Button size="large" onClick={onCancel}>
-              取消
-            </Button>
-          )}
 
-          <Button disabled={isEmpty()} size="large" onClick={onSubmit}>
-            {isEdit ? "保存" : "发布"}
-          </Button>
+  return (
+    <Box
+      sx={{ px: 2, pt: editable ? 2 : 0 }}
+      className={classNames("rounded border-gray-500 dark:border-gray-300", {
+        border: editable && !isEdit
+      })}
+    >
+      <Box
+        onClick={() => editor.commands.focus()}
+        sx={{ minHeight: editable ? (isEdit ? 120 : 160) : 0 }}
+      >
+        <EditorContent editor={editor} />
+      </Box>
+      {editable && (
+        <div className="flex justify-between items-center">
+          <div>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={visibleStatus === 1 ? true : false}
+                  size="small"
+                  color="primary"
+                  onChange={(ev, checked) => {
+                    setVS(checked ? 1 : 0);
+                  }}
+                />
+              }
+              label={<span className="text-sm">仅自己可见</span>}
+            />
+          </div>
+          <div className="text-right">
+            {isEdit && (
+              <Button size="large" sx={{ minWidth: 32 }} onClick={onCancel}>
+                取消
+              </Button>
+            )}
+
+            <LoadingButton
+              loading={isLoading}
+              disabled={editor ? editor.isEmpty : true}
+              size="large"
+              onClick={onSubmit}
+              sx={{ minWidth: 32 }}
+            >
+              {isEdit ? "保存" : "发布"}
+            </LoadingButton>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </Box>
   );
 };

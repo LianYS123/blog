@@ -1,4 +1,4 @@
-import { Lock } from "@mui/icons-material";
+import { Lock, MoreHoriz } from "@mui/icons-material";
 import { Avatar, Card, CardHeader, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { ActionMenuButton } from "components/action/ActionMenuButton";
@@ -77,7 +77,7 @@ export const MomentItem = ({ reload, removeItemById, editItem, ...record }) => {
       /* 只有发布者有编辑权限 */
       action={
         userInfo.id === createUser ? (
-          <ActionMenuButton actions={actions} />
+          <ActionMenuButton icon={<MoreHoriz />} actions={actions} />
         ) : null
       }
     />
@@ -86,42 +86,41 @@ export const MomentItem = ({ reload, removeItemById, editItem, ...record }) => {
   return (
     <Card>
       {headerEl}
-      <Box sx={{ px: 2, pb: 2 }}>
-        {editing ? (
-          <MomentEditor
-            onCancel={() => setEditing(false)}
-            onSuccess={() => setEditing(false)}
-            isEdit={true}
-            record={record}
-            editItem={editItem}
-          />
-        ) : (
-          <article
-            id="htmlTemplate"
-            dangerouslySetInnerHTML={{ __html: html }}
-          ></article>
-        )}
-        <Box display="flex" alignItems="center">
-          <Typography
-            variant="subtitle1"
-            color={theme => theme.palette.text.secondary}
-            mr={1}
-            component="span"
-          >
-            {timestampFormat(createTime)}
-          </Typography>
-          {visibleStatus === 1 && (
-            <Tooltip title="仅自己可见">
-              <Typography
-                color={theme => theme.palette.text.secondary}
-                variant="subtitle1"
-                mr={1}
-                component="span"
-              >
-                <Lock sx={{ fontSize: 16 }} />
-              </Typography>
-            </Tooltip>
-          )}
+
+      <Box sx={{ pb: 2 }}>
+        <MomentEditor
+          onCancel={() => setEditing(false)}
+          onSuccess={() => {
+            setEditing(false);
+            // reload();
+          }}
+          editable={editing}
+          isEdit={true}
+          record={record}
+        />
+        <Box sx={{ px: 2, display: editing ? "none" : "block" }}>
+          <Box mt={2} display="flex" alignItems="center">
+            <Typography
+              variant="subtitle1"
+              color={theme => theme.palette.text.secondary}
+              mr={1}
+              component="span"
+            >
+              {timestampFormat(createTime)}
+            </Typography>
+            {visibleStatus === 1 && (
+              <Tooltip title="仅自己可见">
+                <Typography
+                  color={theme => theme.palette.text.secondary}
+                  variant="subtitle1"
+                  mr={1}
+                  component="span"
+                >
+                  <Lock sx={{ fontSize: 16 }} />
+                </Typography>
+              </Tooltip>
+            )}
+          </Box>
         </Box>
       </Box>
     </Card>

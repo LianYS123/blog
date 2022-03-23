@@ -2,7 +2,7 @@ import { IconButton, ListItemText, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
 
-export const ActionMenuButton = ({ actions = [] }) => {
+export const ActionMenuButton = ({ actions = [], icon = <MoreVertIcon /> }) => {
   const [anchorEl, setAnchorEl] = useState();
   return (
     <>
@@ -12,7 +12,7 @@ export const ActionMenuButton = ({ actions = [] }) => {
           setAnchorEl(ev.currentTarget);
         }}
       >
-        <MoreVertIcon />
+        {icon}
       </IconButton>
       <Menu
         open={!!anchorEl}

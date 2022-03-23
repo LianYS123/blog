@@ -2,7 +2,7 @@ import { Paper, Stack } from "@mui/material";
 import { Empty } from "components/empty";
 import { SkeletonList } from "components/skeleton";
 import { useFetchList } from "hooks";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { MOMENT_LIST } from "services/moment";
 import { MomentEditor } from "./MomentEditor";
@@ -33,7 +33,7 @@ const Moment = () => {
       <ScrollTop />
       <div className="mb-8">
         <Paper>
-          <MomentEditor reload={reload} />
+          <MomentEditor editable={true} onSuccess={() => reload()} />
         </Paper>
       </div>
       {logged ? (
