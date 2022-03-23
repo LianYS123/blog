@@ -58,15 +58,17 @@ export const TTEditor = props => {
   // className="rounded border border-gray-500 dark:border-gray-300"
   return (
     <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
-      <EditorContent
-        onClick={() => editor.commands.focus()}
-        autoFocus
-        style={{
-          overflow: "auto"
-          // padding: 16
-        }}
-        editor={editor}
-      />
+      <Box sx={{ height: "100%", overflow: "auto" }}>
+        <EditorContent
+          onClick={() => editor.commands.focus()}
+          autoFocus
+          style={{
+            overflow: "auto"
+            // padding: 16
+          }}
+          editor={editor}
+        />
+      </Box>
     </Box>
   );
 };
