@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useParams } from "react-router";
 import { useRequest, useUpSM } from "hooks";
@@ -12,12 +12,14 @@ import { DialActions } from "./DialActions";
 import { SkeletonList } from "components/skeleton";
 import { useLocation } from "react-router-dom";
 import { renderOutline } from "./utils";
-import { MarkdownViewer } from "components/editor/MarkdownEditor";
+// import { MarkdownViewer } from "components/editor/MarkdownEditor";
 import { Box } from "@mui/system";
 import { Outline } from "./Outline";
 import { useAppTitle } from "hooks/app";
 import { useTiptapEditor } from "components/editor/tiptap";
 import { EditorContent } from "@tiptap/react";
+
+import { marked } from "marked";
 
 const TiptapViewer = ({ content }) => {
   const editor = useTiptapEditor({ editable: false, content });
@@ -53,20 +55,7 @@ function Detail() {
   const isRich = !contentType || contentType === "RICH";
   const tagArr = tags ? tags.split("|") : [];
   const [outline, setOutline] = useState([]);
-
-  useEffect(() => {
-    if (contentType === null || contentType === "RICH") {
-      setTimeout(() => {
-        const el = document.querySelector(".ProseMirror");
-        const outline = renderOutline(el);
-        setOutline(outline);
-      }, 100);
-    } else if (contentType === "MD") {
-      const el = document.querySelector(".markdown-body");
-      const outline = renderOutline(el);
-      setOutline(outline);
-    }
-  }, [contentType, markdownContent, html]);
+  const [content, setContent] = useState();
 
   const isNotEmpty = () => {
     if (isRich) {
@@ -76,7 +65,33 @@ function Detail() {
     }
   };
 
-  const empty = !isNotEmpty();
+  useEffect(() => {
+    if (isNotEmpty()) {
+      const _html = isRich ? html : marked(markdownContent);
+      const tpl = document.createElement("template");
+      tpl.innerHTML = _html;
+      // 将 p 标签下的 img 标签拆出来
+      tpl.content.querySelectorAll("p > img").forEach(el => {
+        const p = el.parentElement;
+        p.parentNode.insertBefore(el, p);
+        p.remove();
+      });
+      const elements = tpl.content.querySelectorAll("h1,h2,h3,h4"); // 必须使用模板的 content 查询子内容
+      const outline = renderOutline(elements);
+      setOutline(outline);
+      setContent(tpl.innerHTML);
+
+      // id 会被 tiptap 忽略，在这里加上
+      setTimeout(() => {
+        const el = document.querySelector(".ProseMirror");
+        if (el) {
+          renderOutline(el.querySelectorAll("h1, h2, h3, h4"));
+        }
+      }, 100);
+    }
+  }, [contentType, markdownContent, html]);
+
+  // const empty = !isNotEmpty();
 
   return (
     <Container sx={{ pb: 4 }}>
@@ -96,15 +111,7 @@ function Detail() {
           <Box sx={{ display: "flex", justifyItems: "start" }}>
             {/* 文章内容 */}
             <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
-              {isRich ? (
-                <TiptapViewer content={html} />
-              ) : (
-                // <article
-                //   id="htmlTemplate"
-                //   dangerouslySetInnerHTML={{ __html: html }}
-                // ></article>
-                <MarkdownViewer value={markdownContent} />
-              )}
+              <TiptapViewer content={content} />
             </Box>
             {/* 导航 */}
             {upSM && outline.length ? (

@@ -1,8 +1,4 @@
-// 处理存储在oss的文章
-import $ from "jquery";
-
-export const renderOutline = doc => {
-  const elements = $(doc).children();
+export const renderOutline = elements => {
   const outline = [];
 
   const pushLast = (obj, arr) => {
@@ -20,7 +16,8 @@ export const renderOutline = doc => {
     }
   };
   let uid = 0;
-  elements.each((i, ele) => {
+
+  Array.from(elements).forEach(ele => {
     if ("H1 H2 H3 H4".includes(ele.nodeName)) {
       const id = `article-h${++uid}`;
       ele.id = id;
@@ -39,5 +36,6 @@ export const renderOutline = doc => {
       pushLast(obj, outline);
     }
   });
+
   return outline;
 };

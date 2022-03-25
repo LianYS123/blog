@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import _ from "lodash";
 import { AppTitle } from "components/appTitle";
-import { RichEditor } from "./RichEditor";
+// import { RichEditor } from "./RichEditor";
 import { DetailsConfirmModal } from "./DetailsConfirmModal";
 import { Box } from "@mui/system";
 import { MDEditor } from "./MdEditor";
