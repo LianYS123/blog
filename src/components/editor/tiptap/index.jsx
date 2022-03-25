@@ -10,6 +10,11 @@ import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 
+import Table from "@tiptap/extension-table";
+import TableRow from "@tiptap/extension-table-row";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+
 /**
  * tiptap 编辑器统一封装
  */
@@ -27,6 +32,10 @@ export const useTiptapEditor = ({
       Placeholder.configure({
         placeholder
       }),
+      Table,
+      TableRow,
+      TableCell,
+      TableHeader,
       editable
         ? CodeBlockLowlight.extend({
             addNodeView() {
