@@ -18,6 +18,7 @@ import { Outline } from "./Outline";
 import { useAppTitle } from "hooks/app";
 import { useTiptapEditor } from "components/editor/tiptap";
 import { EditorContent } from "@tiptap/react";
+import mediumZoom from "medium-zoom";
 
 import { marked } from "marked";
 
@@ -81,11 +82,13 @@ function Detail() {
       setOutline(outline);
       setContent(tpl.innerHTML);
 
-      // id 会被 tiptap 忽略，在这里加上
       setTimeout(() => {
         const el = document.querySelector(".ProseMirror");
         if (el) {
+          // id 会被 tiptap 忽略，在这里加上
           renderOutline(el.querySelectorAll("h1, h2, h3, h4"));
+          // 添加缩放功能
+          mediumZoom(el.querySelectorAll("img"));
         }
       }, 100);
     }
