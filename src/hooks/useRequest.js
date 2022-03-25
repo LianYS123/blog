@@ -1,4 +1,4 @@
-import { useGlobalProgress } from "providers/ProgressProvider";
+// import { useGlobalProgress } from "providers/ProgressProvider";
 import { useQuery } from "react-query";
 import { useFetch } from "./useFetch";
 
@@ -25,7 +25,7 @@ export const useRequest = ({
   });
 
   // 全局加载进度条
-  useGlobalProgress(res.isLoading);
+  // useGlobalProgress(res.isLoading);
 
   return res;
 };

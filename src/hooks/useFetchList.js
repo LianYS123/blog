@@ -1,6 +1,6 @@
 import { isEmpty, uniqBy } from "lodash";
-import { useGlobalProgress } from "providers/ProgressProvider";
-import { useMemo } from "react";
+// import { useGlobalProgress } from "providers/ProgressProvider";
+import { useCallback, useMemo } from "react";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useInfiniteQuery, useQueryClient } from "react-query";
 import { useFetch } from "./useFetch";
@@ -53,21 +53,7 @@ export const useFetchList = ({
     ...config
   });
 
-  const { data, isLoading, fetchNextPage, refetch } = res;
-
-  // 在数据列表中新增数据
-  // const addToList = rows => {
-  //   const newList = uniqBy([...list, ...rows], it => it.id);
-  //   setList(newList);
-  // };
-
-  // 添加一项
-  // const addItem = item => {
-  //   // 如果列表中不存在这一项，则添加为第一项
-  //   if (item && list.every(it => it.id !== item.id)) {
-  //     setList(setList([item, ...list]));
-  //   }
-  // };
+  const { data, isLoading, isFetching, fetchNextPage, refetch } = res;
 
   const setPages = pages => {
     queryClient.setQueriesData(queryKey, data => ({
@@ -117,15 +103,21 @@ export const useFetchList = ({
     }
   }, [data]);
 
+  const fetchMore = useCallback(() => {
+    if (!isFetching) {
+      fetchNextPage();
+    }
+  }, [isFetching]);
+
   // 滚动到底部时加载更多数据
-  const scrollRef = useBottomScrollListener(fetchNextPage, {
+  const scrollRef = useBottomScrollListener(fetchMore, {
     offset: 50,
     debounce: 1000
     // triggerOnNoScroll: true // 自动触发一次
   });
 
   // 全局加载进度条
-  useGlobalProgress(isLoading);
+  // useGlobalProgress(isLoading);
 
   return {
     list,

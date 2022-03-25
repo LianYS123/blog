@@ -53,11 +53,13 @@ export const APP_ROUTES = [
       {
         path: routers.ARTICLE_LIST,
         component: "article",
+        // component: ArticleList,
         title: "文章列表"
       },
       {
         path: routers.USER_SPACE,
         component: "space",
+        // component: Space,
         title: "个人空间"
       },
       {

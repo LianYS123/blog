@@ -18,10 +18,10 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import AlertDialogProvider from "providers/AlertDialogProvider";
 import LoginDialogProvider from "providers/LoginDialogProvider";
-import { ProgressProvider } from "providers/ProgressProvider";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import { GlobalProgress } from "components/progress/GlobalProgress";
 
 const locales = {
   en_US,
@@ -63,18 +63,19 @@ const App = () => {
         >
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <QueryClientProvider client={queryClient}>
-              <ProgressProvider>
-                <SnackbarProvider
-                  // anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                  maxSnack={3}
-                >
-                  <AlertDialogProvider>
-                    <LoginDialogProvider>
-                      <AppRoutes />
-                    </LoginDialogProvider>
-                  </AlertDialogProvider>
-                </SnackbarProvider>
-              </ProgressProvider>
+              <SnackbarProvider
+                // anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                maxSnack={3}
+              >
+                <AlertDialogProvider>
+                  <LoginDialogProvider>
+                    {/* 全局加载状态 */}
+                    <GlobalProgress />
+                    {/* 路由 */}
+                    <AppRoutes />
+                  </LoginDialogProvider>
+                </AlertDialogProvider>
+              </SnackbarProvider>
             </QueryClientProvider>
           </LocalizationProvider>
         </ThemeProvider>
