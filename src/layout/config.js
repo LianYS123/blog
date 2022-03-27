@@ -19,7 +19,7 @@ export const APP_MENUS = [
   },
   {
     to: routers.ARTICLE_LIST,
-    text: "文章",
+    text: "博客",
     icon: <Article />
   },
   {
@@ -56,7 +56,7 @@ export const BOTTOM_MENUS = [
   },
   {
     to: routers.ARTICLE_LIST,
-    text: "文章",
+    text: "博客",
     icon: <Article />
   },
   {
