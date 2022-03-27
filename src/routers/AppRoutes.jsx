@@ -59,7 +59,12 @@ export const APP_ROUTES = [
       {
         path: routers.RESOURCE,
         component: "resource",
-        title: "文章列表"
+        title: "资源"
+      },
+      {
+        path: routers.BOOK,
+        component: "book",
+        title: "图书"
       },
       {
         path: routers.USER_SPACE,

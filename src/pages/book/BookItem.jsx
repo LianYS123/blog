@@ -3,30 +3,23 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import {
-  Avatar,
-  Box,
-  CardActionArea,
-  CardHeader,
-  Chip,
-  Rating
-} from "@mui/material";
-import { timestampFormat } from "utils";
+import { Box, CardActionArea, CardHeader, Chip, Rating } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import { useUpSM } from "hooks";
 
-export default function SingleRsItem(props) {
+export default function BookItem(props) {
   const {
     id,
-    resourceName,
-    icon,
+    title,
+    cover,
     link,
+    pub,
     publishTime,
     tags = "",
-    desc,
+    description,
     detail,
-    rateNum,
-    rate,
+    ratingCount,
+    ratingScore,
     handleTagClick
   } = props;
 
@@ -41,7 +34,7 @@ export default function SingleRsItem(props) {
       {/* 创建时间 */}
       <Typography variant="subtitle1" mr={1} fontSize={14} component="span">
         <Box mr={1} component="span">
-          {timestampFormat(publishTime)}
+          {pub}
         </Box>
       </Typography>
     </Box>
@@ -50,11 +43,7 @@ export default function SingleRsItem(props) {
   // 卡片头部信息
   const headerEl = (
     <CardHeader
-      title={resourceName} // 文章标题
-      avatar={
-        // 头像
-        <Avatar src={icon} aria-label="recipe" />
-      }
+      title={title} // 文章标题
       subheader={subheaderEl}
     />
   );
@@ -62,7 +51,7 @@ export default function SingleRsItem(props) {
   // 摘要(简介)
   const summaryEl = (
     <CardContent>
-      <Typography variant="body1">{desc}</Typography>
+      <Typography variant="body1">{description}</Typography>
     </CardContent>
   );
 
@@ -86,22 +75,22 @@ export default function SingleRsItem(props) {
   );
 
   // 封面图
-  const coverEl = icon ? (
+  const coverEl = cover ? (
     <CardMedia
       sx={{
         maxWidth: { xs: "auto", sm: 256 },
         minHeight: { xs: "auto", sm: 256 }
       }}
       component="img"
-      image={icon}
+      image={cover}
     />
   ) : null;
 
   const rateEl = (
     <CardContent className="flex items-center">
-      <Rating readOnly precision={0.1} value={rate} />
+      <Rating readOnly precision={0.1} value={ratingScore / 2} />
       <Typography ml={1} variant="subtitle1">
-        {rate}
+        {ratingScore}
       </Typography>
     </CardContent>
   );
@@ -119,9 +108,9 @@ export default function SingleRsItem(props) {
     return (
       <>
         {headerEl}
-        {/* {coverEl} */}
+        {coverEl}
         {summaryEl}
-        {detailEl}
+        {/* {detailEl} */}
         {tagsEl}
         {rateEl}
       </>
@@ -135,11 +124,11 @@ export default function SingleRsItem(props) {
         <Box flex="auto">
           {headerEl}
           {summaryEl}
-          {detailEl}
+          {/* {detailEl} */}
           {rateEl}
           {tagsEl}
         </Box>
-        {/* {coverEl} */}
+        {coverEl}
       </Box>
     );
   };

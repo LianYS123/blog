@@ -12,6 +12,7 @@ const routers = {
   SETTING: "/pages/setting",
   ABOUT: "/pages/about",
   RESOURCE: "/pages/resource",
+  BOOK: "/pages/book",
 
   TMP_REDIRECT: "/tmp-redirect"
 };

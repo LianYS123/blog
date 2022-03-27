@@ -2,7 +2,6 @@ import { Chip, Link, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { makeStyles } from "@mui/styles";
 import { useHistoryState, useUpSM } from "hooks";
-import { RESOURCE_CATEGORIES } from "./config";
 
 const useStyles = makeStyles({
   root: {
@@ -13,52 +12,25 @@ const useStyles = makeStyles({
   }
 });
 
-export const ResourceFilter = () => {
+export const BookFilter = () => {
   const { state, setState } = useHistoryState();
   const {
     selectedTags = [],
     keyword,
-    order = "view_num",
-    category = "ALL",
-    layout = "masonry"
+    order = "rating_count",
+    category = "ALL"
   } = state;
   const upSM = useUpSM();
   const styles = useStyles();
 
   const orders = [
-    ["view_num", "热度"],
+    ["rating_count", "热度"],
     ["publish_time", "时间"],
-    ["rate", "评分"]
-  ];
-
-  const layouts = [
-    ["masonry", "瀑布流"],
-    ["single", "单列"],
-    ["grid", "网格"]
+    ["rating_score", "评分"]
   ];
 
   return (
     <Box sx={{ mb: 2 }}>
-      {/* 布局 */}
-      <Box mb={1}>
-        {layouts.map(([cur, name]) => {
-          return (
-            <Chip
-              color={layout === cur ? "primary" : "default"}
-              classes={{
-                label: upSM ? styles.label : "",
-                root: upSM ? styles.root : ""
-              }}
-              onClick={() => setState({ layout: cur })}
-              size="medium"
-              sx={{ mr: 1, mb: 1 }}
-              key={cur}
-              label={name}
-            />
-          );
-        })}
-      </Box>
-
       {/* 排序 */}
       <Box mb={1}>
         {orders.map(([cur, name]) => {
@@ -81,24 +53,22 @@ export const ResourceFilter = () => {
 
       {/* 分类 */}
       <Box mb={2}>
-        {RESOURCE_CATEGORIES.filter(it => !!it.label).map(
-          ({ category: cur, label }) => {
-            return (
-              <Chip
-                color={category === cur ? "primary" : "default"}
-                classes={{
-                  label: upSM ? styles.label : "",
-                  root: upSM ? styles.root : ""
-                }}
-                onClick={() => setState({ category: cur, pageNo: 1 })}
-                size="medium"
-                sx={{ mr: 1, mb: 1 }}
-                key={cur}
-                label={label}
-              />
-            );
-          }
-        )}
+        {["ALL", "文学", "科技", "生活", "文化", "流行", "经管"].map(cur => {
+          return (
+            <Chip
+              color={category === cur ? "primary" : "default"}
+              classes={{
+                label: upSM ? styles.label : "",
+                root: upSM ? styles.root : ""
+              }}
+              onClick={() => setState({ category: cur, pageNo: 1 })}
+              size="medium"
+              sx={{ mr: 1, mb: 1 }}
+              key={cur}
+              label={cur === "ALL" ? "全部" : cur}
+            />
+          );
+        })}
       </Box>
 
       {/* 关键词 */}

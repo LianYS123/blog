@@ -1,6 +1,13 @@
 import React from "react";
 import routers from "routers";
-import { AccountCircle, Apps, Article, Home, Info } from "@mui/icons-material";
+import {
+  AccountCircle,
+  Apps,
+  Article,
+  Book,
+  Home,
+  Info
+} from "@mui/icons-material";
 import MomentIcon from "./icons/MomentIcon";
 import { SvgIcon } from "@mui/material";
 
@@ -19,6 +26,11 @@ export const APP_MENUS = [
     to: routers.RESOURCE,
     text: "资源",
     icon: <Apps />
+  },
+  {
+    to: routers.BOOK,
+    text: "图书",
+    icon: <Book />
   },
   {
     to: routers.MOMENT,
