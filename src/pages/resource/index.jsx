@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useHistoryState, useRequest } from "hooks";
 import { SkeletonList } from "components/skeleton";
 import {
@@ -46,6 +46,13 @@ const Resource = () => {
   });
   const { totalPage, rows = [] } = data;
 
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (typeof totalPage === "number" && totalPage !== count) {
+      setCount(totalPage);
+    }
+  }, [totalPage]);
+
   // 点击标签
   const handleTagClick = tag => {
     // 如果标签已选中，则取消选中，否则选中该标签
@@ -64,7 +71,7 @@ const Resource = () => {
           color="primary"
           shape="rounded"
           size="large"
-          count={totalPage}
+          count={count}
           page={pageNo}
           onChange={(ev, value) => {
             setState({ pageNo: value });

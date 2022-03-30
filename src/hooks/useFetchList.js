@@ -27,9 +27,9 @@ export const useFetchList = ({
   };
   const queryKey = [service, params, ...deps];
 
-  const res = useInfiniteQuery({
-    queryFn,
-    queryKey,
+  const res = useInfiniteQuery(queryKey, queryFn, {
+    // queryFn,
+    // queryKey,
     enabled: ready,
     getNextPageParam: (lastPage, allPages) => {
       if (!lastPage) {
