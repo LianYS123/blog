@@ -9,56 +9,69 @@ import {
   FormatStrikethrough
 } from "@mui/icons-material";
 
-import { ToggleButton, ToggleButtonGroup, Tooltip } from "@mui/material";
+import {
+  Button,
+  Card,
+  IconButton,
+  Paper,
+  ToggleButton,
+  ToggleButtonGroup,
+  Tooltip
+} from "@mui/material";
+import { Box } from "@mui/system";
+import { BubbleMenu, FloatingMenu } from "@tiptap/react";
+import { useTheme } from "hooks/app";
+import "tippy.js/themes/light.css";
 
 export const TipTapMenubar = ({ editor }) => {
   const getMenus = () => {
-    const titles = [
-      {
-        title: "h1", // 标题
-        active: editor.isActive("heading", { level: 1 }),
-        onClick: () => {
-          editor.chain().focus().toggleHeading({ level: 1 }).run();
-        }
+    const titles = [1, 2, 3, 4].map((level, i) => ({
+      title: `${["一", "二", "三", "四"][i]}级标题`, // 标题
+      text: `H${level}`, // 标题
+      key: `H${level}`, // 标题
+      active: editor.isActive("heading", { level }),
+      onClick: () => {
+        editor.chain().focus().toggleHeading({ level }).run();
       }
-    ];
+    }));
     const menus = [
-      {
-        title: "加粗", // 加粗
-        key: "bold",
-        icon: <FormatBold />,
-        active: editor.isActive("bold"),
-        onClick: () => {
-          editor.chain().focus().toggleBold().run();
-        }
-      },
-      {
-        title: "斜体", // 斜体
-        key: "italic",
-        icon: <FormatItalic />,
-        active: editor.isActive("italic"),
-        onClick: () => {
-          editor.chain().focus().toggleItalic().run();
-        }
-      },
-      {
-        title: "删除线", // 删除线
-        key: "strike",
-        icon: <FormatStrikethrough />,
-        active: editor.isActive("strike"),
-        onClick: () => {
-          editor.chain().focus().toggleStrike().run();
-        }
-      },
-      {
-        title: "行内代码", // 行内代码
-        key: "code",
-        icon: <CodeRounded />,
-        active: editor.isActive("code"),
-        onClick: () => {
-          editor.chain().focus().toggleCode().run();
-        }
-      },
+      ...titles,
+      // {
+      //   title: "加粗", // 加粗
+      //   key: "bold",
+      //   icon: <FormatBold />,
+      //   active: editor.isActive("bold"),
+      //   onClick: () => {
+      //     editor.chain().focus().toggleBold().run();
+      //   }
+      // },
+      // {
+      //   title: "斜体", // 斜体
+      //   key: "italic",
+      //   icon: <FormatItalic />,
+      //   active: editor.isActive("italic"),
+      //   onClick: () => {
+      //     editor.chain().focus().toggleItalic().run();
+      //   }
+      // },
+      // {
+      //   title: "删除线", // 删除线
+      //   key: "strike",
+      //   icon: <FormatStrikethrough />,
+      //   active: editor.isActive("strike"),
+      //   onClick: () => {
+      //     editor.chain().focus().toggleStrike().run();
+      //   }
+      // },
+      // {
+      //   title: "行内代码", // 行内代码
+      //   key: "code",
+      //   icon: <CodeRounded />,
+      //   active: editor.isActive("code"),
+      //   onClick: () => {
+      //     editor.chain().focus().toggleCode().run();
+      //   }
+      // },
       // {
       //   title: "paragraph", // 段落
       //   active: editor.isActive("paragraph"),
@@ -151,26 +164,65 @@ export const TipTapMenubar = ({ editor }) => {
 
   const menus = getMenus();
   const formats = getFormats(menus);
+  const { isDark } = useTheme();
 
   return (
-    <ToggleButtonGroup
-      size="small"
-      color="standard"
-      value={formats}
-      aria-label="text formatting"
+    <BubbleMenu
+      tippyOptions={{
+        // placement: "bottom",
+        theme: isDark ? "translucent" : "light",
+        arrow: false
+      }}
+      editor={editor}
     >
-      {menus.map(({ title, onClick, icon, key }) => {
-        return (
-          <ToggleButton
-            key={key}
-            value={title}
-            onClick={onClick}
-            aria-label={title}
-          >
-            <Tooltip title={title}>{icon}</Tooltip>
-          </ToggleButton>
-        );
-      })}
-    </ToggleButtonGroup>
+      {/* <Paper> */}
+      <Box sx={{ ml: 1 }}>
+        {menus.map(({ title, onClick, active, icon, text, key }) => {
+          return (
+            <Tooltip key={key} title={title}>
+              {icon ? (
+                <IconButton
+                  color={active ? "primary" : "default"}
+                  onClick={onClick}
+                >
+                  {icon}
+                </IconButton>
+              ) : (
+                <Button
+                  size="large"
+                  sx={{ m: 0, p: 0, px: 1, minWidth: 0, boxShadow: "none" }}
+                  color={active ? "primary" : "inherit"}
+                  variant={active ? "contained" : "text"}
+                  onClick={onClick}
+                >
+                  {text}
+                </Button>
+              )}
+            </Tooltip>
+          );
+        })}
+      </Box>
+
+      {/* </Paper> */}
+      {/* <ToggleButtonGroup
+        size="small"
+        color="standard"
+        value={formats}
+        aria-label="text formatting"
+      >
+        {menus.map(({ title, onClick, icon, key }) => {
+          return (
+            <ToggleButton
+              key={key}
+              value={title}
+              onClick={onClick}
+              aria-label={title}
+            >
+              <Tooltip title={title}>{icon}</Tooltip>
+            </ToggleButton>
+          );
+        })}
+      </ToggleButtonGroup> */}
+    </BubbleMenu>
   );
 };

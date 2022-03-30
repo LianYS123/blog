@@ -133,12 +133,11 @@ const Resource = () => {
         />
       </div>
       <ResourceFilter handleTagClick={handleTagClick} />
+      {renderPagination()}
 
       <SkeletonList loading={isLoading} count={5} />
       {!isEmpty(rows) ? (
         <Box pt={2}>
-          {renderPagination()}
-
           {layout === "grid" && renderGrid()}
           {layout === "single" && renderSingle()}
           {layout === "masonry" && renderMasonry()}

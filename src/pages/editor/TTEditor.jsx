@@ -1,9 +1,10 @@
 import { Box } from "@mui/material";
 import { EditorContent } from "@tiptap/react";
 import { useTiptapEditor } from "components/editor/tiptap";
+import { TipTapMenubar } from "components/editor/tiptap/TipTapMenubar";
 import $ from "jquery";
 import { marked } from "marked";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { getRQualityImage, getSummary } from "utils";
 
 export const TTEditor = props => {
@@ -40,35 +41,14 @@ export const TTEditor = props => {
     return params;
   };
 
-  // useEffect(() => {
-  //   if (!editor) {
-  //     return;
-  //   }
-  //   if (convertContent) {
-  //     const html = marked(convertContent);
-  //     editor.setOptions({ content: html });
-  //   } else if (data?.html) {
-  //     editor.setOptions({ content: data.html });
-  //   } else if (data?.markdownContent) {
-  //     const html = marked(data.markdownContent);
-  //     editor.setOptions({ content: html });
-  //   }
-  // }, [data, convertContent, editor]);
-
-  // className="rounded border border-gray-500 dark:border-gray-300"
   return (
-    <Box sx={{ flexGrow: 1, overflow: "hidden" }}>
-      <Box sx={{ height: "100%", overflow: "auto" }}>
-        <EditorContent
-          onClick={() => editor.commands.focus()}
-          autoFocus
-          style={{
-            overflow: "auto"
-            // padding: 16
-          }}
-          editor={editor}
-        />
-      </Box>
+    <Box sx={{ flexGrow: 1 }}>
+      {editor && <TipTapMenubar editor={editor} />}
+      <EditorContent
+        onClick={() => editor.commands.focus()}
+        autoFocus
+        editor={editor}
+      />
     </Box>
   );
 };

@@ -39,7 +39,9 @@ const Home = () => {
           <Card key={index}>
             <CardActionArea
               onClick={() => {
-                if (item.articleId) {
+                if (item.web) {
+                  window.open(item.web, "_blank");
+                } else if (item.articleId) {
                   history.push(routers.DETAIL.replace(":id", item.articleId));
                 }
               }}

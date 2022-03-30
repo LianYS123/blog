@@ -87,12 +87,12 @@ const Book = () => {
       </div>
       <BookFilter handleTagClick={handleTagClick} />
 
+      {renderPagination()}
+
       <SkeletonList loading={isLoading} count={5} />
 
       {!isEmpty(rows) ? (
         <Box pt={2}>
-          {renderPagination()}
-
           <Stack spacing={2}>
             {rows.map(it => {
               return <BookItem {...it} key={it.id} {...commonProps} />;
