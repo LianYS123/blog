@@ -13,12 +13,13 @@ import {
   SpeedDialAction,
   SpeedDialIcon
 } from "@mui/material";
+import { pink } from "@mui/material/colors";
 import { CollectionDialog } from "components/collection/SelectCollectionDialog";
 import { useCustomMutation } from "hooks";
 import { useAssertLogged } from "hooks/app";
 import { useSnackbar } from "notistack";
 import { useAlertDialog } from "providers/AlertDialogProvider";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import routers from "routers";
@@ -28,7 +29,17 @@ import { useIsCurrentUser } from "./hooks";
 /**
  * 文章操作栏
  */
-export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
+export const DialActions = ({
+  id,
+  setVisible: showArticleInfo,
+  authorId,
+  collected: c
+}) => {
+  const [collected, setCollected] = useState(c); // 文章是否被收藏
+  useEffect(() => {
+    setCollected(c);
+  }, [c]);
+
   const { id: resourceId } = useParams(); // 文章id
   const history = useHistory();
 
@@ -40,11 +51,13 @@ export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
   const { assertLogged } = useAssertLogged();
 
   // 操作项可视状态
-  const [actionVisible, setActionVisible] = React.useState(false);
+  const [actionVisible, setActionVisible] = React.useState(true);
 
   // 收藏夹可视状态
   const [collectionVisible, setCollectionVisible] = useState(false);
-  const closeCollectionDialog = () => setCollectionVisible(false);
+  const closeCollectionDialog = () => {
+    setCollectionVisible(false);
+  };
   const openCollectionDialog = () => setCollectionVisible(true);
 
   const { open: openDialog } = useAlertDialog();
@@ -91,18 +104,24 @@ export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
   };
 
   const actions = [
-    {
-      text: "点赞",
-      icon: <ThumbUp />,
-      onClick: () => {
-        assertLogged();
-        enqueueSnackbar("建设中...");
-      },
-      auth: false // 是否需要作者权限
-    },
+    // {
+    //   text: "点赞",
+    //   icon: <ThumbUp />,
+    //   onClick: () => {
+    //     assertLogged();
+    //     enqueueSnackbar("建设中...");
+    //   },
+    //   auth: false // 是否需要作者权限
+    // },
     {
       text: "收藏",
-      icon: <Favorite />,
+      icon: (
+        <Favorite
+          sx={{
+            color: collected ? pink[300] : undefined
+          }}
+        />
+      ),
       onClick: () => {
         assertLogged();
         openCollectionDialog();
@@ -138,7 +157,7 @@ export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
     },
     {
       text: "删除文章",
-      icon: <Delete color="error" />,
+      icon: <Delete />,
       onClick: handleDelete,
       auth: true
     }
@@ -150,7 +169,7 @@ export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
         <ClickAwayListener
           onClickAway={() => {
             if (actionVisible) {
-              setActionVisible(false);
+              // setActionVisible(false);
             }
           }}
         >
@@ -186,6 +205,7 @@ export const DialActions = ({ id, setVisible: showArticleInfo, authorId }) => {
 
         {collectionVisible ? (
           <CollectionDialog
+            onChange={c => setCollected(c)}
             visible={collectionVisible}
             close={closeCollectionDialog}
             articleId={resourceId}

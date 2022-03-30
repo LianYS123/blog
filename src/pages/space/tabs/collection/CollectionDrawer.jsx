@@ -20,6 +20,7 @@ export const CollectionDrawer = props => {
   const {
     data,
     list = [],
+    total,
     loadingFirstPage,
     isFetchingNextPage,
     isLoading,
@@ -29,9 +30,9 @@ export const CollectionDrawer = props => {
   } = useFetchList({
     service: PAGE_COLLECTION_ARTICLES,
     params: { collectionId },
-    ready: !!collectionId
+    ready: !!collectionId && drawerVisible
   });
-  const total = data?.totalRows || 0;
+  // const total = data?.[0]?.totalRows || 0;
   const [removeFromCollection] = useCustomMutation(REMOVE_FROM_COLLECTION);
   // 删除
   const handleDelete = async articleId => {

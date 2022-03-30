@@ -22,6 +22,7 @@ import {
 import { useModalAction, useCustomMutation, useRequest } from "hooks";
 import { CheckCircleOutlined } from "@mui/icons-material";
 import { EditCollectionDialog } from "./EditCollectionDialog";
+import { noop } from "lodash";
 
 const CollectionItemCard = props => {
   const {
@@ -31,7 +32,8 @@ const CollectionItemCard = props => {
     cover,
     exist,
     articleId,
-    reload
+    reload,
+    onChange = noop
   } = props;
 
   // 添加文章到收藏夹
@@ -56,7 +58,11 @@ const CollectionItemCard = props => {
     } else {
       await addArticle({ articleId, collectionId: id });
     }
-    reload();
+    const { data: collections } = await reload();
+    onChange(
+      collections.some(it => it.exist),
+      collections
+    );
   };
 
   return (
@@ -111,10 +117,15 @@ const CollectionItemCard = props => {
   );
 };
 
-export const CollectionDialog = ({ visible, close, articleId }) => {
+export const CollectionDialog = ({
+  visible,
+  close,
+  articleId,
+  onChange = noop
+}) => {
   // 当前用户的所有收藏夹
   const {
-    data: collections = [],
+    data: collections,
     loading,
     refetch
   } = useRequest({
@@ -130,10 +141,11 @@ export const CollectionDialog = ({ visible, close, articleId }) => {
       <DialogTitle>收藏</DialogTitle>
       <DialogContent>
         <Stack spacing={2}>
-          {collections.map(item => (
+          {(collections || []).map(item => (
             <CollectionItemCard
               {...item}
               key={item.id}
+              onChange={onChange}
               articleId={articleId}
               reload={refetch}
             />

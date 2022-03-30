@@ -126,6 +126,7 @@ export const useFetchList = ({
     scrollRef,
     loadingFirstPage: isLoading && isEmpty(list),
     reload: refetch,
+    total: data?.pages?.[0]?.totalRows || 0,
     ...res
   };
 };
