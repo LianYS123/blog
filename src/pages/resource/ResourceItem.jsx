@@ -24,6 +24,7 @@ export default function ResourceItem({
   desc,
   detail,
   rateNum,
+  collected,
   rate,
   handleTagClick = noop,
   headerProps = {}
@@ -74,7 +75,11 @@ export default function ResourceItem({
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <CollectionIconButton type={COLLECTION_TYPES.RESOURCE} itemId={id} />
+        <CollectionIconButton
+          collected={collected}
+          type={COLLECTION_TYPES.RESOURCE}
+          itemId={id}
+        />
       </CardActions>
     </Card>
   );
