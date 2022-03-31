@@ -4,13 +4,13 @@ import { SkeletonList } from "components/skeleton";
 import { useFetchList, useCustomMutation } from "hooks";
 import {
   PAGE_COLLECTION_ARTICLES,
-  REMOVE_FROM_COLLECTION
-} from "services/collection";
+  REMOVE_ARTICLE_FROM_COLLECTION
+} from "services/collection-article";
 import { ActionMenuButton } from "components/action/ActionMenuButton";
 import CardArticle from "./CardArticle";
 import { CommonDrawer } from "components/drawer";
 
-export const CollectionDrawer = props => {
+export const ArticleCollectionDrawer = props => {
   const {
     id: collectionId,
     open: openDrawer,
@@ -33,7 +33,9 @@ export const CollectionDrawer = props => {
     ready: !!collectionId && drawerVisible
   });
   // const total = data?.[0]?.totalRows || 0;
-  const [removeFromCollection] = useCustomMutation(REMOVE_FROM_COLLECTION);
+  const [removeFromCollection] = useCustomMutation(
+    REMOVE_ARTICLE_FROM_COLLECTION
+  );
   // 删除
   const handleDelete = async articleId => {
     //

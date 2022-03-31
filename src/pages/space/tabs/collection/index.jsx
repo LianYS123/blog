@@ -5,7 +5,8 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
-  Grid
+  Grid,
+  Typography
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { SkeletonList } from "components/skeleton";
@@ -15,26 +16,18 @@ import { EditCollectionDialog } from "components/collection/EditCollectionDialog
 import { ActionMenuButton } from "components/action/ActionMenuButton";
 import { DELETE_COLLECTION } from "services/collection";
 import { useAlertDialog } from "providers/AlertDialogProvider";
-import { CollectionDrawer } from "./CollectionDrawer";
+import { ArticleCollectionDrawer } from "./ArticleCollectionDrawer";
 import { useHistoryState } from "hooks";
+import _ from "lodash";
+import { COLLECTION_TYPES } from "constants/index";
+import { ResourceCollectionDrawer } from "./ResourceCollectionDrawer";
 
-export const Collection = () => {
-  // 收藏夹列表
-  const {
-    data = [],
-    loading,
-    refetch
-  } = useRequest({
-    service: SPACE_COLLECTION_LIST
-  });
-
+const CollectionList = ({ collections = [], refetch, type }) => {
   // 弹出收藏夹文章列表抽屉
   const { state, setState } = useHistoryState();
-  const { collectionDrawerVisible = false, drawerCollectionId } = state;
 
   // 编辑收藏夹弹出框
   const { open: openEditCollectionDialog, ...modalProps } = useModalAction();
-
   const { open: openAlertDialog } = useAlertDialog();
 
   // 删除收藏夹
@@ -54,10 +47,9 @@ export const Collection = () => {
   };
 
   return (
-    <Box>
-      <SkeletonList loading={loading} />
+    <>
       <Grid container spacing={2}>
-        {data.map(item => {
+        {collections.map(item => {
           const { collectionName, collectionDesc, id, cover } = item;
           // 操作按钮
           const actions = [
@@ -85,7 +77,8 @@ export const Collection = () => {
                   onClick={() =>
                     setState({
                       drawerCollectionId: item.id,
-                      collectionDrawerVisible: true
+                      collectionDrawerVisible: true,
+                      collectionType: type
                     })
                   }
                 >
@@ -103,18 +96,79 @@ export const Collection = () => {
           );
         })}
       </Grid>
-      {!loading && !data.length ? (
+
+      <EditCollectionDialog reload={refetch} {...modalProps} />
+    </>
+  );
+};
+
+export const Collection = () => {
+  // 收藏夹列表
+  const {
+    data = [],
+    loading,
+    refetch
+  } = useRequest({
+    service: SPACE_COLLECTION_LIST
+  });
+
+  // 弹出收藏夹文章列表抽屉
+  const { state, setState } = useHistoryState();
+  const {
+    collectionDrawerVisible = false,
+    drawerCollectionId,
+    collectionType
+  } = state;
+
+  const articleCollections = data.filter(
+    it => it.collectionType === COLLECTION_TYPES.ARTICLE
+  );
+  const resourceCollections = data.filter(
+    it => it.collectionType === COLLECTION_TYPES.RESOURCE
+  );
+
+  const drawerProps = {
+    visible: collectionDrawerVisible,
+    id: drawerCollectionId,
+    open: () => setState({ collectionDrawerVisible: true }),
+    close: () => setState({ collectionDrawerVisible: false })
+  };
+
+  return (
+    <Box>
+      <SkeletonList loading={loading} />
+
+      <Typography variant="h6" gutterBottom>
+        文章
+      </Typography>
+      <CollectionList
+        type={COLLECTION_TYPES.ARTICLE}
+        collections={articleCollections}
+        refetch={refetch}
+      />
+
+      <Typography mt={4} variant="h6" gutterBottom>
+        资源
+      </Typography>
+      <CollectionList
+        type={COLLECTION_TYPES.RESOURCE}
+        collections={resourceCollections}
+        refetch={refetch}
+      />
+
+      {collectionType === COLLECTION_TYPES.ARTICLE && (
+        <ArticleCollectionDrawer {...drawerProps} />
+      )}
+
+      {collectionType === COLLECTION_TYPES.RESOURCE && (
+        <ResourceCollectionDrawer {...drawerProps} />
+      )}
+
+      {/* {!loading && !data.length ? (
         <Button onClick={() => openEditCollectionDialog({ isEdit: false })}>
           创建收藏夹
         </Button>
-      ) : null}
-      <EditCollectionDialog reload={refetch} {...modalProps} />
-      <CollectionDrawer
-        visible={collectionDrawerVisible}
-        id={drawerCollectionId}
-        open={() => setState({ collectionDrawerVisible: true })}
-        close={() => setState({ collectionDrawerVisible: false })}
-      />
+      ) : null} */}
     </Box>
   );
 };

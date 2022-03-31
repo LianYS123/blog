@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { pink } from "@mui/material/colors";
 import { CollectionDialog } from "components/collection/SelectCollectionDialog";
+import { COLLECTION_TYPES } from "constants";
 import { useCustomMutation } from "hooks";
 import { useAssertLogged } from "hooks/app";
 import { useSnackbar } from "notistack";
@@ -40,7 +41,7 @@ export const DialActions = ({
     setCollected(c);
   }, [c]);
 
-  const { id: resourceId } = useParams(); // 文章id
+  const { id: articleId } = useParams(); // 文章id
   const history = useHistory();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -99,7 +100,7 @@ export const DialActions = ({
 
   // 跳转到编辑页
   const jumpToEditor = () => {
-    const pathname = routers.EDITOR_EDIT.replace(":id", resourceId);
+    const pathname = routers.EDITOR_EDIT.replace(":id", articleId);
     history.push(pathname);
   };
 
@@ -208,7 +209,8 @@ export const DialActions = ({
             onChange={c => setCollected(c)}
             visible={collectionVisible}
             close={closeCollectionDialog}
-            articleId={resourceId}
+            itemId={articleId}
+            type={COLLECTION_TYPES.ARTICLE}
           ></CollectionDialog>
         ) : null}
       </Box>

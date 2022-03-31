@@ -14,15 +14,11 @@ import {
 import { LoadingButton } from "@mui/lab";
 import { Box } from "@mui/system";
 
-import {
-  ADD_ARTICLE_TO_COLLECTION,
-  COLLECTION_ARTICLE_LIST,
-  REMOVE_FROM_COLLECTION
-} from "services/collection";
-import { useModalAction, useCustomMutation, useRequest } from "hooks";
+import { useModalAction } from "hooks";
 import { CheckCircleOutlined } from "@mui/icons-material";
 import { EditCollectionDialog } from "./EditCollectionDialog";
 import { noop } from "lodash";
+import { useCollections } from "./hooks";
 
 const CollectionItemCard = props => {
   const {
@@ -31,22 +27,14 @@ const CollectionItemCard = props => {
     id,
     cover,
     exist,
-    articleId,
     reload,
-    onChange = noop
+    onChange = noop,
+
+    itemId,
+    addItem,
+    removeItem,
+    loading
   } = props;
-
-  // 添加文章到收藏夹
-  const [addArticle, { loading: loadingAdd }] = useCustomMutation(
-    ADD_ARTICLE_TO_COLLECTION
-  );
-
-  // 从收藏夹中移除文章
-  const [removeArticle, { loading: loadingRemove }] = useCustomMutation(
-    REMOVE_FROM_COLLECTION
-  );
-
-  const loading = loadingAdd || loadingRemove;
 
   // 点击收藏夹，添加或移除文章
   const handleCollectionClick = async () => {
@@ -54,9 +42,9 @@ const CollectionItemCard = props => {
       return;
     }
     if (exist) {
-      await removeArticle({ articleId, collectionId: id });
+      await removeItem(itemId, id);
     } else {
-      await addArticle({ articleId, collectionId: id });
+      await addItem(itemId, id);
     }
     const { data: collections } = await reload();
     onChange(
@@ -117,21 +105,25 @@ const CollectionItemCard = props => {
   );
 };
 
+/**
+ * 选择收藏夹弹出框
+ */
 export const CollectionDialog = ({
   visible,
   close,
-  articleId,
-  onChange = noop
+  itemId,
+  onChange = noop,
+  type
 }) => {
-  // 当前用户的所有收藏夹
   const {
-    data: collections,
+    collections,
     loading,
-    refetch
-  } = useRequest({
-    service: COLLECTION_ARTICLE_LIST,
-    params: { articleId }
-  });
+    refetch,
+    addItem,
+    removeItem,
+    loadingAdd,
+    loadingRemove
+  } = useCollections({ type, itemId });
 
   // 创建收藏夹弹出框
   const { open: openDialog, ...modalProps } = useModalAction();
@@ -146,8 +138,11 @@ export const CollectionDialog = ({
               {...item}
               key={item.id}
               onChange={onChange}
-              articleId={articleId}
+              itemId={itemId}
               reload={refetch}
+              loading={loadingAdd || loadingRemove}
+              addItem={addItem}
+              removeItem={removeItem}
             />
           ))}
         </Stack>
@@ -158,7 +153,7 @@ export const CollectionDialog = ({
         </Button>
         <LoadingButton onClick={close}>完成</LoadingButton>
       </DialogActions>
-      <EditCollectionDialog reload={refetch} {...modalProps} />
+      <EditCollectionDialog type={type} reload={refetch} {...modalProps} />
     </Dialog>
   );
 };

@@ -28,3 +28,9 @@ export const TAGS_MAP = {
 };
 
 export const ALL_TAGS = Object.values(TAGS_MAP).flat();
+
+export const COLLECTION_TYPES = {
+  ARTICLE: 0,
+  RESOURCE: 1,
+  BOOK: 2
+};

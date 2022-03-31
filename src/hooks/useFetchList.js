@@ -104,7 +104,7 @@ export const useFetchList = ({
   }, [data]);
 
   const fetchMore = useCallback(() => {
-    if (!isFetching) {
+    if (!isFetching && ready) {
       fetchNextPage();
     }
   }, [isFetching]);

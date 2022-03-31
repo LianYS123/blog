@@ -2,12 +2,16 @@ import {
   Avatar,
   Card,
   CardActionArea,
+  CardActions,
   CardContent,
   CardHeader,
   Chip,
   Rating,
   Typography
 } from "@mui/material";
+import { CollectionIconButton } from "components/collection/CollectionIconButton";
+import { COLLECTION_TYPES } from "constants/index";
+import { noop } from "lodash";
 import { timestampFormat } from "utils";
 
 export default function ResourceItem({
@@ -21,7 +25,8 @@ export default function ResourceItem({
   detail,
   rateNum,
   rate,
-  handleTagClick
+  handleTagClick = noop,
+  headerProps = {}
 }) {
   return (
     <Card component="div">
@@ -30,6 +35,7 @@ export default function ResourceItem({
           avatar={<Avatar src={icon} aria-label="recipe" />}
           title={resourceName}
           subheader={timestampFormat(publishTime)}
+          {...headerProps}
         />
 
         {/* <CardMedia component="img" src={icon} /> */}
@@ -67,6 +73,9 @@ export default function ResourceItem({
           </div>
         </CardContent>
       </CardActionArea>
+      <CardActions>
+        <CollectionIconButton type={COLLECTION_TYPES.RESOURCE} itemId={id} />
+      </CardActions>
     </Card>
   );
 }

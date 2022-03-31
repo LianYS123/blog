@@ -1,6 +1,7 @@
 import { Favorite, ThumbUp } from "@mui/icons-material";
 import { CardActions, IconButton, Tooltip } from "@mui/material";
 import { CollectionDialog } from "components/collection/SelectCollectionDialog";
+import { COLLECTION_TYPES } from "constants/index";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 
@@ -38,7 +39,8 @@ export const ArticleActions = props => {
         <CollectionDialog
           visible={visible}
           close={close}
-          articleId={articleId}
+          itemId={articleId}
+          type={COLLECTION_TYPES.ARTICLE}
         ></CollectionDialog>
       ) : null}
     </CardActions>
