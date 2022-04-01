@@ -54,11 +54,13 @@ export const appSlice = createSlice({
         body.classList.add("dark");
         body.classList.remove("light");
         document.documentElement.style.colorScheme = "dark";
+        document.documentElement.dataset.theme = "dark";
       } else {
         body.removeAttribute("theme-mode");
         body.classList.remove("dark");
         body.classList.add("light");
         document.documentElement.style.colorScheme = "light";
+        document.documentElement.dataset.theme = "light";
       }
     },
     setIsAppLoaded: (state, action) => {

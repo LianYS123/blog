@@ -9,6 +9,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Skeleton,
   Stack
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
@@ -19,6 +20,7 @@ import { CheckCircleOutlined } from "@mui/icons-material";
 import { EditCollectionDialog } from "./EditCollectionDialog";
 import { noop } from "lodash";
 import { useCollections } from "./hooks";
+import { SkeletonList } from "components/skeleton";
 
 const CollectionItemCard = props => {
   const {
@@ -117,7 +119,7 @@ export const CollectionDialog = ({
 }) => {
   const {
     collections,
-    loading,
+    isLoading,
     refetch,
     addItem,
     removeItem,
@@ -132,6 +134,7 @@ export const CollectionDialog = ({
     <Dialog fullWidth open={visible} onClose={close}>
       <DialogTitle>收藏</DialogTitle>
       <DialogContent>
+        {isLoading && <Skeleton animation="wave" sx={{ height: 200 }} />}
         <Stack spacing={2}>
           {(collections || []).map(item => (
             <CollectionItemCard

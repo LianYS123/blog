@@ -14,6 +14,7 @@ import zh_CN from "locales/zh_CN";
 import AppRoutes from "routers/AppRoutes";
 
 import "./app.less";
+// import "./app.css";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import AlertDialogProvider from "providers/AlertDialogProvider";

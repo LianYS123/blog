@@ -90,8 +90,8 @@ export const useCollections = ({ itemId, type }) => {
   // 当前用户的所有收藏夹
   const {
     data: collections,
-    loading,
-    refetch
+    refetch,
+    ...rest
   } = useRequest({
     service: services.list,
     params: { [field]: itemId }
@@ -114,8 +114,8 @@ export const useCollections = ({ itemId, type }) => {
   };
 
   return {
+    ...rest,
     collections,
-    loading,
     refetch,
     addItem,
     removeItem,

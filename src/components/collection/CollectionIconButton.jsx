@@ -1,5 +1,5 @@
 import { Favorite } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import { pink } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import { CollectionDialog } from "./SelectCollectionDialog";
@@ -25,19 +25,22 @@ export const CollectionIconButton = ({
 
   return (
     <>
-      <IconButton
-        onClick={ev => {
-          // ev.preventDefault();
-          ev.stopPropagation();
-          openCollectionDialog(true);
-        }}
-      >
-        <Favorite
-          sx={{
-            color: collected ? pink[300] : undefined
+      <Tooltip title="收藏">
+        <IconButton
+          onClick={ev => {
+            // ev.preventDefault();
+            ev.stopPropagation();
+            openCollectionDialog(true);
           }}
-        />
-      </IconButton>
+        >
+          <Favorite
+            sx={{
+              color: collected ? pink[300] : undefined
+            }}
+          />
+        </IconButton>
+      </Tooltip>
+
       {collectionVisible ? (
         <CollectionDialog
           onChange={c => setCollected(c)}
