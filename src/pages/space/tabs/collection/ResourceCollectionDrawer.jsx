@@ -52,9 +52,14 @@ export const ResourceCollectionDrawer = props => {
     }
   };
 
-  const [layout, setLayout] = useState("grid");
+  const [layout, setLayout] = useState("single");
 
   const layouts = [
+    {
+      icon: <TableRows />,
+      layout: "single",
+      tip: "单列"
+    },
     {
       icon: <Apps />,
       layout: "grid",
@@ -64,11 +69,6 @@ export const ResourceCollectionDrawer = props => {
       icon: <Dashboard />,
       layout: "masonry",
       tip: "瀑布流"
-    },
-    {
-      icon: <TableRows />,
-      layout: "single",
-      tip: "单列"
     }
   ];
 
@@ -95,7 +95,7 @@ export const ResourceCollectionDrawer = props => {
     >
       <Container
         ref={scrollRef}
-        sx={{ height: "100%", overflow: "auto", mt: 6 }}
+        sx={{ height: "100%", overflow: "auto", py: 6 }}
       >
         <SkeletonList loading={loadingFirstPage} />
         {list.length ? (

@@ -73,11 +73,12 @@ export function CommonDrawer(props) {
           visibility: "visible",
           right: 0,
           left: 0,
-          boxShadow: trigger ? 1 : 0
+          boxShadow: trigger ? 1 : 0,
+          zIndex: theme => theme.zIndex.drawer + 1
         }}
       >
         <Puller />
-        <Box sx={{ display: "flex", p: 2 }}>
+        <Box sx={{ display: "flex", p: 2, alignItems: "center" }}>
           <Typography sx={{ color: "text.secondary", flexGrow: 1 }}>
             {title}
           </Typography>
