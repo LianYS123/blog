@@ -2,11 +2,14 @@ import { Box } from "@mui/system";
 import Loading from "components/loading";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import AppFooter from "./footer";
+import AppBottomNav from "./bottomNav";
 import AppHeader from "./header";
 import PWAPrompt from "react-ios-pwa-prompt";
 import { isiosDevice } from "utils";
 import { useMount } from "react-use";
+import { useUpSM } from "hooks";
+import { AppFooter } from "./footer";
+import { Container } from "@mui/material";
 
 // 页面布局
 const AppLayout = ({ children }) => {
@@ -15,6 +18,7 @@ const AppLayout = ({ children }) => {
   useMount(() => {
     setiOS(isiosDevice());
   });
+  const upSM = useUpSM();
   return (
     <>
       {isAppLoaded ? (
@@ -24,7 +28,12 @@ const AppLayout = ({ children }) => {
             <main id="container" className="h-full pt-14">
               {children}
             </main>
-            <AppFooter />
+            {upSM && (
+              <Container>
+                <AppFooter />
+              </Container>
+            )}
+            <AppBottomNav />
           </Box>
           {iOS && (
             <PWAPrompt

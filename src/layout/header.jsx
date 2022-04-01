@@ -23,7 +23,10 @@ export default function AppHeader() {
     <Slide in={!trigger}>
       <AppBar
         color="inherit"
-        sx={{ boxShadow: y > 10 ? 1 : 0 }}
+        className="bg-white dark:bg-black"
+        sx={{
+          boxShadow: y > 10 ? 1 : 0
+        }}
         position="fixed"
       >
         <Toolbar>
