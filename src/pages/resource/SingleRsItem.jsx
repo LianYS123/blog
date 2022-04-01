@@ -14,6 +14,7 @@ import {
 import { timestampFormat } from "utils";
 import { useHistory } from "react-router-dom";
 import { useUpSM } from "hooks";
+import { ActionMenuButton } from "components/action/ActionMenuButton";
 
 export default function SingleRsItem(props) {
   const {
@@ -27,7 +28,8 @@ export default function SingleRsItem(props) {
     detail,
     rateNum,
     rate,
-    handleTagClick
+    handleTagClick,
+    actions = []
   } = props;
 
   const tagArr = tags ? tags.split("|") : [];
@@ -56,6 +58,16 @@ export default function SingleRsItem(props) {
         <Avatar src={icon} aria-label="recipe" />
       }
       subheader={subheaderEl}
+      action={
+        actions.length ? (
+          <ActionMenuButton
+            actions={actions.map(it => ({
+              ...it,
+              onClick: ev => it.onClick(id)
+            }))}
+          />
+        ) : undefined
+      }
     />
   );
 
@@ -114,44 +126,19 @@ export default function SingleRsItem(props) {
     </CardContent>
   );
 
-  // 手机上渲染
-  const renderXs = () => {
-    return (
-      <>
-        {headerEl}
-        {/* {coverEl} */}
-        {summaryEl}
-        {detailEl}
-        {tagsEl}
-        {rateEl}
-      </>
-    );
-  };
-
-  // 电脑上渲染
-  const renderMd = () => {
-    return (
-      <Box display="flex" maxHeight={480}>
-        <Box flex="auto">
-          {headerEl}
-          {summaryEl}
-          {detailEl}
-          {rateEl}
-          {tagsEl}
-        </Box>
-        {/* {coverEl} */}
-      </Box>
-    );
-  };
-
   return (
-    <Card component="div">
+    <Card>
+      {actions.length ? headerEl : null}
       <CardActionArea
         onClick={() => {
           window.open(link, "_blank");
         }}
       >
-        {upSM ? renderMd() : renderXs()}
+        {actions.length ? null : headerEl}
+        {summaryEl}
+        {detailEl}
+        {rateEl}
+        {tagsEl}
       </CardActionArea>
     </Card>
   );

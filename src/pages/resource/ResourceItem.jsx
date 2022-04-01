@@ -9,6 +9,7 @@ import {
   Rating,
   Typography
 } from "@mui/material";
+import { ActionMenuButton } from "components/action/ActionMenuButton";
 import { CollectionIconButton } from "components/collection/CollectionIconButton";
 import { COLLECTION_TYPES } from "constants/index";
 import { noop } from "lodash";
@@ -27,20 +28,30 @@ export default function ResourceItem({
   collected,
   rate,
   handleTagClick = noop,
-  headerProps = {}
+  actions = []
 }) {
+  const headerEl = (
+    <CardHeader
+      avatar={<Avatar src={icon} aria-label="recipe" />}
+      title={resourceName}
+      subheader={timestampFormat(publishTime)}
+      action={
+        actions.length ? (
+          <ActionMenuButton
+            actions={actions.map(it => ({
+              ...it,
+              onClick: ev => it.onClick(id)
+            }))}
+          />
+        ) : undefined
+      }
+    />
+  );
   return (
     <Card component="div">
+      {actions.length ? headerEl : null}
       <CardActionArea onClick={() => window.open(link, "_blank")}>
-        <CardHeader
-          avatar={<Avatar src={icon} aria-label="recipe" />}
-          title={resourceName}
-          subheader={timestampFormat(publishTime)}
-          {...headerProps}
-        />
-
-        {/* <CardMedia component="img" src={icon} /> */}
-
+        {actions.length ? null : headerEl}
         <CardContent>
           <Typography variant="body1">{desc}</Typography>
         </CardContent>

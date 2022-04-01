@@ -42,7 +42,7 @@ export const MomentEditor = ({
 
   // 可编辑时，自动聚焦
   useEffect(() => {
-    if (editable && editor) {
+    if (isEdit && editable && editor) {
       editor.commands.focus();
     }
   }, [editor, editable]);

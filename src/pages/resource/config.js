@@ -11,7 +11,7 @@ export const RESOURCE_CATEGORIES = [
   { category: "ai", count: 61, label: "AI" },
   { category: "interviewExp", count: 59, label: "面试经验" },
   { category: "golang", count: 57, label: "Go 语言" },
-  { category: "onlineBook", count: 44, label: "电子书" },
+  { category: "onlineBook", count: 44, label: "文档" },
   { category: "algorithm", count: 38, label: "算法" },
   { category: "qa", count: 30, label: "Q&A" },
   { category: "pushIn", count: 28 },

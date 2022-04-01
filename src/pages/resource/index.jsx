@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useHistoryState, useRequest } from "hooks";
 import { SkeletonList } from "components/skeleton";
-import {
-  Box,
-  Container,
-  Grid,
-  Pagination,
-  Stack,
-  TextField
-} from "@mui/material";
+import { Box, Container, Pagination, TextField } from "@mui/material";
 import { Empty } from "components/empty";
 import { ResourceFilter } from "./Filter";
-import ResourceItem from "./ResourceItem";
-import { Masonry } from "@mui/lab";
-import SingleRsItem from "./SingleRsItem";
 import { RESOURCE_PAGE } from "services/resource";
 import { isEmpty } from "lodash";
+import { ResourceList } from "./ResourceList";
+import { useTitle } from "react-use";
 
 const Resource = () => {
+  useTitle("资源");
+
   const { state, setState } = useHistoryState();
 
   const {
@@ -87,43 +81,6 @@ const Resource = () => {
 
   const commonProps = { handleTagClick, refetch };
 
-  // 网格
-  const renderGrid = () => {
-    return (
-      <Grid container spacing={2}>
-        {rows.map(it => {
-          return (
-            <Grid item key={it.id} xs={12} sm={6} md={4}>
-              <ResourceItem {...it} {...commonProps} />
-            </Grid>
-          );
-        })}
-      </Grid>
-    );
-  };
-
-  // 瀑布流
-  const renderMasonry = () => {
-    return (
-      <Masonry columns={{ xs: 1, sm: 2, md: 3 }} spacing={4}>
-        {rows.map(it => {
-          return <ResourceItem {...it} key={it.id} {...commonProps} />;
-        })}
-      </Masonry>
-    );
-  };
-
-  // 单列
-  const renderSingle = () => {
-    return (
-      <Stack spacing={2}>
-        {rows.map(it => {
-          return <SingleRsItem {...it} key={it.id} {...commonProps} />;
-        })}
-      </Stack>
-    );
-  };
-
   return (
     <Container className="pt-4 md:pt-10 pb-6">
       <div className="flex justify-end pb-8">
@@ -145,10 +102,7 @@ const Resource = () => {
       <SkeletonList loading={isLoading} count={5} />
       {!isEmpty(rows) ? (
         <Box pt={2}>
-          {layout === "grid" && renderGrid()}
-          {layout === "single" && renderSingle()}
-          {layout === "masonry" && renderMasonry()}
-
+          <ResourceList layout={layout} rows={rows} {...commonProps} />
           {renderPagination()}
         </Box>
       ) : isLoading ? null : (
