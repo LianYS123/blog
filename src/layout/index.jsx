@@ -28,11 +28,11 @@ const AppLayout = ({ children }) => {
             <main id="container" className="h-full pt-14">
               {children}
             </main>
-            {upSM && (
+            {/* {upSM && (
               <Container>
                 <AppFooter />
               </Container>
-            )}
+            )} */}
             <AppBottomNav />
           </Box>
           {iOS && (

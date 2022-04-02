@@ -13,6 +13,8 @@ import "./github-markdown.less";
 import "./highlight.less"; // 代码高亮
 import "./highlight-dark.less"; // 代码高亮
 
+import "swiper/css";
+
 import App from "./app";
 
 ReactDOM.render(<App />, document.getElementById("root"));
