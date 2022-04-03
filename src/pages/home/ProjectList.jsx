@@ -39,7 +39,7 @@ export const ProjectList = () => {
     <Box className="bg-neutral py-20">
       <Container>
         <div className="flex justify-between items-center">
-          <Typography sx={{ color: "white" }} variant="h5">
+          <Typography sx={{ color: "white" }} variant="h4">
             我的项目
           </Typography>
           <div className="flex space-x-2 text-white">

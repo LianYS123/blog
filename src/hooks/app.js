@@ -68,7 +68,7 @@ export const useInitApp = () => {
 
 /**
  * 登录断言
- * @returns {{assertLogged: Function, logged: boolean}}
+ * @returns {{assertLogged: Function, logged: boolean, assertLoggedWithoutError: Function}}
  */
 export const useAssertLogged = () => {
   const { logged } = useSelector(state => state.app);
@@ -79,7 +79,13 @@ export const useAssertLogged = () => {
       throw new Error("用户未登录");
     }
   };
-  return { assertLogged, logged };
+  const assertLoggedWithoutError = () => {
+    if (!logged) {
+      openLoginDialog({ tip: "请先登录" });
+    }
+    return logged;
+  };
+  return { assertLogged, logged, assertLoggedWithoutError };
 };
 
 /**

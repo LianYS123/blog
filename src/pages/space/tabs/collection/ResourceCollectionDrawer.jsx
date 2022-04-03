@@ -56,6 +56,11 @@ export const ResourceCollectionDrawer = props => {
 
   const layouts = [
     {
+      icon: <Dashboard />,
+      layout: "masonry",
+      tip: "瀑布流"
+    },
+    {
       icon: <TableRows />,
       layout: "single",
       tip: "单列"
@@ -64,11 +69,6 @@ export const ResourceCollectionDrawer = props => {
       icon: <Apps />,
       layout: "grid",
       tip: "网格"
-    },
-    {
-      icon: <Dashboard />,
-      layout: "masonry",
-      tip: "瀑布流"
     }
   ];
 
@@ -83,7 +83,7 @@ export const ResourceCollectionDrawer = props => {
           size="small"
           exclusive
           value={layout}
-          onChange={(ev, value) => setLayout(value)}
+          onChange={(ev, value) => value && setLayout(value)}
         >
           {layouts.map(({ icon, tip, layout }) => (
             <ToggleButton key={layout} size="small" value={layout}>

@@ -48,7 +48,7 @@ const CollectionList = ({ collections = [], refetch, type }) => {
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         {collections.map(item => {
           const { collectionName, collectionDesc, id, cover } = item;
           // 操作按钮
@@ -138,7 +138,17 @@ export const Collection = () => {
     <Box>
       <SkeletonList loading={loading} />
 
-      <Typography variant="h6" gutterBottom>
+      <Typography
+        className="border-l-4"
+        sx={{
+          borderColor: theme => theme.palette.primary.main,
+          pl: 2,
+          mb: 3
+          // mt: 2
+        }}
+        variant="h5"
+        gutterBottom
+      >
         文章
       </Typography>
       <CollectionList
@@ -147,7 +157,18 @@ export const Collection = () => {
         refetch={refetch}
       />
 
-      <Typography mt={4} variant="h6" gutterBottom>
+      <Typography
+        className="border-l-4"
+        sx={{
+          borderColor: theme => theme.palette.primary.main,
+          pl: 2,
+          mb: 3,
+          mt: 6
+        }}
+        mt={4}
+        variant="h5"
+        gutterBottom
+      >
         资源
       </Typography>
       <CollectionList

@@ -1,6 +1,7 @@
 import { Favorite } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { pink } from "@mui/material/colors";
+import { useAssertLogged } from "hooks/app";
 import { useEffect, useState } from "react";
 import { CollectionDialog } from "./SelectCollectionDialog";
 
@@ -19,6 +20,8 @@ export const CollectionIconButton = ({
   };
   const openCollectionDialog = () => setCollectionVisible(true);
 
+  const { assertLoggedWithoutError } = useAssertLogged();
+
   useEffect(() => {
     setCollected(c);
   }, [c]);
@@ -28,9 +31,9 @@ export const CollectionIconButton = ({
       <Tooltip title="收藏">
         <IconButton
           onClick={ev => {
-            // ev.preventDefault();
-            ev.stopPropagation();
-            openCollectionDialog(true);
+            if (assertLoggedWithoutError()) {
+              openCollectionDialog();
+            }
           }}
         >
           <Favorite

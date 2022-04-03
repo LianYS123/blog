@@ -7,7 +7,7 @@ import { ProjectList } from "./ProjectList";
 import { Box } from "@mui/system";
 
 const Home = () => {
-  useTitle("Liam's Blog");
+  useTitle("首页");
 
   return (
     <>

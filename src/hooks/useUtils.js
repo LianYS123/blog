@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import { useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/system";
+import qs from "query-string";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 
@@ -214,11 +215,42 @@ export const useHistoryState = () => {
   const { state = {}, pathname } = useLocation();
 
   // 修改 history 状态
-  const setState = (newState = {}) => {
-    history.replace(pathname, { ...state, ...newState });
+  const setState = (newState = {}, push = true) => {
+    if (push) {
+      history.push(pathname, { ...state, ...newState });
+    } else {
+      history.replace(pathname, { ...state, ...newState });
+    }
   };
 
   return { state, setState, history };
+};
+
+/**
+ * 修改 history 查询参数
+ */
+export const useHistoryQuery = () => {
+  const history = useHistory();
+
+  const { pathname, search } = useLocation();
+
+  const query = qs.parse(search);
+
+  const setQuery = (newQuery = {}) => {
+    history.replace({
+      pathname,
+      search: qs.stringify({ ...query, ...newQuery })
+    });
+  };
+
+  const pushQuery = (newQuery = {}) => {
+    history.push({
+      pathname,
+      search: qs.stringify({ ...query, ...newQuery })
+    });
+  };
+
+  return { query, setQuery, pushQuery, history };
 };
 
 // 媒体查询
