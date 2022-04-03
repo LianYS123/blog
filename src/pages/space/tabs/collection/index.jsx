@@ -2,6 +2,7 @@ import {
   Button,
   Card,
   CardActionArea,
+  CardActions,
   CardContent,
   CardHeader,
   CardMedia,
@@ -19,8 +20,9 @@ import { useAlertDialog } from "providers/AlertDialogProvider";
 import { ArticleCollectionDrawer } from "./ArticleCollectionDrawer";
 import { useHistoryState } from "hooks";
 import _ from "lodash";
-import { COLLECTION_TYPES } from "constants/index";
+import { COLLECTION_TYPES, HOME_SECTION_TYPES } from "constants/index";
 import { ResourceCollectionDrawer } from "./ResourceCollectionDrawer";
+import { AddToHomeButton } from "components/homeSection/AddToHomeButton";
 
 const CollectionList = ({ collections = [], refetch, type }) => {
   // 弹出收藏夹文章列表抽屉
@@ -45,6 +47,23 @@ const CollectionList = ({ collections = [], refetch, type }) => {
       }
     });
   };
+
+  const getSectionType = () => {
+    switch (type) {
+      case COLLECTION_TYPES.ARTICLE:
+        return HOME_SECTION_TYPES.ARTICLE_COLLECTION;
+
+      case COLLECTION_TYPES.RESOURCE:
+        return HOME_SECTION_TYPES.RESOURCE_COLLECTION;
+
+      case COLLECTION_TYPES.BOOK:
+        return HOME_SECTION_TYPES.BOOK_COLLECTION;
+      default:
+        break;
+    }
+  };
+
+  const sectionType = getSectionType();
 
   return (
     <>
@@ -89,8 +108,11 @@ const CollectionList = ({ collections = [], refetch, type }) => {
                       src={cover}
                     />
                   ) : null}
-                  <CardContent>{collectionDesc}</CardContent>
                 </CardActionArea>
+                <CardContent className="flex justify-between">
+                  <div>{collectionDesc}</div>
+                  <AddToHomeButton sectionType={sectionType} record={item} />
+                </CardContent>
               </Card>
             </Grid>
           );

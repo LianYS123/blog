@@ -17,6 +17,7 @@ import routers from "routers";
 import { useHistory } from "react-router-dom";
 import { Lock } from "@mui/icons-material";
 import { useUpSM } from "hooks";
+import { ArticleActions } from "./ArticleActions";
 
 export default function CardArticle(props) {
   const {
@@ -152,6 +153,7 @@ export default function CardArticle(props) {
       >
         {upSM ? renderMd() : renderXs()}
       </CardActionArea>
+      <ArticleActions {...props} />
     </Card>
   );
 }

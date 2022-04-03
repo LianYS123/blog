@@ -10,13 +10,15 @@ import {
   IconButton,
   Tooltip
 } from "@mui/material";
+import { pink } from "@mui/material/colors";
 import { useCustomMutation } from "hooks";
+import { useSectionList } from "hooks/app";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { DELETE_HOME_SECTION, HOME_SECTION_LIST } from "services/homeSection";
+import { DELETE_HOME_SECTION } from "services/homeSection";
 import { SectionItemDialog } from "./SectionItemDialog";
 
-export const AddToHomeButton = ({ ...props }) => {
+export const AddToHomeButton = ({ children, ...props }) => {
   const {
     userInfo: { adminType }
   } = useSelector(state => state.app);
@@ -25,37 +27,52 @@ export const AddToHomeButton = ({ ...props }) => {
   const [record, setRecord] = useState(props.record);
   const [isEdit, setIsEdit] = useState(false);
 
-  const [getList] = useCustomMutation(HOME_SECTION_LIST);
   const [deleteItem, { loading }] = useCustomMutation(DELETE_HOME_SECTION, {
     successMessage: "已移除"
   });
 
+  const { exist, currentItem, refetch } = useSectionList({ itemId: record.id });
+
   const hasAuth = adminType === 1;
+
+  const handleAddToHome = async ev => {
+    if (exist) {
+      setConfirmVisible(true);
+      setRecord(currentItem);
+    } else {
+      setVisible(true);
+    }
+  };
+
+  const handleEdit = () => {
+    setIsEdit(true);
+    setConfirmVisible(false);
+    setVisible(true);
+  };
+
+  const handleRemove = async () => {
+    await deleteItem([{ id: record.id }]);
+    setConfirmVisible(false);
+    refetch();
+  };
+
   return hasAuth ? (
     <>
-      <Tooltip title="添加到主页">
-        <IconButton
-          onClick={async ev => {
-            const { data } = await getList({ itemId: record.id });
-            if (data && data.length > 0) {
-              setConfirmVisible(true);
-              setRecord(data[0]);
-            } else {
-              setVisible(true);
-            }
-          }}
-        >
-          <AddToHomeScreenIcon />
-        </IconButton>
-      </Tooltip>
-      <SectionItemDialog
-        visible={visible}
-        close={() => setVisible(false)}
-        {...props}
-        isEdit={isEdit}
-        record={record}
-      />
+      {children ? (
+        <div onClick={handleAddToHome}>{children}</div>
+      ) : (
+        <Tooltip title="添加到主页">
+          <IconButton onClick={handleAddToHome}>
+            <AddToHomeScreenIcon
+              sx={{
+                color: exist ? pink[300] : undefined
+              }}
+            />
+          </IconButton>
+        </Tooltip>
+      )}
 
+      {/* 已经收藏过了提示框 */}
       <Dialog open={confirmVisible} onClose={() => setConfirmVisible(false)}>
         <DialogTitle>提示</DialogTitle>
         <DialogContent>
@@ -65,28 +82,29 @@ export const AddToHomeButton = ({ ...props }) => {
         </DialogContent>
         <DialogActions>
           {/* <Button onClick={() => setConfirmVisible(false)}>取消</Button> */}
-          <Button
-            onClick={() => {
-              setIsEdit(true);
-              setConfirmVisible(false);
-              setVisible(true);
-            }}
-            autoFocus
-          >
+          <Button onClick={handleEdit} autoFocus>
             编辑
           </Button>
           <LoadingButton
             loading={loading}
             color="error"
-            onClick={() => {
-              deleteItem({ id: record.id });
-            }}
+            onClick={handleRemove}
             autoFocus
           >
             移除
           </LoadingButton>
         </DialogActions>
       </Dialog>
+
+      {/* 收藏内容编辑器 */}
+      <SectionItemDialog
+        visible={visible}
+        close={() => setVisible(false)}
+        {...props}
+        isEdit={isEdit}
+        record={record}
+        reload={refetch}
+      />
     </>
   ) : null;
 };

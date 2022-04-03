@@ -1,20 +1,16 @@
 import { Favorite, ThumbUp } from "@mui/icons-material";
 import { CardActions, IconButton, Tooltip } from "@mui/material";
+import { CollectionIconButton } from "components/collection/CollectionIconButton";
 import { CollectionDialog } from "components/collection/SelectCollectionDialog";
-import { COLLECTION_TYPES } from "constants/index";
+import { AddToHomeButton } from "components/homeSection/AddToHomeButton";
+import { COLLECTION_TYPES, HOME_SECTION_TYPES } from "constants/index";
 import { useSnackbar } from "notistack";
-import { useState } from "react";
 
 // 操作
-export const ArticleActions = props => {
-  const { id: articleId } = props;
-  const { enqueueSnackbar } = useSnackbar();
-  const [visible, setVisible] = useState(false);
-  const close = () => setVisible(false);
-  const open = () => setVisible(true);
+export const ArticleActions = record => {
   return (
     <CardActions>
-      <Tooltip title="点赞">
+      {/* <Tooltip title="点赞">
         <IconButton
           onClick={ev => {
             ev.stopPropagation();
@@ -23,26 +19,17 @@ export const ArticleActions = props => {
         >
           <ThumbUp />
         </IconButton>
-      </Tooltip>
+      </Tooltip> */}
 
-      <Tooltip title="收藏">
-        <IconButton
-          onClick={ev => {
-            ev.stopPropagation();
-            open();
-          }}
-        >
-          <Favorite />
-        </IconButton>
-      </Tooltip>
-      {visible ? (
-        <CollectionDialog
-          visible={visible}
-          close={close}
-          itemId={articleId}
-          type={COLLECTION_TYPES.ARTICLE}
-        ></CollectionDialog>
-      ) : null}
+      <CollectionIconButton
+        collected={record.collected}
+        type={COLLECTION_TYPES.ARTICLE}
+        itemId={record.id}
+      />
+      <AddToHomeButton
+        sectionType={HOME_SECTION_TYPES.ARTICLE}
+        record={record}
+      />
     </CardActions>
   );
 };

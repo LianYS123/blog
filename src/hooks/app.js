@@ -7,6 +7,9 @@ import { useLoginDialog } from "providers/LoginDialogProvider";
 import { APP_ROUTES } from "routers/AppRoutes";
 import { useRouteMatch } from "react-router-dom";
 import { useTitle } from "react-use";
+import { HOME_SECTION_LIST } from "services/homeSection";
+import { homeSlice } from "models/home";
+import { useQueryClient } from "react-query";
 
 // 主题操作
 export const useTheme = () => {
@@ -44,14 +47,8 @@ export const useInitApp = () => {
     switchTo(theme);
   }, []);
 
-  useEffect(() => {
-    if (!token) {
-      dispatch(appSlice.actions.setIsAppLoaded(true));
-    }
-  }, [token]);
-
   // token变化时请求用户信息并存储到全局
-  useRequest({
+  const { status: loginUserStatus } = useRequest({
     service: GET_LOGIN_USER,
     ready: !!token,
     deps: [token],
@@ -59,11 +56,44 @@ export const useInitApp = () => {
       // 设置登录数据，修改登录状态为已登录
       dispatch(appSlice.actions.setUserInfo(data));
       dispatch(appSlice.actions.setLogged(true));
-    },
-    onSettled: () => {
-      dispatch(appSlice.actions.setIsAppLoaded(true));
     }
   });
+
+  // 请求主页推荐数据
+  const { status: sectionListStatus, isFetched } = useRequest({
+    service: HOME_SECTION_LIST,
+    onSuccess: data => {
+      dispatch(homeSlice.actions.setSectionList(data));
+    }
+  });
+
+  // 同步页面加载状态
+  useEffect(() => {
+    let loaded;
+    if (!token) {
+      loaded = true;
+    } else {
+      loaded = loginUserStatus !== "idle" && loginUserStatus !== "loading";
+    }
+    dispatch(appSlice.actions.setIsAppLoaded(loaded));
+  }, [token, loginUserStatus]);
+};
+
+/**
+ * 主页推荐模块列表，以及刷新方法
+ */
+export const useSectionList = ({ itemId = -1 } = {}) => {
+  const queryClient = useQueryClient();
+  const { sectionList } = useSelector(state => state.home);
+
+  const refetch = () => {
+    queryClient.refetchQueries([HOME_SECTION_LIST, undefined]);
+  };
+
+  const exist = sectionList.some(it => it.itemId === itemId);
+  const currentItem = sectionList.find(it => it.itemId === itemId);
+
+  return { sectionList, refetch, exist, currentItem };
 };
 
 /**

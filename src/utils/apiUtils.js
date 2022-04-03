@@ -26,12 +26,15 @@ export const parseAPI = (url, data) => {
   }
 
   if (SIMPLE_REQUEST_METHODS.includes(method)) {
-    parsedUrl = stringifyUrl({ url: parsedUrl, query: parsedData });
+    parsedUrl = stringifyUrl({
+      url: parsedUrl,
+      query: Array.isArray(data) ? data : parsedData
+    });
   }
 
   return {
     method: method.toUpperCase(),
     parsedUrl,
-    parsedData
+    parsedData: Array.isArray(data) ? data : parsedData
   };
 };

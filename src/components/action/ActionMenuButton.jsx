@@ -1,6 +1,7 @@
 import { IconButton, ListItemText, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
+import { noop } from "lodash";
 
 export const ActionMenuButton = ({ actions = [], icon = <MoreVertIcon /> }) => {
   const [anchorEl, setAnchorEl] = useState();
@@ -20,7 +21,7 @@ export const ActionMenuButton = ({ actions = [], icon = <MoreVertIcon /> }) => {
         anchorEl={anchorEl}
       >
         {actions.map((action, index) => {
-          const { text, onClick } = action;
+          const { text, onClick = noop } = action;
           return (
             <MenuItem
               key={index}
