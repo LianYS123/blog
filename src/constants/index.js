@@ -34,3 +34,33 @@ export const COLLECTION_TYPES = {
   RESOURCE: 1,
   BOOK: 2
 };
+
+/**
+ * 主页模块类型
+ */
+export const HOME_SECTION_TYPES = {
+  /**
+   * 文章
+   */
+  ARTICLE: 0,
+  /**
+   * 资源
+   */
+  RESOURCE: 1,
+  /**
+   * 图书
+   */
+  BOOK: 2,
+  /**
+   * 文章收藏夹
+   */
+  ARTICLE_COLLECTION: 3,
+  /**
+   * 资源收藏夹
+   */
+  RESOURCE_COLLECTION: 4,
+  /**
+   * 图书收藏夹
+   */
+  BOOK_COLLECTION: 5
+};

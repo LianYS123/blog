@@ -11,25 +11,29 @@ import {
 } from "@mui/material";
 import { ActionMenuButton } from "components/action/ActionMenuButton";
 import { CollectionIconButton } from "components/collection/CollectionIconButton";
-import { COLLECTION_TYPES } from "constants/index";
+import { AddToHomeButton } from "components/homeSection/AddToHomeButton";
+import { COLLECTION_TYPES, HOME_SECTION_TYPES } from "constants/index";
 import { noop } from "lodash";
 import { timestampFormat } from "utils";
 
 export default function ResourceItem({
-  id,
-  resourceName,
-  icon,
-  link,
-  publishTime,
-  tags = "",
-  desc,
-  detail,
-  rateNum,
-  collected,
-  rate,
   handleTagClick = noop,
-  actions = []
+  actions = [],
+  ...record
 }) {
+  const {
+    id,
+    resourceName,
+    icon,
+    link,
+    publishTime,
+    tags = "",
+    desc,
+    detail,
+    rateNum,
+    collected,
+    rate
+  } = record;
   const headerEl = (
     <CardHeader
       avatar={<Avatar src={icon} aria-label="recipe" />}
@@ -90,6 +94,10 @@ export default function ResourceItem({
           collected={collected}
           type={COLLECTION_TYPES.RESOURCE}
           itemId={id}
+        />
+        <AddToHomeButton
+          sectionType={HOME_SECTION_TYPES.RESOURCE}
+          record={record}
         />
       </CardActions>
     </Card>

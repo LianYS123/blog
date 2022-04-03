@@ -1,6 +1,6 @@
 // 收藏夹资源
 export const PAGE_COLLECTION_RESOURCES =
-  "/client/collection/pageResources/{collectionId}"; // 分页查询收藏夹下的资源
+  "/open/client/collection/pageResources/{collectionId}"; // 分页查询收藏夹下的资源
 
 export const COLLECTION_RESOURCE_LIST =
   "/client/collection/resource/{resourceId}"; // 当前用户的收藏列表，带有是否收藏当前资源的信息

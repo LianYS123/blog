@@ -1,6 +1,6 @@
 // 收藏夹文章
 export const PAGE_COLLECTION_ARTICLES =
-  "/client/collection/pageArticles/{collectionId}"; // 分页查询收藏夹下的文章
+  "/open/client/collection/pageArticles/{collectionId}"; // 分页查询收藏夹下的文章
 
 export const COLLECTION_ARTICLE_LIST = "/client/collection/article/{articleId}"; // 当前用户的收藏列表，带有是否收藏当前文章的信息
 

@@ -7,6 +7,7 @@ import {
   Avatar,
   Box,
   CardActionArea,
+  CardActions,
   CardHeader,
   Chip,
   Rating
@@ -15,8 +16,17 @@ import { timestampFormat } from "utils";
 import { useHistory } from "react-router-dom";
 import { useUpSM } from "hooks";
 import { ActionMenuButton } from "components/action/ActionMenuButton";
+import { CollectionIconButton } from "components/collection/CollectionIconButton";
+import { COLLECTION_TYPES } from "constants";
+import { HOME_SECTION_TYPES } from "constants";
+import { AddToHomeButton } from "components/homeSection/AddToHomeButton";
+import { noop } from "lodash";
 
-export default function SingleRsItem(props) {
+export default function SingleRsItem({
+  handleTagClick = noop,
+  actions = [],
+  ...record
+}) {
   const {
     id,
     resourceName,
@@ -27,10 +37,9 @@ export default function SingleRsItem(props) {
     desc,
     detail,
     rateNum,
-    rate,
-    handleTagClick,
-    actions = []
-  } = props;
+    collected,
+    rate
+  } = record;
 
   const tagArr = tags ? tags.split("|") : [];
   const history = useHistory();
@@ -140,6 +149,17 @@ export default function SingleRsItem(props) {
         {rateEl}
         {tagsEl}
       </CardActionArea>
+      <CardActions>
+        <CollectionIconButton
+          collected={collected}
+          type={COLLECTION_TYPES.RESOURCE}
+          itemId={id}
+        />
+        <AddToHomeButton
+          sectionType={HOME_SECTION_TYPES.RESOURCE}
+          record={record}
+        />
+      </CardActions>
     </Card>
   );
 }
