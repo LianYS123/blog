@@ -14,6 +14,7 @@ export const ArticleCollectionDrawer = props => {
   const {
     id: collectionId,
     open: openDrawer,
+    hideActions = false,
     visible: drawerVisible,
     close: closeDrawer
   } = props;
@@ -59,15 +60,22 @@ export const ArticleCollectionDrawer = props => {
             {list.map(it => (
               <CardArticle
                 key={it.id}
-                headerProps={{
-                  action: (
-                    <ActionMenuButton
-                      actions={[
-                        { text: "删除", onClick: () => handleDelete(it.id) }
-                      ]}
-                    />
-                  )
-                }}
+                headerProps={
+                  hideActions
+                    ? undefined
+                    : {
+                        action: (
+                          <ActionMenuButton
+                            actions={[
+                              {
+                                text: "删除",
+                                onClick: () => handleDelete(it.id)
+                              }
+                            ]}
+                          />
+                        )
+                      }
+                }
                 {...it}
               />
             ))}

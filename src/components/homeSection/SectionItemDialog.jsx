@@ -109,6 +109,16 @@ export const SectionItemDialog = props => {
             margin="dense"
             fullWidth
             variant="standard"
+            label="详情"
+            multiline
+            maxRows={6}
+            {...getCommonFieldProps("itemDetail", formik)}
+          />
+
+          <TextField
+            margin="dense"
+            fullWidth
+            variant="standard"
             label="图片"
             {...getCommonFieldProps("itemImage", formik)}
           />

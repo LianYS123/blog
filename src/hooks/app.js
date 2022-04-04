@@ -10,6 +10,7 @@ import { useTitle } from "react-use";
 import { HOME_SECTION_LIST } from "services/homeSection";
 import { homeSlice } from "models/home";
 import { useQueryClient } from "react-query";
+import { groupBy } from "lodash";
 
 // 主题操作
 export const useTheme = () => {
@@ -94,6 +95,15 @@ export const useSectionList = ({ itemId = -1 } = {}) => {
   const currentItem = sectionList.find(it => it.itemId === itemId);
 
   return { sectionList, refetch, exist, currentItem };
+};
+
+/**
+ * 根据模块类型获取列表
+ */
+export const useSectionListByType = sectionType => {
+  const { sectionList } = useSelector(state => state.home);
+  const sectionTypeMap = groupBy(sectionList, it => it.sectionType);
+  return sectionTypeMap[sectionType] || [];
 };
 
 /**

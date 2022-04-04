@@ -21,6 +21,7 @@ import { useUpSM } from "hooks";
 import { CollectionIconButton } from "components/collection/CollectionIconButton";
 import { COLLECTION_TYPES, HOME_SECTION_TYPES } from "constants/index";
 import { AddToHomeButton } from "components/homeSection/AddToHomeButton";
+import { Link } from "react-router-dom";
 
 export default function CardArticle({ handleTagClick = noop, ...record }) {
   const {
@@ -154,20 +155,21 @@ export default function CardArticle({ handleTagClick = noop, ...record }) {
     return (
       <div className="flex items-stretch">
         <div className="flex-auto flex flex-col justify-between">
-          <CardActionArea
-            className="flex-auto"
+          <Box
+            component={Link}
             sx={{
               pb: 2,
               display: "flex",
+              flex: "auto",
               flexDirection: "column",
               justifyContent: "flex-start",
               alignItems: "flex-start"
             }}
-            onClick={() => history.push(routers.DETAIL.replace(":id", id))}
+            to={routers.DETAIL.replace(":id", id)}
           >
             {headerEl}
             {summaryEl}
-          </CardActionArea>
+          </Box>
           {cardActionsEl}
         </div>
         {coverEl}

@@ -39,8 +39,14 @@ export const useSectionItemFormik = ({
 
   const convertRecordToFields = record => {
     const fields = { itemId: record.id, sectionType };
-    const setFields = (itemName, itemDesc, itemImage, itemLink) => {
-      Object.assign(fields, { itemName, itemDesc, itemImage, itemLink });
+    const setFields = (itemName, itemDesc, itemImage, itemLink, itemDetail) => {
+      Object.assign(fields, {
+        itemName,
+        itemDesc,
+        itemImage,
+        itemLink,
+        itemDetail
+      });
     };
     if (sectionType === 0) {
       // 文章
@@ -48,8 +54,8 @@ export const useSectionItemFormik = ({
       setFields(articleName, summary, cover);
     } else if (sectionType === 1) {
       // 资源
-      const { resourceName, desc, icon, link } = record;
-      setFields(resourceName, desc, icon, link);
+      const { resourceName, desc, icon, link, detail } = record;
+      setFields(resourceName, desc, icon, link, detail);
     } else if (sectionType === 2) {
       // 图书
     } else if (sectionType === 3 || sectionType === 4 || sectionType === 5) {
@@ -73,6 +79,7 @@ export const useSectionItemFormik = ({
             "itemDesc",
             "itemImage",
             "itemLink",
+            "itemDetail",
             "sectionType"
           ])
         );
