@@ -8,6 +8,7 @@ import {
   Avatar,
   Box,
   CardActionArea,
+  CardActions,
   CardHeader,
   Chip,
   Tooltip
@@ -17,9 +18,11 @@ import routers from "routers";
 import { useHistory } from "react-router-dom";
 import { Lock } from "@mui/icons-material";
 import { useUpSM } from "hooks";
-import { ArticleActions } from "./ArticleActions";
+import { CollectionIconButton } from "components/collection/CollectionIconButton";
+import { COLLECTION_TYPES, HOME_SECTION_TYPES } from "constants/index";
+import { AddToHomeButton } from "components/homeSection/AddToHomeButton";
 
-export default function CardArticle(props) {
+export default function CardArticle({ handleTagClick = noop, ...record }) {
   const {
     authorAvatar,
     cover,
@@ -30,8 +33,8 @@ export default function CardArticle(props) {
     id,
     tags,
     visibleStatus,
-    handleTagClick = noop
-  } = props;
+    collected
+  } = record;
 
   const tagArr = tags ? tags.split("|") : [];
   const history = useHistory();
@@ -91,69 +94,86 @@ export default function CardArticle(props) {
   );
 
   // 标签
-  const tagsEl = (
-    <CardContent className="space-x-1">
-      {tagArr.map(tag => (
-        <Chip
-          // size="small"
-          className="cursor-pointer"
-          onClick={ev => {
-            // ev.preventDefault();
-            ev.stopPropagation();
-            handleTagClick(tag);
-          }}
-          key={tag}
-          label={tag}
-        />
-      ))}
-    </CardContent>
-  );
+  const tagsEl = tagArr.map(tag => (
+    <Chip
+      className="cursor-pointer mr-2"
+      onClick={ev => {
+        ev.stopPropagation();
+        handleTagClick(tag);
+      }}
+      key={tag}
+      label={tag}
+    />
+  ));
 
   // 封面图
   const coverEl = cover ? (
     <CardMedia
-      sx={{ width: { xs: "auto", sm: 256 } }}
+      sx={{
+        width: { xs: "auto", sm: 256 }
+      }}
       component="img"
       image={cover}
       alt={articleName}
     />
   ) : null;
 
+  const cardActionsEl = (
+    <CardActions className="flex">
+      <div className="mr-2">
+        <CollectionIconButton
+          collected={collected}
+          type={COLLECTION_TYPES.ARTICLE}
+          itemId={record.id}
+        />
+        <AddToHomeButton
+          sectionType={HOME_SECTION_TYPES.ARTICLE}
+          record={record}
+        />
+      </div>
+      {tagsEl}
+    </CardActions>
+  );
+
   // 手机上渲染
   const renderXs = () => {
     return (
-      <>
+      <CardActionArea
+        onClick={() => history.push(routers.DETAIL.replace(":id", id))}
+      >
         {headerEl}
         {coverEl}
         {summaryEl}
-        {tagsEl}
-      </>
+        {cardActionsEl}
+      </CardActionArea>
     );
   };
 
   // 电脑上渲染
   const renderMd = () => {
     return (
-      <Box display="flex" maxHeight={256}>
-        <Box flex="auto">
-          {headerEl}
-          {summaryEl}
-          {tagsEl}
-        </Box>
+      <div className="flex items-stretch">
+        <div className="flex-auto flex flex-col justify-between">
+          <CardActionArea
+            className="flex-auto"
+            sx={{
+              pb: 2,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              alignItems: "flex-start"
+            }}
+            onClick={() => history.push(routers.DETAIL.replace(":id", id))}
+          >
+            {headerEl}
+            {summaryEl}
+          </CardActionArea>
+          {cardActionsEl}
+        </div>
         {coverEl}
-      </Box>
+      </div>
     );
   };
 
-  return (
-    <Card>
-      <CardActionArea
-        onClick={() => history.push(routers.DETAIL.replace(":id", id))}
-        component="div"
-      >
-        {upSM ? renderMd() : renderXs()}
-      </CardActionArea>
-      <ArticleActions {...props} />
-    </Card>
-  );
+  return <Card>{upSM ? renderMd() : renderXs()}</Card>;
 }
