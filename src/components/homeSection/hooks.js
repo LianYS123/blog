@@ -72,7 +72,8 @@ export const useSectionItemFormik = ({
             "itemName",
             "itemDesc",
             "itemImage",
-            "itemLink"
+            "itemLink",
+            "sectionType"
           ])
         );
       }

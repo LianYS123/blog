@@ -16,6 +16,7 @@ import { useSectionList } from "hooks/app";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { DELETE_HOME_SECTION } from "services/homeSection";
+import { typeLabelMap } from "./config";
 import { SectionItemDialog } from "./SectionItemDialog";
 
 export const AddToHomeButton = ({ children, ...props }) => {
@@ -61,7 +62,9 @@ export const AddToHomeButton = ({ children, ...props }) => {
       {children ? (
         <div onClick={handleAddToHome}>{children}</div>
       ) : (
-        <Tooltip title="添加到主页">
+        <Tooltip
+          title={exist ? typeLabelMap[currentItem?.sectionType] : "添加到主页"}
+        >
           <IconButton onClick={handleAddToHome}>
             <AddToHomeScreenIcon
               sx={{

@@ -52,15 +52,28 @@ export const HOME_SECTION_TYPES = {
    */
   BOOK: 2,
   /**
-   * 文章收藏夹
+   * 文章合集
    */
   ARTICLE_COLLECTION: 3,
   /**
-   * 资源收藏夹
+   * 资源合集
    */
   RESOURCE_COLLECTION: 4,
   /**
-   * 图书收藏夹
+   * 图书合集
    */
-  BOOK_COLLECTION: 5
+  BOOK_COLLECTION: 5,
+
+  /**
+   * 文章合集展开
+   */
+  ARTICLE_COLLECTION_EXPAND: 6,
+  /**
+   * 资源合集展开
+   */
+  RESOURCE_COLLECTION_EXPAND: 7,
+  /**
+   * 图书合集展开
+   */
+  BOOK_COLLECTION_EXPAND: 8
 };

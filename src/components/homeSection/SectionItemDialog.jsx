@@ -10,52 +10,54 @@ import {
 } from "@mui/material";
 import { HOME_SECTION_TYPES } from "constants/index";
 import { getCommonFieldProps } from "utils";
+import { typeOptions } from "./config";
 import { useSectionItemFormik } from "./hooks";
 
 /**
  * 编辑/添加主页推荐条目的弹出框
  */
 export const SectionItemDialog = props => {
-  const { visible, isEdit, close } = props;
+  const { visible, isEdit, close, sectionType } = props;
   const { formik, loading } = useSectionItemFormik({ ...props });
-  const typeOptions = [
-    {
-      label: "文章",
-      value: 0
-    },
-    {
-      label: "资源",
-      value: 1
-    },
-    {
-      label: "图书",
-      value: 2
-    },
-    {
-      label: "文章合集",
-      value: 3
-    },
-    {
-      label: "资源合集",
-      value: 4
-    },
-    {
-      label: "图书合集",
-      value: 5
-    },
-    {
-      label: "文章合集展开",
-      value: 6
-    },
-    {
-      label: "资源合集展开",
-      value: 7
-    },
-    {
-      label: "图书合集展开",
-      value: 8
+
+  /**
+   * 此方法是为了过滤掉不能被选择的模块类型，写得有点乱。
+   */
+  const getOptions = () => {
+    const {
+      ARTICLE_COLLECTION,
+      ARTICLE_COLLECTION_EXPAND,
+      RESOURCE_COLLECTION,
+      RESOURCE_COLLECTION_EXPAND,
+      BOOK_COLLECTION,
+      BOOK_COLLECTION_EXPAND
+    } = HOME_SECTION_TYPES;
+
+    const articleCollectionTypes = [
+      ARTICLE_COLLECTION,
+      ARTICLE_COLLECTION_EXPAND
+    ];
+    const resourceCollectionTypes = [
+      RESOURCE_COLLECTION,
+      RESOURCE_COLLECTION_EXPAND
+    ];
+    const bookCollectionTypes = [BOOK_COLLECTION, BOOK_COLLECTION_EXPAND];
+
+    if (articleCollectionTypes.includes(sectionType)) {
+      return typeOptions.filter(it =>
+        articleCollectionTypes.includes(it.value)
+      );
     }
-  ];
+    if (resourceCollectionTypes.includes(sectionType)) {
+      return typeOptions.filter(it =>
+        resourceCollectionTypes.includes(it.value)
+      );
+    }
+    if (bookCollectionTypes.includes(sectionType)) {
+      return typeOptions.filter(it => bookCollectionTypes.includes(it.value));
+    }
+    return typeOptions.filter(it => it.value === sectionType);
+  };
   return (
     <Dialog open={visible} onClose={() => close()}>
       <form onSubmit={formik.handleSubmit}>
@@ -72,7 +74,7 @@ export const SectionItemDialog = props => {
             fullWidth
             {...getCommonFieldProps("sectionType", formik)}
           >
-            {typeOptions.map(option => (
+            {getOptions().map(option => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>
