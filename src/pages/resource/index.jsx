@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { useHistoryState, useRequest } from "hooks";
+import { useHistoryState, useModalAction, useRequest } from "hooks";
 import { SkeletonList } from "components/skeleton";
-import { Box, Container, Pagination, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Pagination,
+  TextField
+} from "@mui/material";
 import { Empty } from "components/empty";
 import { ResourceFilter } from "./Filter";
 import { RESOURCE_PAGE } from "services/resource";
 import { isEmpty } from "lodash";
 import { ResourceList } from "./ResourceList";
 import { useTitle } from "react-use";
+import { EditResourceDialog } from "./EditResourceDialog";
+import { Edit } from "@mui/icons-material";
+import { useIsAdmin } from "hooks/app";
 
 const Resource = () => {
   useTitle("资源");
@@ -40,12 +50,16 @@ const Resource = () => {
   });
   const { totalPage, rows = [] } = data;
 
+  const isAdmin = useIsAdmin();
+
   const [count, setCount] = useState(0);
   useEffect(() => {
     if (typeof totalPage === "number" && totalPage !== count) {
       setCount(totalPage);
     }
   }, [totalPage]);
+
+  const { open, ...modalProps } = useModalAction();
 
   // 点击标签
   const handleTagClick = tag => {
@@ -79,7 +93,18 @@ const Resource = () => {
     );
   };
 
-  const commonProps = { handleTagClick, refetch };
+  const renderEditIcon = record => {
+    if (!isAdmin) {
+      return null;
+    }
+    return (
+      <IconButton onClick={() => open({ record, isEdit: true })}>
+        <Edit />
+      </IconButton>
+    );
+  };
+
+  const commonProps = { handleTagClick, refetch, renderEditIcon };
 
   return (
     <Container className="pt-4 md:pt-10 pb-6">
@@ -97,7 +122,17 @@ const Resource = () => {
         />
       </div>
       <ResourceFilter handleTagClick={handleTagClick} />
-      {renderPagination()}
+
+      <div className="flex justify-between items-center">
+        <div>{renderPagination()}</div>
+        {isAdmin ? (
+          <Box>
+            <Button variant="outlined" onClick={() => open({ isEdit: false })}>
+              添加资源
+            </Button>
+          </Box>
+        ) : null}
+      </div>
 
       <SkeletonList loading={isLoading} count={5} />
       {!isEmpty(rows) ? (
@@ -108,6 +143,7 @@ const Resource = () => {
       ) : isLoading ? null : (
         <Empty />
       )}
+      <EditResourceDialog reload={refetch} {...modalProps} />
     </Container>
   );
 };

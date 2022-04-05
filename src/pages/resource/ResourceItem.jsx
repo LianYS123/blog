@@ -5,6 +5,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  CardMedia,
   Chip,
   Rating,
   Typography
@@ -18,6 +19,7 @@ import { timestampFormat } from "utils";
 
 export default function ResourceItem({
   handleTagClick = noop,
+  renderEditIcon = noop,
   actions = [],
   ...record
 }) {
@@ -30,15 +32,16 @@ export default function ResourceItem({
     tags = "",
     desc,
     detail,
+    cover,
     rateNum,
     collected,
     rate
   } = record;
   const headerEl = (
     <CardHeader
-      avatar={<Avatar src={icon} aria-label="recipe" />}
+      avatar={icon ? <Avatar src={icon} aria-label="recipe" /> : null}
       title={resourceName}
-      subheader={timestampFormat(publishTime)}
+      subheader={timestampFormat(publishTime || record.createTime)}
       action={
         actions.length ? (
           <ActionMenuButton
@@ -51,11 +54,23 @@ export default function ResourceItem({
       }
     />
   );
+
+  // 封面图
+  const coverEl = cover ? (
+    <CardMedia
+      sx={{
+        maxHeight: 256
+      }}
+      component="img"
+      image={cover}
+    />
+  ) : null;
   return (
     <Card component="div">
       {actions.length ? headerEl : null}
       <CardActionArea onClick={() => window.open(link, "_blank")}>
         {actions.length ? null : headerEl}
+        {coverEl}
         <CardContent>
           <Typography variant="body1">{desc}</Typography>
         </CardContent>
@@ -99,6 +114,7 @@ export default function ResourceItem({
           sectionType={HOME_SECTION_TYPES.RESOURCE}
           record={record}
         />
+        {renderEditIcon(record)}
       </CardActions>
     </Card>
   );

@@ -24,6 +24,7 @@ import { noop } from "lodash";
 
 export default function SingleRsItem({
   handleTagClick = noop,
+  renderEditIcon = noop,
   actions = [],
   ...record
 }) {
@@ -37,6 +38,7 @@ export default function SingleRsItem({
     desc,
     detail,
     rateNum,
+    cover,
     collected,
     rate
   } = record;
@@ -52,7 +54,7 @@ export default function SingleRsItem({
       {/* 创建时间 */}
       <Typography variant="subtitle1" mr={1} fontSize={14} component="span">
         <Box mr={1} component="span">
-          {timestampFormat(publishTime)}
+          {timestampFormat(publishTime || record.createTime)}
         </Box>
       </Typography>
     </Box>
@@ -64,7 +66,7 @@ export default function SingleRsItem({
       title={resourceName} // 文章标题
       avatar={
         // 头像
-        <Avatar src={icon} aria-label="recipe" />
+        icon ? <Avatar src={icon} aria-label="recipe" /> : null
       }
       subheader={subheaderEl}
       action={
@@ -107,14 +109,14 @@ export default function SingleRsItem({
   );
 
   // 封面图
-  const coverEl = icon ? (
+  const coverEl = cover ? (
     <CardMedia
       sx={{
         maxWidth: { xs: "auto", sm: 256 },
         minHeight: { xs: "auto", sm: 256 }
       }}
       component="img"
-      image={icon}
+      image={cover}
     />
   ) : null;
 
@@ -159,6 +161,7 @@ export default function SingleRsItem({
           sectionType={HOME_SECTION_TYPES.RESOURCE}
           record={record}
         />
+        {renderEditIcon(record)}
       </CardActions>
     </Card>
   );

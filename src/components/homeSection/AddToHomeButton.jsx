@@ -12,17 +12,13 @@ import {
 } from "@mui/material";
 import { pink } from "@mui/material/colors";
 import { useCustomMutation } from "hooks";
-import { useSectionList } from "hooks/app";
+import { useIsAdmin, useSectionList } from "hooks/app";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { DELETE_HOME_SECTION } from "services/homeSection";
 import { typeLabelMap } from "./config";
 import { SectionItemDialog } from "./SectionItemDialog";
 
 export const AddToHomeButton = ({ children, ...props }) => {
-  const {
-    userInfo: { adminType }
-  } = useSelector(state => state.app);
   const [visible, setVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [record, setRecord] = useState(props.record);
@@ -33,8 +29,7 @@ export const AddToHomeButton = ({ children, ...props }) => {
   });
 
   const { exist, currentItem, refetch } = useSectionList({ itemId: record.id });
-
-  const hasAuth = adminType === 1;
+  const isAdmin = useIsAdmin();
 
   const handleAddToHome = async ev => {
     if (exist) {
@@ -57,7 +52,7 @@ export const AddToHomeButton = ({ children, ...props }) => {
     refetch();
   };
 
-  return hasAuth ? (
+  return isAdmin ? (
     <>
       {children ? (
         <div onClick={handleAddToHome}>{children}</div>

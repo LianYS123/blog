@@ -153,3 +153,10 @@ export const useAppTitle = () => {
   const title = routesTitleMap[path] || "Blog";
   useTitle(title);
 };
+
+export const useIsAdmin = () => {
+  const {
+    userInfo: { adminType }
+  } = useSelector(state => state.app);
+  return adminType === 1;
+};
