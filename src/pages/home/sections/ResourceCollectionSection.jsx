@@ -3,6 +3,8 @@ import { useSectionListByType } from "hooks/app";
 import { useHistoryState } from "hooks";
 import { ResourceCollectionDrawer } from "pages/space/tabs/collection/ResourceCollectionDrawer";
 import { SwiperSection } from "../components/SwiperSection";
+import { GridSection } from "../components/GridSection";
+import routers from "routers";
 
 export const ResourceCollectionSection = () => {
   //
@@ -15,9 +17,10 @@ export const ResourceCollectionSection = () => {
 
   return (
     <>
-      <SwiperSection
+      <GridSection
         title="资源合集"
         list={list}
+        toMore={routers.RESOURCE}
         onItemClick={item => {
           setState({
             resourceDrawerItemId: item.itemId,

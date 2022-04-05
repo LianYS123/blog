@@ -49,7 +49,7 @@ export const useInitApp = () => {
   }, []);
 
   // token变化时请求用户信息并存储到全局
-  const { status: loginUserStatus } = useRequest({
+  const loginUserResult = useRequest({
     service: GET_LOGIN_USER,
     ready: !!token,
     deps: [token],
@@ -61,23 +61,24 @@ export const useInitApp = () => {
   });
 
   // 请求主页推荐数据
-  const { status: sectionListStatus, isFetched } = useRequest({
+  const sectionListResult = useRequest({
     service: HOME_SECTION_LIST,
     onSuccess: data => {
       dispatch(homeSlice.actions.setSectionList(data));
     }
   });
 
+  const requestLoaded = res =>
+    res.status !== "idle" && res.status !== "loading";
+
   // 同步页面加载状态
   useEffect(() => {
-    let loaded;
-    if (!token) {
-      loaded = true;
-    } else {
-      loaded = loginUserStatus !== "idle" && loginUserStatus !== "loading";
-    }
-    dispatch(appSlice.actions.setIsAppLoaded(loaded));
-  }, [token, loginUserStatus]);
+    const loginUserLoaded = !token || requestLoaded(loginUserResult);
+    const sectionListLoaded = requestLoaded(sectionListResult);
+    dispatch(
+      appSlice.actions.setIsAppLoaded(loginUserLoaded && sectionListLoaded)
+    );
+  }, [token, loginUserResult, sectionListResult]);
 };
 
 /**

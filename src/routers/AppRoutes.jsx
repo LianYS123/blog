@@ -42,14 +42,14 @@ export const APP_ROUTES = [
     title: "登录"
   },
   {
-    path: routers.HOME,
-    component: "home",
-    title: "首页"
-  },
-  {
     path: "/pages",
     component: AppLayout,
     children: [
+      {
+        path: routers.HOME,
+        component: "home",
+        title: "首页"
+      },
       {
         path: routers.ARTICLE_LIST,
         component: "article",

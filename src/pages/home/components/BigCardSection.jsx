@@ -11,7 +11,7 @@ import { getItemActionProps } from "../utils";
 export const BigCardSection = ({ title, list, to, onItemClick }) => {
   return (
     <Container>
-      <Stack spacing={8}>
+      <Stack spacing={16}>
         {list.map((item, index) => {
           const {
             itemId,

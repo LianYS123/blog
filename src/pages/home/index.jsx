@@ -1,6 +1,5 @@
-import { Container, Typography } from "@mui/material";
+import { Container, Stack, Typography } from "@mui/material";
 import React from "react";
-import AppHeader from "layout/header";
 import { AppFooter } from "layout/footer";
 import { useTitle } from "react-use";
 import { ProjectList } from "./ProjectList";
@@ -17,8 +16,7 @@ const Home = () => {
   return (
     <>
       <Container>
-        <AppHeader />
-        <div className="hero min-h-screen mb-16">
+        <div className="hero min-h-screen mb-64">
           <div className="hero-content">
             <div>
               <Typography variant="h1" gutterBottom>
@@ -36,11 +34,11 @@ const Home = () => {
         </div>
       </Container>
 
-      <Box sx={{ mb: 32 }}>
+      <Box sx={{ mb: 48 }}>
         <ArticleSection />
       </Box>
 
-      <Box sx={{ mb: 32 }}>
+      <Box sx={{ mb: 48 }}>
         <MomentSection />
       </Box>
 
@@ -48,19 +46,19 @@ const Home = () => {
         <ResourceSection />
       </Box>
 
-      <Box sx={{ mb: 32 }}>
-        <ResourceCollectionSection />
+      <Box sx={{ mb: 16 }}>
+        <ArticleCollectionSection />
       </Box>
 
       <Box sx={{ mb: 32 }}>
-        <ArticleCollectionSection />
+        <ResourceCollectionSection />
       </Box>
 
       <Box sx={{ mb: 32 }}>
         <ProjectList />
       </Box>
 
-      <Container>
+      <Container sx={{ mt: 48 }}>
         <AppFooter />
       </Container>
     </>
