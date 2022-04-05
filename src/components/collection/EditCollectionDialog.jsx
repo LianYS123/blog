@@ -7,12 +7,24 @@ import {
   DialogTitle,
   TextField
 } from "@mui/material";
+import { Box } from "@mui/system";
+import { UploadImage } from "components/upload";
+import { useEffect, useState } from "react";
 import { getCommonFieldProps } from "utils";
 import { useCollectionFormik } from "./hooks";
 
 export const EditCollectionDialog = props => {
-  const { visible, isEdit, close } = props;
-  const { formik, loading } = useCollectionFormik({ ...props });
+  const { visible, isEdit, close, record } = props;
+  const [cover, setCover] = useState();
+  useEffect(() => {
+    if (record?.cover) {
+      setCover(record.cover);
+    }
+  }, [record?.cover]);
+  const { formik, loading } = useCollectionFormik({
+    ...props,
+    extra: { cover }
+  });
   return (
     <Dialog open={visible} onClose={() => close()}>
       <form onSubmit={formik.handleSubmit}>
@@ -35,6 +47,12 @@ export const EditCollectionDialog = props => {
             label="描述"
             {...getCommonFieldProps("collectionDesc", formik)}
           />
+
+          <Box sx={{ mt: 2 }}>
+            <UploadImage value={cover} onChange={setCover}>
+              <Button>上传封面</Button>
+            </UploadImage>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button disabled={loading} onClick={() => close()}>

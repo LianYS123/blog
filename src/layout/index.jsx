@@ -8,8 +8,8 @@ import PWAPrompt from "react-ios-pwa-prompt";
 import { isiosDevice } from "utils";
 import { useMount } from "react-use";
 import { useUpSM } from "hooks";
-import { AppFooter } from "./footer";
-import { Container } from "@mui/material";
+import { useLocation } from "react-router-dom";
+import routers from "routers";
 
 // 页面布局
 const AppLayout = ({ children }) => {
@@ -19,20 +19,16 @@ const AppLayout = ({ children }) => {
     setiOS(isiosDevice());
   });
   const upSM = useUpSM();
+  const { pathname } = useLocation();
   return (
     <>
       {isAppLoaded ? (
         <>
-          <Box sx={{ pb: 7 }}>
+          <Box sx={{ pb: pathname === routers.HOME ? 0 : 7 }}>
             <AppHeader />
             <main id="container" className="h-full pt-14">
               {children}
             </main>
-            {/* {upSM && (
-              <Container>
-                <AppFooter />
-              </Container>
-            )} */}
             <AppBottomNav />
           </Box>
           {iOS && (
