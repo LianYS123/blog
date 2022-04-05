@@ -5,10 +5,11 @@ import { AppFooter } from "layout/footer";
 import { useTitle } from "react-use";
 import { ProjectList } from "./ProjectList";
 import { Box } from "@mui/system";
-import { ArticleSection } from "./sections/ArticleSection";
+import { ArticleCollectionSection } from "./sections/ArticleCollectionSection";
 import { ResourceSection } from "./sections/ResourceSection";
 import { MomentSection } from "./sections/MomentSection";
-import { ArticleCollectionSection } from "./sections/ArticleCollectionSection";
+import { ArticleSection } from "./sections/ArticleSection";
+import { ResourceCollectionSection } from "./sections/ResourceCollectionSection";
 
 const Home = () => {
   useTitle("首页");
@@ -40,11 +41,15 @@ const Home = () => {
       </Box>
 
       <Box sx={{ mb: 32 }}>
+        <MomentSection />
+      </Box>
+
+      <Box sx={{ mb: 32 }}>
         <ResourceSection />
       </Box>
 
       <Box sx={{ mb: 32 }}>
-        <MomentSection />
+        <ResourceCollectionSection />
       </Box>
 
       <Box sx={{ mb: 32 }}>
