@@ -25,8 +25,8 @@ const AppLayout = ({ children }) => {
       {isAppLoaded ? (
         <>
           <Box sx={{ pb: pathname === routers.HOME ? 0 : 7 }}>
-            <AppHeader />
-            <main id="container" className="h-full pt-14">
+            <AppHeader usePlaceholder={pathname !== routers.HOME} />
+            <main id="container" className="h-full">
               {children}
             </main>
             <AppBottomNav />

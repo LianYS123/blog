@@ -1,4 +1,11 @@
-import { Container, Stack, Typography } from "@mui/material";
+import {
+  Container,
+  IconButton,
+  Stack,
+  SvgIcon,
+  Tooltip,
+  Typography
+} from "@mui/material";
 import React from "react";
 import { AppFooter } from "layout/footer";
 import { useTitle } from "react-use";
@@ -9,14 +16,18 @@ import { ResourceSection } from "./sections/ResourceSection";
 import { MomentSection } from "./sections/MomentSection";
 import { ArticleSection } from "./sections/ArticleSection";
 import { ResourceCollectionSection } from "./sections/ResourceCollectionSection";
+import AppHeader from "layout/header";
+import { ScrollTop } from "components/scrollTop";
 
 const Home = () => {
   useTitle("首页");
 
   return (
     <>
+      {/* <AppHeader /> */}
       <Container>
-        <div className="hero min-h-screen mb-64">
+        {/* <ScrollTop /> */}
+        <div className="hero min-h-screen mb-48 relative">
           <div className="hero-content">
             <div>
               <Typography variant="h1" gutterBottom>
@@ -31,34 +42,54 @@ const Home = () => {
               </Typography>
             </div>
           </div>
+          <div className="absolute left-0 bottom-6">
+            <Tooltip placement="right" title="发现更多">
+              <IconButton
+                size="large"
+                color="primary"
+                onClick={() => {
+                  const el = document.querySelector("#articleSection");
+                  el.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                <SvgIcon className="animate-bounce" viewBox="0 0 1024 1024">
+                  <path
+                    d="M448 789.312V0h128v789.312l234.688-234.624L896 640l-384 384-384-384 85.312-85.312L448 789.312z"
+                    fill="currentColor"
+                    p-id="2204"
+                  ></path>
+                </SvgIcon>
+              </IconButton>
+            </Tooltip>
+          </div>
         </div>
       </Container>
 
-      <Box sx={{ mb: 48 }}>
+      <Box id="articleSection" sx={{ mb: 48 }}>
         <ArticleSection />
       </Box>
 
-      <Box sx={{ mb: 48 }}>
+      <Box id="momentSection" sx={{ mb: 48 }}>
         <MomentSection />
       </Box>
 
-      <Box sx={{ mb: 32 }}>
+      <Box id="resourceSection" sx={{ mb: 32 }}>
         <ResourceSection />
       </Box>
 
-      <Box sx={{ mb: 16 }}>
+      <Box id="articleCollectionSection" sx={{ mb: 16 }}>
         <ArticleCollectionSection />
       </Box>
 
-      <Box sx={{ mb: 32 }}>
+      <Box id="resourceCollectionSection" sx={{ mb: 32 }}>
         <ResourceCollectionSection />
       </Box>
 
-      <Box sx={{ mb: 32 }}>
+      <Box id="projectList" sx={{ mb: 32 }}>
         <ProjectList />
       </Box>
 
-      <Container sx={{ mt: 48 }}>
+      <Container id="appFooter" sx={{ mt: 16 }}>
         <AppFooter />
       </Container>
     </>
