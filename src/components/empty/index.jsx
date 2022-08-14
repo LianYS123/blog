@@ -1,4 +1,3 @@
-// import { Empty as SemiEmpty } from "@douyinfe/semi-ui";
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
 import { useRefresh } from "hooks";

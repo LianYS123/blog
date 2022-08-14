@@ -1,9 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 import { useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/system";
+import { noop } from "lodash";
 import qs from "query-string";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { useHistory, useLocation } from "react-router-dom";
 
 import { usePrevious, useWindowScroll, useWindowSize } from "react-use";
 import routers from "routers";
@@ -14,10 +14,10 @@ import { getDocHeight } from "utils";
  * @param {Object} [initialProps] modal属性初始值
  * @return {{ open: Function, close: Function, visible: Boolean }}
  */
-export const useModalAction = initialProps => {
+export const useModalAction = (initialProps) => {
   const [visible, setVisible] = useState(false);
   const [props, setProps] = useState(initialProps || {});
-  const open = useCallback(props => {
+  const open = useCallback((props) => {
     setVisible(true);
     setProps(props);
   }, []);
@@ -66,7 +66,7 @@ export const useCountDown = ({
 
   decreaseRef.current = () => {
     if (count > countTo) {
-      setCount(c => c - 1);
+      setCount((c) => c - 1);
     } else {
       reset();
     }
@@ -144,18 +144,9 @@ export const useScrollDistance = () => {
  * @param {*} redirectPath 临时跳转路由
  */
 export const useRefresh = (redirectPath = routers.TMP_REDIRECT) => {
-  const history = useHistory();
-  const { pathname } = history.location;
-  let handler;
   const refresh = () => {
-    history.replace(redirectPath);
-    handler = setTimeout(() => {
-      history.replace(pathname); // 使用闭包的特性，返回旧路由
-    }, 10);
+    //
   };
-  useEffect(() => {
-    return () => handler && clearTimeout(handler);
-  }, [handler]);
   return refresh;
 };
 
@@ -210,47 +201,35 @@ export function useSpinDelay(loading, options) {
  * 修改历史记录状态
  */
 export const useHistoryState = () => {
-  const history = useHistory();
+  // const history = useHistory();
 
-  const { state = {}, pathname } = useLocation();
+  // const { state = {}, pathname } = useLocation();
 
   // 修改 history 状态
   const setState = (newState = {}, push = true) => {
-    if (push) {
-      history.push(pathname, { ...state, ...newState });
-    } else {
-      history.replace(pathname, { ...state, ...newState });
-    }
+    // if (push) {
+    //   history.push(pathname, { ...state, ...newState });
+    // } else {
+    //   history.replace(pathname, { ...state, ...newState });
+    // }
   };
 
-  return { state, setState, history };
+  return { state: {}, setState, history: {} };
 };
 
 /**
  * 修改 history 查询参数
  */
 export const useHistoryQuery = () => {
-  const history = useHistory();
-
-  const { pathname, search } = useLocation();
-
-  const query = qs.parse(search);
-
   const setQuery = (newQuery = {}) => {
-    history.replace({
-      pathname,
-      search: qs.stringify({ ...query, ...newQuery })
-    });
+    //
   };
 
   const pushQuery = (newQuery = {}) => {
-    history.push({
-      pathname,
-      search: qs.stringify({ ...query, ...newQuery })
-    });
+    //
   };
 
-  return { query, setQuery, pushQuery, history };
+  return { query: {}, setQuery: noop, pushQuery: noop, history: {} };
 };
 
 // 媒体查询

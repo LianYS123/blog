@@ -1,12 +1,10 @@
 import { appSlice } from "models/app";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { GET_LOGIN_USER } from "services/auth";
 import { useRequest } from "./useRequest";
 import { useLoginDialog } from "providers/LoginDialogProvider";
-import { APP_ROUTES } from "routers/AppRoutes";
-import { useRouteMatch } from "react-router-dom";
-import { useTitle } from "react-use";
+import { useMount } from "react-use";
 import { HOME_SECTION_LIST } from "services/homeSection";
 import { homeSlice } from "models/home";
 import { useQueryClient } from "react-query";
@@ -14,9 +12,9 @@ import { groupBy } from "lodash";
 
 // 主题操作
 export const useTheme = () => {
-  const { theme } = useSelector(state => state.app);
+  const { theme } = useSelector((state) => state.app);
   const dispatch = useDispatch();
-  const switchTo = mode => {
+  const switchTo = (mode) => {
     dispatch(appSlice.actions.setTheme(mode));
   };
   const switchToLight = () => {
@@ -39,21 +37,23 @@ export const useTheme = () => {
 
 // 数据初始化
 export const useInitApp = () => {
-  const { token } = useSelector(state => state.app);
+  const { token } = useSelector((state) => state.app);
   const dispatch = useDispatch();
   const { switchTo, theme } = useTheme();
 
-  // 初始化主题
-  useEffect(() => {
-    switchTo(theme);
-  }, []);
+  useMount(() => {
+    // 初始化主题
+    switchTo(localStorage.getItem("theme") || "light");
+    // 设置token
+    dispatch(appSlice.actions.setToken(localStorage.getItem("acc")));
+  });
 
   // token变化时请求用户信息并存储到全局
   const loginUserResult = useRequest({
     service: GET_LOGIN_USER,
     ready: !!token,
     deps: [token],
-    onSuccess: data => {
+    onSuccess: (data) => {
       // 设置登录数据，修改登录状态为已登录
       dispatch(appSlice.actions.setUserInfo(data));
       dispatch(appSlice.actions.setLogged(true));
@@ -63,12 +63,12 @@ export const useInitApp = () => {
   // 请求主页推荐数据
   const sectionListResult = useRequest({
     service: HOME_SECTION_LIST,
-    onSuccess: data => {
+    onSuccess: (data) => {
       dispatch(homeSlice.actions.setSectionList(data));
     }
   });
 
-  const requestLoaded = res =>
+  const requestLoaded = (res) =>
     res.status !== "idle" && res.status !== "loading";
 
   // 同步页面加载状态
@@ -86,14 +86,14 @@ export const useInitApp = () => {
  */
 export const useSectionList = ({ itemId = -1 } = {}) => {
   const queryClient = useQueryClient();
-  const { sectionList } = useSelector(state => state.home);
+  const { sectionList } = useSelector((state) => state.home);
 
   const refetch = () => {
     queryClient.refetchQueries([HOME_SECTION_LIST, undefined]);
   };
 
-  const exist = sectionList.some(it => it.itemId === itemId);
-  const currentItem = sectionList.find(it => it.itemId === itemId);
+  const exist = sectionList.some((it) => it.itemId === itemId);
+  const currentItem = sectionList.find((it) => it.itemId === itemId);
 
   return { sectionList, refetch, exist, currentItem };
 };
@@ -101,9 +101,9 @@ export const useSectionList = ({ itemId = -1 } = {}) => {
 /**
  * 根据模块类型获取列表
  */
-export const useSectionListByType = sectionType => {
-  const { sectionList } = useSelector(state => state.home);
-  const sectionTypeMap = groupBy(sectionList, it => it.sectionType);
+export const useSectionListByType = (sectionType) => {
+  const { sectionList } = useSelector((state) => state.home);
+  const sectionTypeMap = groupBy(sectionList, (it) => it.sectionType);
   return sectionTypeMap[sectionType] || [];
 };
 
@@ -112,7 +112,7 @@ export const useSectionListByType = sectionType => {
  * @returns {{assertLogged: Function, logged: boolean, assertLoggedWithoutError: Function}}
  */
 export const useAssertLogged = () => {
-  const { logged } = useSelector(state => state.app);
+  const { logged } = useSelector((state) => state.app);
   const { open: openLoginDialog } = useLoginDialog();
   const assertLogged = () => {
     if (!logged) {
@@ -129,34 +129,9 @@ export const useAssertLogged = () => {
   return { assertLogged, logged, assertLoggedWithoutError };
 };
 
-/**
- * 页面标题
- */
-export const useAppTitle = () => {
-  // 路由地址和标题的映射
-  const getRoutesTitleMap = (routes = []) => {
-    const map = {};
-    const stack = [...routes];
-    while (stack.length) {
-      const { title, path, children } = stack.pop();
-      if (children && children.length) {
-        stack.push(...children);
-      }
-      if (title && path) {
-        map[path] = title;
-      }
-    }
-    return map;
-  };
-  const routesTitleMap = useMemo(() => getRoutesTitleMap(APP_ROUTES), []);
-  const { path } = useRouteMatch();
-  const title = routesTitleMap[path] || "Blog";
-  useTitle(title);
-};
-
 export const useIsAdmin = () => {
   const {
     userInfo: { adminType }
-  } = useSelector(state => state.app);
+  } = useSelector((state) => state.app);
   return adminType === 1;
 };

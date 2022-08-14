@@ -14,7 +14,7 @@ export const GlobalProgress = () => {
   });
   const visible = useSpinDelay(loading);
   return (
-    <Portal container={document.body}>
+    <Portal container={() => document.body}>
       {visible ? (
         <Box
           sx={{

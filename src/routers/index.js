@@ -1,18 +1,18 @@
 const routers = {
-  LOGIN: "/pages/login",
-  HOME: "/pages/home",
-  ARTICLE_LIST: "/pages/list",
-  MOMENT: "/pages/moment",
-  NOT_FOUND: "/pages/404",
-  EDITOR: "/pages/editor",
-  EDITOR_EDIT: "/pages/editor/:id",
-  DETAIL: "/pages/detail/:id",
+  LOGIN: "/login",
+  HOME: "/home",
+  ARTICLE_LIST: "/list",
+  MOMENT: "/moment",
+  NOT_FOUND: "/404",
+  EDITOR: "/editor",
+  EDITOR_EDIT: "/editor/:id",
+  DETAIL: "/detail/:id",
 
-  USER_SPACE: "/pages/space",
-  SETTING: "/pages/setting",
-  ABOUT: "/pages/about",
-  RESOURCE: "/pages/resource",
-  BOOK: "/pages/book",
+  USER_SPACE: "/space",
+  SETTING: "/setting",
+  ABOUT: "/about",
+  RESOURCE: "/resource",
+  BOOK: "/book",
 
   TMP_REDIRECT: "/tmp-redirect"
 };
