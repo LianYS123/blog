@@ -23,14 +23,12 @@ import { MDEditor } from "./MdEditor";
 import { SyncAlt } from "@mui/icons-material";
 import { useAlertDialog } from "providers/AlertDialogProvider";
 import { SkeletonList } from "components/skeleton";
-import { useAppTitle } from "hooks/app";
 import { TTEditor } from "./TTEditor";
 
 /**
  * 文章编辑器
  */
 function Editor() {
-  useAppTitle();
   const history = useHistory();
 
   const { id } = useParams();

@@ -2,7 +2,6 @@
 import { useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/system";
 import { noop } from "lodash";
-import qs from "query-string";
 import { useEffect, useState, useRef, useCallback } from "react";
 
 import { usePrevious, useWindowScroll, useWindowSize } from "react-use";

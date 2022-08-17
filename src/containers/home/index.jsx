@@ -7,7 +7,6 @@ import {
   Typography
 } from "@mui/material";
 import React from "react";
-import { useTitle } from "react-use";
 import { ProjectList } from "./ProjectList";
 import { Box } from "@mui/system";
 import { ArticleCollectionSection } from "./sections/ArticleCollectionSection";
@@ -17,7 +16,6 @@ import { ArticleSection } from "./sections/ArticleSection";
 import { ResourceCollectionSection } from "./sections/ResourceCollectionSection";
 
 const Home = () => {
-  useTitle("首页");
 
   return (
     <>

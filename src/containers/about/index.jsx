@@ -1,9 +1,7 @@
 import React from "react";
 import { Box, Container, Grid, Typography } from "@mui/material";
-import { useAppTitle } from "hooks/app";
 
 export default function About() {
-  useAppTitle();
   return (
     <Container>
       <Grid sx={{ mt: 8 }} container spacing={2}>

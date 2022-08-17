@@ -17,13 +17,11 @@ import routers from "routers";
 import LogoWithText from "./LogoWithText";
 import Logo from "./Logo";
 import LiamsBlog from "svg/LiamsBlog";
-import { useAppTitle } from "hooks/app";
 
 /**
  * 登录页
  */
 export default function Login() {
-  useAppTitle();
   const history = useHistory();
   const { search } = useLocation();
   const redirect = new URLSearchParams(search).get("redirect");

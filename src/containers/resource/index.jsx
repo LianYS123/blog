@@ -14,13 +14,11 @@ import { ResourceFilter } from "./Filter";
 import { RESOURCE_PAGE } from "services/resource";
 import { isEmpty } from "lodash";
 import { ResourceList } from "./ResourceList";
-import { useTitle } from "react-use";
 import { EditResourceDialog } from "./EditResourceDialog";
 import { Edit } from "@mui/icons-material";
 import { useIsAdmin } from "hooks/app";
 
 const Resource = () => {
-  useTitle("资源");
 
   const { state, setState } = useHistoryState();
 

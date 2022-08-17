@@ -6,11 +6,9 @@ import { Container, Stack, TextField } from "@mui/material";
 import { Empty } from "components/empty";
 import { TagFilter } from "./TagFilter";
 import CardArticle from "./card/CardArticle";
-import { useAppTitle } from "hooks/app";
 import { ScrollTop } from "components/scrollTop";
 
 const ArticleList = () => {
-  useAppTitle();
   const { state, setState } = useHistoryState();
 
   const { selectedTags = [], keyword } = state;
