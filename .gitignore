@@ -9,8 +9,6 @@ output
 proxy.js
 langs
 .DS_Store
-package-lock.json
-yarn.lock
 bower_components
 
 # 个人工具、临时文件
