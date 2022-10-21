@@ -126,7 +126,7 @@ function Detail() {
             ) : null}
           </Box>
         </>
-      ) : (
+      ) : isLoading ? null : (
         "暂无数据"
       )}
       {/* 快速拨号操作栏 */}
