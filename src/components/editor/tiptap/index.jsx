@@ -3,7 +3,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useRef } from "react";
 import { Image } from "./Image";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import lowlight from "lowlight";
+import { lowlight } from "lowlight";
 import CodeBlock from "./CodeBlock";
 import Placeholder from "@tiptap/extension-placeholder";
 import Document from "@tiptap/extension-document";

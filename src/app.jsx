@@ -62,23 +62,21 @@ const App = () => {
             }
           })}
         >
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <QueryClientProvider client={queryClient}>
-              <SnackbarProvider
-                // anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                maxSnack={3}
-              >
-                <AlertDialogProvider>
-                  <LoginDialogProvider>
-                    {/* 全局加载状态 */}
-                    <GlobalProgress />
-                    {/* 路由 */}
-                    <AppRoutes />
-                  </LoginDialogProvider>
-                </AlertDialogProvider>
-              </SnackbarProvider>
-            </QueryClientProvider>
-          </LocalizationProvider>
+          <QueryClientProvider client={queryClient}>
+            <SnackbarProvider
+              // anchorOrigin={{ vertical: "top", horizontal: "right" }}
+              maxSnack={3}
+            >
+              <AlertDialogProvider>
+                <LoginDialogProvider>
+                  {/* 全局加载状态 */}
+                  <GlobalProgress />
+                  {/* 路由 */}
+                  <AppRoutes />
+                </LoginDialogProvider>
+              </AlertDialogProvider>
+            </SnackbarProvider>
+          </QueryClientProvider>
         </ThemeProvider>
       </IntlProvider>
     </Router>
