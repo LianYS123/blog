@@ -6,16 +6,16 @@ import { APP_MENUS } from "./config";
 export const AppFooter = () => {
   return (
     <footer className="footer text-lg mt-40 pb-16">
-      <div>
+      {/* <div>
         <span className="footer-title text-base">导航</span>
         {APP_MENUS.map(it => (
           <Link className="link link-hover" key={it.to} to={it.to}>
             {it.text}
           </Link>
         ))}
-      </div>
+      </div> */}
 
-      <div>
+      {/* <div>
         <span className="footer-title text-base">工作技能</span>
         <a className="link link-hover">HTML & CSS</a>
         <a className="link link-hover">Javascript</a>
@@ -23,7 +23,7 @@ export const AppFooter = () => {
         <a className="link link-hover">Webpack</a>
         <a className="link link-hover">Typescript</a>
         <a className="link link-hover">Java...</a>
-      </div>
+      </div> */}
 
       <div>
         <span className="footer-title text-base">联系方式</span>
@@ -37,6 +37,16 @@ export const AppFooter = () => {
             </Tooltip>
           </a>
         </div>
+      </div>
+      <div>
+        <span className="footer-title text-base">备案信息</span>
+        <a
+          href="https://beian.miit.gov.cn/"
+          className="link link-hover"
+          target="_blank"
+        >
+          赣ICP备2021003108号-1
+        </a>
       </div>
     </footer>
   );
